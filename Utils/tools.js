@@ -1,9 +1,6 @@
 function drawFigure() {
     const svgContent = svgOutput.value;
-
     const canvas = document.getElementById("canvas_svg");
-    canvas.innerHTML = '';
-
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgContent, "image/svg+xml");
     const svgElement = doc.documentElement;
@@ -11,17 +8,23 @@ function drawFigure() {
     svgElement.setAttribute("width", "100%");
     svgElement.setAttribute("height", "100%");
 
-    canvas.appendChild(svgElement);
+    // Reemplazar el SVG existente en lugar de eliminar y agregar elementos
+    if (canvas.firstChild) {
+        canvas.replaceChild(svgElement, canvas.firstChild);
+    } else {
+        canvas.appendChild(svgElement);
+    }
 
-    const draggableCircles = d3.selectAll("#canvas_svg circle[stroke='black']")
-        .classed("draggable-circle", true);
-
-    draggableCircles.on("mousedown", dragStarted);
-    draggableCircles.on("wheel", changeRadius);
+    const draggableCircles = d3
+        .selectAll("#canvas_svg circle[stroke='black']")
+        .classed("draggable-circle", true)
+        .on("mousedown", dragStarted)
+        .on("wheel", changeRadius);
 
     let activeCircle = null;
     let initialX, initialY, deltaX, deltaY;
-
+    let isDragging = false;
+    let animationFrameId = null;
     function dragStarted(event) {
         activeCircle = this;
         activeCircle.classList.add("active");
@@ -33,6 +36,8 @@ function drawFigure() {
 
         document.addEventListener("mousemove", dragged);
         document.addEventListener("mouseup", dragEnded);
+
+
     }
 
     function dragged(event) {
@@ -43,11 +48,14 @@ function drawFigure() {
         const offsetY = (event.clientY - deltaY - initialY) * speed;
         const newX = initialX + offsetX;
         const newY = initialY + offsetY;
+        let hasDataChanged = false; // Variable para rastrear si los datos han cambiado
 
         activeCircle.setAttribute("cx", newX);
         activeCircle.setAttribute("cy", newY);
+        isDragging = true;
         updateCircleData(activeCircle, newX, newY);
-        computeShape();
+
+
     }
 
     function changeRadius(event) {
@@ -70,7 +78,6 @@ function drawFigure() {
             activeCircle.setAttribute("r", newRadius);
             updateCircleData(activeCircle, null, null, newRadius);
         }
-        computeShape();
     }
 
     function updateCircleData(circle, newX, newY, newRadius) {
@@ -82,23 +89,45 @@ function drawFigure() {
         if (newX !== null && newY !== null) {
             // Actualizar las coordenadas del círculo en el textarea
             lines[circleIndex + 1] = `${newX} ${newY}`;
+            hasDataChanged = true; // Los datos han cambiado
         }
 
         if (newRadius !== undefined) {
             // Actualizar el radio del círculo en el textarea
-            lines[circleIndex + parseInt(firstLine)+1] = `${newRadius}`;
+            lines[circleIndex + parseInt(firstLine) + 1] = `${newRadius}`;
+            hasDataChanged = true; // Los datos han cambiado
         }
 
-        shapeInput.value = lines.join("\n");
+            shapeInput.value = lines.join("\n");
+            if (isDragging && !animationFrameId) {
+                animationFrameId = requestAnimationFrame(animate);
+            } else if (!isDragging && animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
     }
+
 
     function dragEnded() {
         if (!activeCircle) return;
-
+        isDragging = false;
         activeCircle.classList.remove("active");
         activeCircle = null;
 
         document.removeEventListener("mousemove", dragged);
         document.removeEventListener("mouseup", dragEnded);
+    }
+
+    function animate() {
+        if (isDragging) {
+            if (hasDataChanged) {
+                computeShape();
+                hasDataChanged = false; // Reiniciar el indicador de cambios
+            }
+            requestAnimationFrame(animate);
+        } else {
+            // Detener el ciclo de animación
+            animationFrameId = null;
+        }
     }
 }
