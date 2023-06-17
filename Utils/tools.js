@@ -25,9 +25,9 @@ function drawFigure() {
     let initialX, initialY, deltaX, deltaY;
     let isDragging = false;
     let animationFrameId = null;
+    let hasDataChanged = false;
     function dragStarted(event) {
         activeCircle = this;
-        activeCircle.classList.add("active");
 
         initialX = parseFloat(activeCircle.getAttribute("cx"));
         initialY = parseFloat(activeCircle.getAttribute("cy"));
@@ -36,7 +36,7 @@ function drawFigure() {
 
         document.addEventListener("mousemove", dragged);
         document.addEventListener("mouseup", dragEnded);
-
+        document.addEventListener("wheel", changeRadius); // Añadir listener para el evento wheel
 
     }
 
@@ -48,37 +48,34 @@ function drawFigure() {
         const offsetY = (event.clientY - deltaY - initialY) * speed;
         const newX = initialX + offsetX;
         const newY = initialY + offsetY;
-        let hasDataChanged = false; // Variable para rastrear si los datos han cambiado
-
         activeCircle.setAttribute("cx", newX);
         activeCircle.setAttribute("cy", newY);
         isDragging = true;
         updateCircleData(activeCircle, newX, newY);
-
 
     }
 
     function changeRadius(event) {
         if (!activeCircle) return;
 
-        // Verificar si se mantiene presionada la tecla Shift
-        const isShiftPressed = event.shiftKey;
+        // Verificar si se movió la rueda del ratón hacia arriba o hacia abajo
+        const isScrollUp = event.deltaY < 0;
+        const isScrollDown = event.deltaY > 0;
 
-        if (isShiftPressed) {
+        if (isScrollUp || isScrollDown) {
             event.preventDefault(); // Evitar el comportamiento predeterminado del desplazamiento de la página
 
             const currentRadius = parseFloat(activeCircle.getAttribute("r"));
-            const wheelDelta = event.deltaY;
+            const scaleFactor = isScrollUp ? 2 : -2; // Factor de escala para el cambio de radio
 
-            const scaleFactor = 1; // Factor de escala para el cambio de radio
-            const deltaRadius = wheelDelta < 0 ? scaleFactor : -scaleFactor; // Cambio positivo o negativo del radio
-
-            const newRadius = Math.max(currentRadius + deltaRadius, 1); // Asegurarse de que el radio no sea menor que 1
+            const newRadius = Math.max(currentRadius + scaleFactor, 1); // Asegurarse de que el radio no sea menor que 1
 
             activeCircle.setAttribute("r", newRadius);
             updateCircleData(activeCircle, null, null, newRadius);
         }
     }
+
+
 
     function updateCircleData(circle, newX, newY, newRadius) {
         const shapeInput = document.getElementById("shapeInput");
@@ -98,20 +95,18 @@ function drawFigure() {
             hasDataChanged = true; // Los datos han cambiado
         }
 
-            shapeInput.value = lines.join("\n");
-            if (isDragging && !animationFrameId) {
-                animationFrameId = requestAnimationFrame(animate);
-            } else if (!isDragging && animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
-            }
+        shapeInput.value = lines.join("\n");
+        if (isDragging && !animationFrameId) {
+            animationFrameId = requestAnimationFrame(animate);
+        } else if (!isDragging && animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
     }
 
 
     function dragEnded() {
-        if (!activeCircle) return;
         isDragging = false;
-        activeCircle.classList.remove("active");
         activeCircle = null;
 
         document.removeEventListener("mousemove", dragged);
@@ -130,4 +125,31 @@ function drawFigure() {
             animationFrameId = null;
         }
     }
+}
+
+const svgElement = document.getElementById("canvas_svg");
+
+// Agrega un listener para el evento wheel en el elemento SVG
+svgElement.addEventListener("wheel", handleWheelEvent, { passive: false });
+
+// Función para manejar el evento wheel
+function handleWheelEvent(event) {
+    if (isMouseOverSVG(event)) {
+        event.preventDefault(); // Evita el desplazamiento predeterminado de la página
+        changeRadius(event); // Llama a la función changeRadius para cambiar el radio del círculo
+    }
+}
+
+// Función para verificar si el ratón está sobre el elemento SVG
+function isMouseOverSVG(event) {
+    const svgRect = svgElement.getBoundingClientRect();
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    return (
+        mouseX >= svgRect.left &&
+        mouseX <= svgRect.right &&
+        mouseY >= svgRect.top &&
+        mouseY <= svgRect.bottom
+    );
 }
