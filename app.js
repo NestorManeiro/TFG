@@ -62,7 +62,10 @@ window.onerror = () => {
 
 // para ejecutar mi función
 document.getElementById("mybutton").addEventListener("click", () => {
-    //alert("check console");
+    computeShape();
+});
+
+function computeShape(){
     svgOutput.value = Module.ccall(
         "ComputeSVGFromShape", // name of C function
         'string', // return type
@@ -70,9 +73,8 @@ document.getElementById("mybutton").addEventListener("click", () => {
         ['string'], // argument types
         [shapeInput.value] // arguments
     );
-    //drawFigure();
-});
-
+    drawFigure()
+}
 // para cargar el shape.txt en el textarea al principio
 window.addEventListener('load', function() {
     // Crear una nueva solicitud XMLHttpRequest

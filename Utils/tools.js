@@ -47,6 +47,7 @@ function drawFigure() {
         activeCircle.setAttribute("cx", newX);
         activeCircle.setAttribute("cy", newY);
         updateCircleData(activeCircle, newX, newY);
+        computeShape();
     }
 
     function changeRadius(event) {
@@ -69,6 +70,7 @@ function drawFigure() {
             activeCircle.setAttribute("r", newRadius);
             updateCircleData(activeCircle, null, null, newRadius);
         }
+        computeShape();
     }
 
     function updateCircleData(circle, newX, newY, newRadius) {
