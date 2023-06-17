@@ -1,6 +1,17 @@
 .draggable-circle {
     pointer-events: all;
 }
+#canvas_svg {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+}
+
+#canvas_svg svg {
+    flex: 1;
+    overflow: hidden;
+}
 
 .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
 textarea.emscripten { font-family: monospace; width: 80%; }

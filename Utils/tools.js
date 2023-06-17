@@ -1,19 +1,19 @@
-// función que pinta el svg en el canvas
 function drawFigure() {
     const svgContent = svgOutput.value;
 
-    d3.select("#canvas_svg").selectAll("*").remove();
-
-    const svg = d3.select("#canvas_svg")
-        .append("svg")
-        .attr("width", 600)
-        .attr("height", 500);
+    const canvas = document.getElementById("canvas_svg");
+    canvas.innerHTML = '';
 
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgContent, "image/svg+xml");
-    svg.node().appendChild(doc.documentElement);
+    const svgElement = doc.documentElement;
 
-    const draggableCircles = svg.selectAll("circle[stroke='black']")
+    svgElement.setAttribute("width", "100%");
+    svgElement.setAttribute("height", "100%");
+
+    canvas.appendChild(svgElement);
+
+    const draggableCircles = d3.selectAll("#canvas_svg circle[stroke='black']")
         .classed("draggable-circle", true);
 
     draggableCircles.on("mousedown", dragStarted);

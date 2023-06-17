@@ -3,7 +3,6 @@ let progressElement = document.getElementById('progress');
 let spinnerElement = document.getElementById('spinner');
 let shapeInput = document.getElementById('shapeInput');
 let svgOutput = document.getElementById('svgOutput');
-document.getElementById('canvas_svg');
 //Cambiar esto a let o const y explota todo
 var Module = {
     preRun: [],
