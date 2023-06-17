@@ -1,11 +1,18 @@
 <!doctype html>
 <html lang="en-us">
   <head>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Emscripten-Generated Code</title>
 
     <!-- al final del style se incluye un canvas para dibujar el svg -->
+    <style>
+      .draggable-circle {
+        pointer-events: all;
+      }
+    </style>
+
     <style>
       .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
       textarea.emscripten { font-family: monospace; width: 80%; }
@@ -205,24 +212,9 @@
         solicitud.send();
         });
 
-     // función que pinta el svg en el canvas
-     function drawFigure() {
-
-      // Limpia el contenido anterior del canvas
-      canvasElement.innerHTML = '';
-
-      // Crea un nuevo elemento SVG
-      var svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      svgElement.setAttribute('width', canvasElement.clientWidth);
-      svgElement.setAttribute('height', canvasElement.clientHeight);
-      svgElement.innerHTML = svgOutput.value;
-
-      // Agrega el elemento SVG al canvas
-      canvasElement.appendChild(svgElement);
-    }
-
     </script>
     <script async type="text/javascript" src="hello6.js"></script>
+    <script async type="text/javascript" src="/Mine/My.js"></script>
   </body>
 </html>
 
