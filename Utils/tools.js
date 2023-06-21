@@ -127,6 +127,7 @@ function drawFigure() {
     }
 }
 
+//Prevent mouse
 const svgElement = document.getElementById("canvas_svg");
 
 // Agrega un listener para el evento wheel en el elemento SVG
@@ -136,7 +137,7 @@ svgElement.addEventListener("wheel", handleWheelEvent, { passive: false });
 function handleWheelEvent(event) {
     if (isMouseOverSVG(event)) {
         event.preventDefault(); // Evita el desplazamiento predeterminado de la página
-        changeRadius(event); // Llama a la función changeRadius para cambiar el radio del círculo
+
     }
 }
 
@@ -152,4 +153,25 @@ function isMouseOverSVG(event) {
         mouseY >= svgRect.top &&
         mouseY <= svgRect.bottom
     );
+}
+
+function addNewCircleToShapeInput(x, y) {
+    const shapeInput = document.getElementById("shapeInput");
+    const lines = shapeInput.value.split("\n");
+
+    // Obtener el número de círculos existentes
+    const numCircles = parseInt(lines[0]);
+    const lastCircle = numCircles+1;
+    const lastRadius = lastCircle+lastCircle;
+    // Incrementar el número de círculos en 1
+    lines[0] = (numCircles + 1).toString();
+
+    // Agregar las coordenadas del nuevo círculo al final
+    lines.splice(lastCircle, 0, `${x} ${y}`);
+
+    // Agregar el radio del nuevo círculo al final
+    lines.splice(lastRadius, 0, "50");
+
+    // Actualizar el contenido del textarea
+    shapeInput.value = lines.join("\n");
 }
