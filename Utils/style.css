@@ -1,6 +1,106 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: red;
+    text-align: center;
+}
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: none;
+    border-top: 1px solid #ccc;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-family: Consolas, monospace;
+    max-width: 500px; /* Ancho máximo deseado */
+    box-sizing: border-box; /* Incluir el padding en el ancho total */
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: block; /* Mostrar los botones como bloques */
+    margin-top: 10px; /* Espacio entre los botones y los textareas */
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Estilos específicos */
+#spinner {
+    overflow: visible;
+    text-align: center;
+}
+
+.spinner {
+    margin: 20px auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 5px solid #f3f3f3;
+    border-top-color: #3498db;
+    animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spinner-text {
+    margin-top: 0.5em;
+    font-weight: bold;
+}
+
+.loading-message {
+    font-weight: bold;
+    text-align: center;
+}
+
+.progress-bar {
+    text-align: center;
+}
+
+.console-heading {
+    font-weight: bold;
+}
+
+.console {
+    resize: none;
+}
+
+#canvas_svg {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.inline-buttons button {
+    display: inline-block;
+    margin-right: 10px; /* Espacio entre los botones */
+}
+
+/* Estilos específicos para draggable-circle */
 .draggable-circle {
     pointer-events: all;
 }
+
+/* Estilos específicos para canvas_svg */
 #canvas_svg {
     width: 100%;
     height: 100%;
@@ -13,13 +113,32 @@
     overflow: hidden;
 }
 
-.emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
-textarea.emscripten { font-family: monospace; width: 80%; }
-div.emscripten { text-align: center; }
-div.emscripten_border { border: 1px solid black; }
-/* the canvas *must not* have any border or padding, or mouse coords will be wrong */
-canvas.emscripten { border: 0 none; background-color: black; }
+.emscripten {
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
 
+textarea.emscripten {
+    font-family: monospace;
+    width: 80%;
+}
+
+div.emscripten {
+    text-align: center;
+}
+
+div.emscripten_border {
+    border: 1px solid black;
+}
+
+canvas.emscripten {
+    border: 0 none;
+    background-color: black;
+}
+
+/* Estilos específicos para spinner */
 .spinner {
     height: 50px;
     width: 50px;
@@ -35,23 +154,28 @@ canvas.emscripten { border: 0 none; background-color: black; }
     border-radius: 100%;
     background-color: rgb(200,100,250);
 }
+
 @-webkit-keyframes rotation {
-    from {-webkit-transform: rotate(0deg);}
-    to {-webkit-transform: rotate(360deg);}
-}
-@-moz-keyframes rotation {
-    from {-moz-transform: rotate(0deg);}
-    to {-moz-transform: rotate(360deg);}
-}
-@-o-keyframes rotation {
-    from {-o-transform: rotate(0deg);}
-    to {-o-transform: rotate(360deg);}
-}
-@keyframes rotation {
-    from {transform: rotate(0deg);}
-    to {transform: rotate(360deg);}
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
 }
 
+@-moz-keyframes rotation {
+    from { -moz-transform: rotate(0deg); }
+    to { -moz-transform: rotate(360deg); }
+}
+
+@-o-keyframes rotation {
+    from { -o-transform: rotate(0deg); }
+    to { -o-transform: rotate(360deg); }
+}
+
+@keyframes rotation {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Estilos específicos para canvas_svg */
 #canvas_svg {
     width: 600px;
     height: 500px;

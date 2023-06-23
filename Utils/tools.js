@@ -175,3 +175,22 @@ function addNewCircleToShapeInput(x, y) {
     // Actualizar el contenido del textarea
     shapeInput.value = lines.join("\n");
 }
+
+function downloadsvg(){
+    var svgContent = document.getElementById('svgOutput').value; // Obtener el contenido del textarea
+
+    // Crear un elemento <a> para descargar el archivo
+    var enlaceDescarga = document.createElement('a');
+    enlaceDescarga.setAttribute('href', 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgContent));
+    enlaceDescarga.setAttribute('download', 'imagen.svg');
+    enlaceDescarga.style.display = 'none';
+
+    // Agregar el elemento <a> al documento
+    document.body.appendChild(enlaceDescarga);
+
+    // Simular un clic en el enlace de descarga
+    enlaceDescarga.click();
+
+    // Eliminar el elemento <a> del documento
+    document.body.removeChild(enlaceDescarga);
+}
