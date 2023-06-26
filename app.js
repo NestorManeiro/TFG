@@ -14,11 +14,11 @@ var Module = {
             if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
 
             //Comentar para tener mejora de rendimiento
-            console.log(text);
+            /*console.log(text);
             if (element) {
                 element.value += text + "\n";
                 element.scrollTop = element.scrollHeight; // focus on bottom
-            }
+            }*/
         };
     })(),
     canvas: (() => {

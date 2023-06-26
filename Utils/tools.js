@@ -4,9 +4,7 @@ function drawFigure() {
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgContent, "image/svg+xml");
     const svgElement = doc.documentElement;
-
-    svgElement.setAttribute("width", "100%");
-    svgElement.setAttribute("height", "100%");
+    let zoom=1;
 
     // Reemplazar el SVG existente en lugar de eliminar y agregar elementos
     if (canvas.firstChild) {
@@ -20,6 +18,7 @@ function drawFigure() {
         .classed("draggable-circle", true)
         .on("mousedown", dragStarted)
         .on("wheel", wheel);
+    svgElement.addEventListener("wheel", wheel);
 
     let activeCircle = null;
     let initialX, initialY, deltaX, deltaY;
@@ -54,23 +53,29 @@ function drawFigure() {
         updateCircleData(activeCircle, newX, newY);
 
     }
-
     function wheel(event) {
         // Verificar si se movió la rueda del ratón hacia arriba o hacia abajo
         const isScrollUp = event.deltaY < 0;
         const isScrollDown = event.deltaY > 0;
         const isShiftPressed = event.shiftKey;
         if (!activeCircle){
-            // Calcular el factor de escala basado en la dirección del desplazamiento de la rueda del ratón
-            const zoomFactor = isScrollUp ? 1.1 : 0.9;
+            const canvasRect = canvas.getBoundingClientRect();
+            const mouseX = (event.clientX   - canvasRect.left + window.scrollX);
+            const mouseY = (event.clientY   - canvasRect.top + window.scrollY);
 
-            // Obtener las coordenadas del ratón relativas al SVG
-            const mouseX = event.clientX - svgElement.getBoundingClientRect().left;
-            const mouseY = event.clientY - svgElement.getBoundingClientRect().top;
+            const zoomCenterX = (mouseX - window.scrollX) / canvasRect.width;
+            const zoomCenterY = (mouseY - window.scrollY) / canvasRect.height;
 
-            // Aplicar la transformación de escala al SVG utilizando el punto de origen del ratón
-            svgElement.setAttribute('transform', `scale(${zoomFactor})`);
-            svgElement.setAttribute('transform-origin', `${mouseX}px ${mouseY}px`);
+            const transformOrigin = `${zoomCenterX * 100}% ${zoomCenterY * 100}%`;
+
+            if (isScrollUp) {
+                zoom += 0.06;
+            } else {
+                zoom -= 0.06;
+            }
+
+            svgElement.style.transformOrigin = transformOrigin;
+            svgElement.style.transform = `scale(${zoom})`;
         } else {
             if (!isShiftPressed && (isScrollUp || isScrollDown)) {
                 const currentRadius = parseFloat(activeCircle.getAttribute("r"));
