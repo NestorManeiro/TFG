@@ -13,6 +13,7 @@ var Module = {
         return function(text) {
             if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
 
+            //Comentar para tener mejora de rendimiento
             console.log(text);
             if (element) {
                 element.value += text + "\n";
@@ -67,13 +68,13 @@ document.getElementById("mybutton").addEventListener("click", () => {
 
 function computeShape(){
     svgOutput.value = Module.ccall(
-        "ComputeSVGFromShape", // name of C function
+        "_Z19ComputeSVGFromShapePc", // name of C function
         'string', // return type
         //['number','string'], // argument types
         ['string'], // argument types
-        [shapeInput.value] // arguments
+        [shapeInput.value], // arguments
     );
-    drawFigure()
+    drawFigure();
 }
 // para cargar el shape.txt en el textarea al principio
 window.addEventListener('load', function() {
