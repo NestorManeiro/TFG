@@ -5,7 +5,7 @@ function drawFigure() {
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgContent, "image/svg+xml");
     const svgElement = doc.documentElement;
-    let zoom=1;
+    let zoom = 1;
 
     // Reemplazar el SVG existente en lugar de eliminar y agregar elementos
     if (canvas.firstChild) {
@@ -29,6 +29,7 @@ function drawFigure() {
     let isDragging = false;
     let animationFrameId = null;
     let hasDataChanged = false;
+
     function dragStarted(event) {
         activeCircle = this;
 
@@ -39,14 +40,13 @@ function drawFigure() {
 
         document.addEventListener("mousemove", dragged);
         document.addEventListener("mouseup", dragEnded);
-        document.addEventListener("wheel", wheel); // Añadir listener para el evento wheel
-
+        document.addEventListener("wheel", wheel);
     }
 
     function dragged(event) {
         if (!activeCircle) return;
 
-        const speed = 2;
+        const speed = 2.1;
         const offsetX = (event.clientX - deltaX - initialX) * speed;
         const offsetY = (event.clientY - deltaY - initialY) * speed;
         const newX = initialX + offsetX;
@@ -55,78 +55,65 @@ function drawFigure() {
         activeCircle.setAttribute("cy", newY);
         isDragging = true;
         updateCircleData(activeCircle, newX, newY);
-
     }
+
     function wheel(event) {
-        // Verificar si se movió la rueda del ratón hacia arriba o hacia abajo
         const isScrollUp = event.deltaY < 0;
         const isScrollDown = event.deltaY > 0;
         const isShiftPressed = event.shiftKey;
-        if (!activeCircle){
+
+        if (!activeCircle) {
             const canvasRect = canvas.getBoundingClientRect();
-            const mouseX = (event.clientX   - canvasRect.left + window.scrollX);
-            const mouseY = (event.clientY   - canvasRect.top + window.scrollY);
+            const mouseX = event.clientX - canvasRect.left + window.scrollX;
+            const mouseY = event.clientY - canvasRect.top + window.scrollY;
 
             const zoomCenterX = (mouseX - window.scrollX) / canvasRect.width;
             const zoomCenterY = (mouseY - window.scrollY) / canvasRect.height;
 
             const transformOrigin = `${zoomCenterX * 100}% ${zoomCenterY * 100}%`;
 
-            if (isScrollUp) {
-                zoom += 0.06;
-            } else {
-                zoom -= 0.06;
-            }
+            zoom += isScrollUp ? 0.06 : -0.06;
 
             svgElement.style.transformOrigin = transformOrigin;
             svgElement.style.transform = `scale(${zoom})`;
         } else {
             if (!isShiftPressed && (isScrollUp || isScrollDown)) {
                 const currentRadius = parseFloat(activeCircle.getAttribute("r"));
-                const scaleFactor = isScrollUp ? 2 : -2; // Factor de escala para el cambio de radio
-
-                const newRadius = Math.max(currentRadius + scaleFactor, 1); // Asegurarse de que el radio no sea menor que 1
-
+                const scaleFactor = isScrollUp ? 2 : -2;
+                const newRadius = Math.max(currentRadius + scaleFactor, 1);
                 activeCircle.setAttribute("r", newRadius);
                 updateCircleData(activeCircle, null, null, newRadius);
             } else if (isShiftPressed && (isScrollUp || isScrollDown)) {
-                const smoothFactor = isScrollUp ? 0.2 : -0.2; // Factor de cambio de suavizado
-
+                const smoothFactor = isScrollUp ? 0.2 : -0.2;
                 updateCircleData(activeCircle, null, null, undefined, smoothFactor);
             }
         }
     }
 
-
-
-    function updateCircleData(circle, newX, newY, newRadius,smoothFactor) {
+    function updateCircleData(circle, newX, newY, newRadius, smoothFactor) {
         const shapeInput = document.getElementById("shapeInput");
-        const circleIndex = Array.from(
-            draggableCircles.nodes()).indexOf(circle);
+        const circleIndex = Array.from(draggableCircles.nodes()).indexOf(circle);
         const lines = shapeInput.value.split("\n");
-        const firstLine = lines[0].trim(); // Obtener el valor de la primera línea y eliminar espacios en blanco
+        const firstLine = lines[0].trim();
 
         if (newX !== null && newY !== null) {
-            // Actualizar las coordenadas del círculo en el textarea
             lines[circleIndex + 1] = `${newX} ${newY}`;
-            hasDataChanged = true; // Los datos han cambiado
+            hasDataChanged = true;
         }
 
         if (newRadius !== undefined) {
-            // Actualizar el radio del círculo en el textarea
             lines[circleIndex + parseInt(firstLine) + 1] = `${newRadius}`;
-            hasDataChanged = true; // Los datos han cambiado
+            hasDataChanged = true;
         }
 
         if (smoothFactor !== undefined) {
-            // Actualizar el radio del círculo en el textarea
-            const currentSmooth = parseFloat(lines[circleIndex + (parseInt(firstLine)*2) + 1]);
-             // Convertir a cadena de texto
-            lines[circleIndex + (parseInt(firstLine)*2) + 1] = Math.max(Math.min(currentSmooth + smoothFactor, 2), 0).toString();
-            hasDataChanged = true; // Los datos han cambiado
+            const currentSmooth = parseFloat(lines[circleIndex + parseInt(firstLine) * 2 + 1]);
+            lines[circleIndex + parseInt(firstLine) * 2 + 1] = Math.max(Math.min(currentSmooth + smoothFactor, 2), 0).toString();
+            hasDataChanged = true;
         }
 
         shapeInput.value = lines.join("\n");
+
         if (isDragging && !animationFrameId) {
             animationFrameId = requestAnimationFrame(animate);
         } else if (!isDragging && animationFrameId) {
@@ -134,7 +121,6 @@ function drawFigure() {
             animationFrameId = null;
         }
     }
-
 
     function dragEnded() {
         isDragging = false;
@@ -148,11 +134,10 @@ function drawFigure() {
         if (isDragging) {
             if (hasDataChanged) {
                 computeShape();
-                hasDataChanged = false; // Reiniciar el indicador de cambios
+                hasDataChanged = false;
             }
             requestAnimationFrame(animate);
         } else {
-            // Detener el ciclo de animación
             animationFrameId = null;
         }
     }

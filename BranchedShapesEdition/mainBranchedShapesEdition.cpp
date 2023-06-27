@@ -9,7 +9,7 @@
 
 #include "triangulation.h"
 
-NodeTree nT; /// shape object
+NodeTree nT;
 int main() {
 
    /// READING SHAPE PARAMETERS
@@ -117,49 +117,4 @@ char* insertpointmiddle(int argc, int argv) {
                   (nT.s_[argc]+nT.s_[argv])*0.5,0,1);
     nT.svg_generation("shape_new.svg", true);
     return allocateAndExtract();
-}
-
-/// **********************************************************
-///               MAIN
-/// **********************************************************
-int ejemplo(int argc, char *argv[]){
-  /// ADD A POINT IN THE MIDDLE OF THE FIRST SEGMENT
-  nT.insert_point((nT.n_[0]+nT.n_[1])*0.5,
-                  (nT.r_[0]+nT.r_[1])*0.5,
-                  (nT.s_[0]+nT.s_[1])*0.5,0,1);
-
-  /// ERASE A POINT
-  nT.erase_point(2);
-
-  /// CONNECT 2 NODES
-  nT.connect_nodes(2,3);
-
-  /// DISCONNECT 2 NODES
-  nT.disconnect_nodes(0,2);
-
-
-  /// SAVING THE NEW SHAPE FILES
-  nT.svg_generation("shape_new.svg",true);
-  nT.write("shape_new.txt");
-
-/***********************************************************************/
-
-  /// EXAMPLE OF RANDOM GENERATION OF A BRANCHED SHAPE
-  nT=NodeTree_random_generator();
-
-  /// SAVING THE NEW SHAPE FILES
-  nT.svg_generation("random_shape.svg",true);
-  nT.write("random_shape.txt");
-
-
-/***********************************************************************/
-
-  /// EXAMPLE OF A BRANCHED SHAPE SIMILAR TO THE RANDOMLY GENERATED
-
-  NodeTree nT2=NodeTree_similar_generation(nT);
-
-  /// SAVING THE NEW SHAPE FILES
-  nT2.svg_generation("random_shape_similar.svg",true);
-  nT2.write("random_shape_similar.txt");
-
 }

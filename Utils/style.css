@@ -191,7 +191,7 @@ canvas.emscripten {
 
 /* Estilos específicos para canvas_svg */
 #canvas_svg {
-    width: 600px;
-    height: 500px;
+    width: 454px;
+    height: 454px;
     border: 1px solid black;
 }

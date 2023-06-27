@@ -22,7 +22,7 @@
 <textarea id="shapeInput" rows="10" cols="50"></textarea>
 <button id="mybutton">Compute Shape</button>
 <hr>
-<textarea id="svgOutput" rows="10" cols="50" ></textarea>
+<textarea id="svgOutput" rows="10" cols="50" hidden></textarea>
 <div id="container">
     <div id="canvas_svg">
     </div>
@@ -35,11 +35,17 @@
         </ol>
         <div class="inline-buttons">
             <button onclick="downloadsvg()">Download SVG</button>
-            <button id="eraseButton">Erase a circle</button>
+            <button id="middlecircle">New circle in the middle of a segment</button>
+        </div>
+        <div class="inline-buttons">
             <button id="createButton">Create a circle(WIP)</button>
-            <button id="middlecircle">Insert new circle in the middle of a segment</button>
+            <button id="eraseButton">Erase a circle</button>
+        </div>
+        <div class="inline-buttons">
             <button id="createconection">New circle connection</button>
             <button id="eraseconection">Remove circle connection</button>
+        </div>
+        <div class="inline-buttons">
             <button onclick="randomGenerate()">Generate random SVG</button>
             <button onclick="similarGenerate()">Generate similar SVG</button>
         </div>
