@@ -90,8 +90,8 @@ button:hover {
 #canvas_svg {
     margin-top: 20px;
     border: 1px solid #ccc;
-    width: 454px;
-    height: 454px;
+    width: 454px; !important;
+    height: 454px; !important;
     overflow: auto;
     display: flex;
     align-items: stretch;
