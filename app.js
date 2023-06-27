@@ -3,7 +3,7 @@ let progressElement = document.getElementById('progress');
 let spinnerElement = document.getElementById('spinner');
 let shapeInput = document.getElementById('shapeInput');
 let svgOutput = document.getElementById('svgOutput');
-//Cambiar esto a let o const y explota todo
+
 var Module = {
     preRun: [],
     postRun: [],
@@ -77,29 +77,6 @@ function computeShape(){
     drawFigure();
 }
 
-function erasePoint(i) {
-    shapeInput.value = Module.ccall(
-        "_Z10erasepointi", // nombre de la función C
-        "string", // tipo de retorno
-        ["number"], // tipos de argumentos
-        [i] // argumentos
-    );
-    computeShape();
-}
-
-function readTextFile(file, callback) {
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", file, true);
-    rawFile.onreadystatechange = function () {
-        if (rawFile.readyState === 4 && (rawFile.status === 200 || rawFile.status === 0)) {
-            var content = rawFile.responseText;
-            callback(content);
-        }
-    };
-    rawFile.send(null);
-}
-
-
 // para cargar el shape.txt en el textarea al principio
 window.addEventListener('load', function() {
     // Crear una nueva solicitud XMLHttpRequest
@@ -121,3 +98,4 @@ window.addEventListener('load', function() {
     // Enviar la solicitud
     solicitud.send();
 });
+

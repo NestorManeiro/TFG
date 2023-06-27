@@ -24,12 +24,6 @@ int main() {
   /// GENERATION OF A SVG FILE (THE SECOND PARAMETERS IS USED TO DRAW THE CIRCLES IN BLACK)
   nT.svg_generation("shape.svg",true);
 
-  /// PRINT SHAPE MAIN PARAMETERS
-  for(int k=0;k<nT.n_.size();k++){
-    printf("cercle %d : center = (%1.2lf,%1.2lf), radius=%1.2lf, smoothing factor=%1.2lf\n",
-           k,nT.n_[k].x,nT.n_[k].y,nT.r_[k],nT.s_[k]);
-  }
-
   /// SAVING THE NEW SHAPE FILES
   nT.svg_generation("shape_new.svg",true);
   nT.write("shape_new.txt");
@@ -59,24 +53,71 @@ char* ComputeSVGFromShape(char* shape) {
     return contenido;
 }
 
-EMSCRIPTEN_KEEPALIVE
-char* erasepoint(int argc) {
-    nT.erase_point(argc);
-    nT.svg_generation("shape_new.svg", true);
-    nT.write("shape_new.txt");
-
-    std::ifstream file("shape_new.txt");
+//Esto esta en comun en muchisimas funciones, asi que lo he extrapolado.
+char* readContentFromFile(const std::string& filename) {
+    std::ifstream file(filename);
     std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
     file.close();
 
     char* result = (char*)malloc(content.size() + 1);
     std::strcpy(result, content.c_str());
+
     return result;
 }
 
+char* allocateAndExtract() {
+    nT.write("shape_new.txt");
+    return readContentFromFile("shape_new.txt");
+}
+EMSCRIPTEN_KEEPALIVE
+char* downloadsvg() {
+    nT.svg_generation("shape_new.svg", false);
+    return readContentFromFile("shape_new.svg");
+}
 
+EMSCRIPTEN_KEEPALIVE
+char* erasepoint(int argc) {
+    nT.erase_point(argc);
+    nT.svg_generation("shape_new.svg", true);
+    return allocateAndExtract();
+}
 
+EMSCRIPTEN_KEEPALIVE
+char* similargeneration() {
+    nT=NodeTree_similar_generation(nT);
+    nT.svg_generation("shape_new.svg", true);
+    return allocateAndExtract();
+}
 
+EMSCRIPTEN_KEEPALIVE
+char* randomgeneration() {
+    nT=NodeTree_random_generator();
+    nT.svg_generation("shape_new.svg", true);
+    return allocateAndExtract();
+}
+
+EMSCRIPTEN_KEEPALIVE
+char* connectnodes(int argc, int argv) {
+    nT.connect_nodes(argc,argv);
+    nT.svg_generation("shape_new.svg", true);
+    return allocateAndExtract();
+}
+
+EMSCRIPTEN_KEEPALIVE
+char* disconnectnodes(int argc, int argv) {
+    nT.disconnect_nodes(argc,argv);
+    nT.svg_generation("shape_new.svg", true);
+    return allocateAndExtract();
+}
+
+EMSCRIPTEN_KEEPALIVE
+char* insertpointmiddle(int argc, int argv) {
+  nT.insert_point((nT.n_[argc]+nT.n_[argv])*0.5,
+                  (nT.r_[argc]+nT.r_[argv])*0.5,
+                  (nT.s_[argc]+nT.s_[argv])*0.5,0,1);
+    nT.svg_generation("shape_new.svg", true);
+    return allocateAndExtract();
+}
 
 /// **********************************************************
 ///               MAIN

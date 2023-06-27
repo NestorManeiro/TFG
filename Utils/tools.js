@@ -200,13 +200,27 @@ eraseButton.addEventListener("click", function() {
     }
 });
 
-
+//New functionalities
+function erasePoint(i) {
+    shapeInput.value = Module.ccall(
+        "_Z10erasepointi", // nombre de la función C
+        "string", // tipo de retorno
+        ["number"], // tipos de argumentos
+        [i] // argumentos
+    );
+    computeShape();
+}
 function downloadsvg(){
-    var svgContent = document.getElementById('svgOutput').value; // Obtener el contenido del textarea
+    var aux =  Module.ccall(
+        "_Z11downloadsvgv", // nombre de la función C
+        "string", // tipo de retorno
+        ["number"], // tipos de argumentos
+        [] // argumentos
+    );
 
     // Crear un elemento <a> para descargar el archivo
     var enlaceDescarga = document.createElement('a');
-    enlaceDescarga.setAttribute('href', 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgContent));
+    enlaceDescarga.setAttribute('href', 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(aux));
     enlaceDescarga.setAttribute('download', 'imagen.svg');
     enlaceDescarga.style.display = 'none';
 
@@ -218,4 +232,121 @@ function downloadsvg(){
 
     // Eliminar el elemento <a> del documento
     document.body.removeChild(enlaceDescarga);
+}
+function randomGenerate() {
+    shapeInput.value = Module.ccall(
+        "_Z16randomgenerationv", // nombre de la función C
+        "string", // tipo de retorno
+    );
+    computeShape();
+}
+
+function similarGenerate() {
+    shapeInput.value = Module.ccall(
+        "_Z17similargenerationv", // nombre de la función C
+        "string", // tipo de retorno
+    );
+    computeShape();
+}
+
+var createcon = document.getElementById("createconection");
+createcon.addEventListener("click", function() {
+    if (circulitos) {
+        // Asigna el evento click a los círculos
+        circulitos.on("click", function() {
+            // Obtiene el índice del círculo en el array de nodos
+            const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
+            // Realiza cualquier acción que necesites con el índice del círculo
+            if (typeof createconection.firstCircleIndex === "undefined") {
+                // Almacena el índice del primer círculo
+                createconection.firstCircleIndex = circleIndex;
+            } else {
+                // Almacena el índice del segundo círculo
+                const secondCircleIndex = circleIndex;
+                // Llama a la función createconection con los índices de los círculos como parámetros
+                createconection(createconection.firstCircleIndex, secondCircleIndex);
+                // Reinicia el primer índice almacenado para futuras conexiones
+                delete createconection.firstCircleIndex;
+            }
+        });
+    }
+});
+
+// Nuevas funcionalidades
+function createconection(circleIndex1, circleIndex2) {
+    shapeInput.value = Module.ccall(
+        "_Z12connectnodesii", // nombre de la función C
+        "string", // tipo de retorno
+        ["number", "number"], // tipos de argumentos
+        [circleIndex1, circleIndex2] // argumentos
+    );
+    computeShape();
+}
+
+var erasecon = document.getElementById("eraseconection");
+erasecon.addEventListener("click", function() {
+    if (circulitos) {
+        // Asigna el evento click a los círculos
+        circulitos.on("click", function() {
+            // Obtiene el índice del círculo en el array de nodos
+            const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
+            // Realiza cualquier acción que necesites con el índice del círculo
+            if (typeof erasecon.firstCircleIndex === "undefined") {
+                // Almacena el índice del primer círculo
+                erasecon.firstCircleIndex = circleIndex;
+            } else {
+                // Almacena el índice del segundo círculo
+                const secondCircleIndex = circleIndex;
+                // Llama a la función eraseconection con los índices de los círculos como parámetros
+                eraseConnection(erasecon.firstCircleIndex, secondCircleIndex);
+                // Reinicia el primer índice almacenado para futuras conexiones
+                delete erasecon.firstCircleIndex;
+            }
+        });
+    }
+});
+
+// Nuevas funcionalidades
+function eraseConnection(circleIndex1, circleIndex2) {
+    shapeInput.value = Module.ccall(
+        "_Z15disconnectnodesii", // nombre de la función C
+        "string", // tipo de retorno
+        ["number", "number"], // tipos de argumentos
+        [circleIndex1, circleIndex2] // argumentos
+    );
+    computeShape();
+}
+
+var middlecircle = document.getElementById("middlecircle");
+middlecircle.addEventListener("click", function() {
+    if (circulitos) {
+        // Asigna el evento click a los círculos
+        circulitos.on("click", function() {
+            // Obtiene el índice del círculo en el array de nodos
+            const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
+            // Realiza cualquier acción que necesites con el índice del círculo
+            if (typeof erasecon.firstCircleIndex === "undefined") {
+                // Almacena el índice del primer círculo
+                erasecon.firstCircleIndex = circleIndex;
+            } else {
+                // Almacena el índice del segundo círculo
+                const secondCircleIndex = circleIndex;
+                // Llama a la función eraseconection con los índices de los círculos como parámetros
+                middleCircle(erasecon.firstCircleIndex, secondCircleIndex);
+                // Reinicia el primer índice almacenado para futuras conexiones
+                delete erasecon.firstCircleIndex;
+            }
+        });
+    }
+});
+
+// Nuevas funcionalidades
+function middleCircle(circleIndex1, circleIndex2) {
+    shapeInput.value = Module.ccall(
+        "_Z17insertpointmiddleii", // nombre de la función C
+        "string", // tipo de retorno
+        ["number", "number"], // tipos de argumentos
+        [circleIndex1, circleIndex2] // argumentos
+    );
+    computeShape();
 }

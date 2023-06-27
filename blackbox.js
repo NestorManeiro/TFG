@@ -3714,6 +3714,10 @@ function dbg(text) {
       abort('native code called abort()');
     }
 
+  function _emscripten_date_now() {
+      return Date.now();
+    }
+
   function _emscripten_memcpy_big(dest, src, num) {
       HEAPU8.copyWithin(dest, src, src + num);
     }
@@ -4612,6 +4616,7 @@ var wasmImports = {
   "__syscall_openat": ___syscall_openat,
   "_emscripten_fs_load_embedded_files": __emscripten_fs_load_embedded_files,
   "abort": _abort,
+  "emscripten_date_now": _emscripten_date_now,
   "emscripten_memcpy_big": _emscripten_memcpy_big,
   "emscripten_resize_heap": _emscripten_resize_heap,
   "environ_get": _environ_get,
@@ -4630,7 +4635,19 @@ var __Z19ComputeSVGFromShapePc = Module["__Z19ComputeSVGFromShapePc"] = createEx
 /** @type {function(...*):?} */
 var _malloc = createExportWrapper("malloc");
 /** @type {function(...*):?} */
+var __Z11downloadsvgv = Module["__Z11downloadsvgv"] = createExportWrapper("_Z11downloadsvgv");
+/** @type {function(...*):?} */
 var __Z10erasepointi = Module["__Z10erasepointi"] = createExportWrapper("_Z10erasepointi");
+/** @type {function(...*):?} */
+var __Z17similargenerationv = Module["__Z17similargenerationv"] = createExportWrapper("_Z17similargenerationv");
+/** @type {function(...*):?} */
+var __Z16randomgenerationv = Module["__Z16randomgenerationv"] = createExportWrapper("_Z16randomgenerationv");
+/** @type {function(...*):?} */
+var __Z12connectnodesii = Module["__Z12connectnodesii"] = createExportWrapper("_Z12connectnodesii");
+/** @type {function(...*):?} */
+var __Z15disconnectnodesii = Module["__Z15disconnectnodesii"] = createExportWrapper("_Z15disconnectnodesii");
+/** @type {function(...*):?} */
+var __Z17insertpointmiddleii = Module["__Z17insertpointmiddleii"] = createExportWrapper("_Z17insertpointmiddleii");
 /** @type {function(...*):?} */
 var _main = Module["_main"] = createExportWrapper("main");
 /** @type {function(...*):?} */
@@ -4682,7 +4699,7 @@ var dynCall_iiiiij = Module["dynCall_iiiiij"] = createExportWrapper("dynCall_iii
 var dynCall_iiiiijj = Module["dynCall_iiiiijj"] = createExportWrapper("dynCall_iiiiijj");
 /** @type {function(...*):?} */
 var dynCall_iiiiiijj = Module["dynCall_iiiiiijj"] = createExportWrapper("dynCall_iiiiiijj");
-var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 68132;
+var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 68492;
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===

@@ -16,3 +16,15 @@ animate como se dijo simplemente llama al actualizador del svg que automaticamen
 y estamos pendiente de añadir nuevo circulo.
 
 primero esta el numero de circulos, luego su posicion, luego su tamaño y el resto no se.
+
+---ACTUALIZACION---
+
+Al hacer download las cosas que estan un poco arriba, no aparecen en el dibujo final.
+
+La speed del raton hay que mirarla, ni siquiera creo que que exista speed sea algo  que debiera existir.
+
+hay que hacer algo con los draggeable-circles, esa clase deberia estar estanciada desde el prinicpio.
+
+A nivel de codigo, no permitir que se pueda intentar colocar un punto entre dos, si no existe el segmento.
+
+Optmizar, es inhumano lo mal que va cunado hay muchos circulos, hay que mirarlo. Incluso sale un error de out of memory o algo asi.
