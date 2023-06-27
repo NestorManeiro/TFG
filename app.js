@@ -14,11 +14,11 @@ var Module = {
             if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
 
             //Comentar para tener mejora de rendimiento
-            /*console.log(text);
+            console.log(text);
             if (element) {
                 element.value += text + "\n";
                 element.scrollTop = element.scrollHeight; // focus on bottom
-            }*/
+            }
         };
     })(),
     canvas: (() => {
@@ -76,6 +76,30 @@ function computeShape(){
     );
     drawFigure();
 }
+
+function erasePoint(i) {
+    shapeInput.value = Module.ccall(
+        "_Z10erasepointi", // nombre de la función C
+        "string", // tipo de retorno
+        ["number"], // tipos de argumentos
+        [i] // argumentos
+    );
+    computeShape();
+}
+
+function readTextFile(file, callback) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function () {
+        if (rawFile.readyState === 4 && (rawFile.status === 200 || rawFile.status === 0)) {
+            var content = rawFile.responseText;
+            callback(content);
+        }
+    };
+    rawFile.send(null);
+}
+
+
 // para cargar el shape.txt en el textarea al principio
 window.addEventListener('load', function() {
     // Crear una nueva solicitud XMLHttpRequest

@@ -1,3 +1,4 @@
+var circulitos;
 function drawFigure() {
     const svgContent = svgOutput.value;
     const canvas = document.getElementById("canvas_svg");
@@ -12,6 +13,9 @@ function drawFigure() {
     } else {
         canvas.appendChild(svgElement);
     }
+    circulitos = d3
+        .selectAll("#canvas_svg circle[stroke='black']")
+        .classed("draggable-circle", true);
 
     const draggableCircles = d3
         .selectAll("#canvas_svg circle[stroke='black']")
@@ -97,7 +101,8 @@ function drawFigure() {
 
     function updateCircleData(circle, newX, newY, newRadius,smoothFactor) {
         const shapeInput = document.getElementById("shapeInput");
-        const circleIndex = Array.from(draggableCircles.nodes()).indexOf(circle);
+        const circleIndex = Array.from(
+            draggableCircles.nodes()).indexOf(circle);
         const lines = shapeInput.value.split("\n");
         const firstLine = lines[0].trim(); // Obtener el valor de la primera línea y eliminar espacios en blanco
 
@@ -181,9 +186,20 @@ function isMouseOverSVG(event) {
     );
 }
 
-function addNewCircleToShapeInput(x, y) {
 
-}
+var eraseButton = document.getElementById("eraseButton");
+eraseButton.addEventListener("click", function() {
+    if (circulitos) {
+        // Asigna el evento click a los círculos
+        circulitos.on("click", function() {
+            // Obtiene el índice del círculo en el array de nodos
+            const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
+            // Realiza cualquier acción que necesites con el índice del círculo
+            erasePoint(circleIndex);
+        });
+    }
+});
+
 
 function downloadsvg(){
     var svgContent = document.getElementById('svgOutput').value; // Obtener el contenido del textarea
