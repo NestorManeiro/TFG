@@ -34,4 +34,6 @@ tambien con muchos circulos no se puede ni arrastrar casi
 
 tambein ahora lo del circulo en medio es clickando en un circulo y leugo en otro, no en medio.
 
+similar generation
+
 UI: ALgo que indique que estas esperando a que clickes circulos o algo, experiencia de usuario xd
