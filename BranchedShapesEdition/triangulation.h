@@ -300,6 +300,30 @@ class NodeTree{ ///AAA
 
   };
 
+  ///***********************************************************************
+  ///                 BASIC PRINT
+  ///***********************************************************************
+  void print_params(){
+    printf("\nSHAPE PARAMETERS\n");
+
+    printf("shape_type = %d\n",shape_type);
+    printf("random_seed = %d\n",random_seed);
+    printf("average_node_distance = %f\n",average_node_distance);
+    printf("average_radius = %f\n",average_radius);
+    printf("smoothing_factor = %f\n",smoothing_factor);
+    printf("branched_finished_in_peak = %d\n",branched_finished_in_peak);
+    printf("Xperiods = %d\n",Xperiods);
+    printf("Yperiods = %d\n",Yperiods);
+    printf("joint_extrema_probability = %f\n",joint_extrema_probability);
+    printf("MaxNeigbors = %d\n",MaxNeigbors);
+    printf("allow_branche_intersection = %d\n",(int) allow_branche_intersection);
+    printf("node_radius_reduction_factor = %f\n",node_radius_reduction_factor);
+    printf("MaxAngles = %d\n",MaxAngles);
+    printf("MaxNodes = %d\n",(int) MaxNodes);
+    printf("round_termination = %d\n\n",(int) round_termination);
+
+  };
+
   int read(char filename[400]){
 
     /// OPEN THE FILE
@@ -895,11 +919,31 @@ class NodeTree{ ///AAA
 
   };
 
+
+  ///********************************************************
+  /// nodeTree TRANSFORMATION
+  ///********************************************************
+  void transformation(double zoom=1.,double zx=0.,double zy=0.,double dx=0.,double dy=0.){
+    if(zoom!=1 || dx!=0 || dy!=0){
+      for(int k=0;k<n_.size();k++){
+        n_[k].x+=dx;
+        n_[k].y+=dy;
+      }
+
+      if(zoom!=1){
+        for(int k=0;k<n_.size();k++){
+          n_[k].x=zx+zoom*(n_[k].x-zx);
+          n_[k].y=zy+zoom*(n_[k].y-zy);
+          r_[k]*=zoom;
+        }
+      }
+    }
+  }
+
   ///********************************************************
   /// SVG FILE GENERATION AAA
   ///********************************************************
   void svg_generation(char name[200],bool draw_nodes=false){
-    //if(checking()==false) return;
 
     node_angles_computation();
 
@@ -1214,7 +1258,7 @@ class NodeTree{ ///AAA
       }
       float r=r_[k]>=10?5:r_[k]/2.;
       fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"none\" fill=\"black\" /> \n",n_[k].x,n_[k].y,r);
-      fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"black\" stroke-width=\"1\" fill=\"none\" /> \n",n_[k].x,n_[k].y,r_[k]);
+      fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"black\" stroke-width=\"1\" fill=\"none\" class=\"draggable-circle\"/> \n",n_[k].x,n_[k].y,r_[k]);
     }
   }
 //    T.update_n();

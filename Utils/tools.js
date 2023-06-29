@@ -1,27 +1,24 @@
 var circulitos;
 function drawFigure() {
     const svgContent = svgOutput.value;
-    const canvas = document.getElementById("canvas_svg");
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgContent, "image/svg+xml");
     const svgElement = doc.documentElement;
     let zoom = 1;
 
     // Reemplazar el SVG existente en lugar de eliminar y agregar elementos
+    const canvas = document.getElementById("canvas_svg");
     if (canvas.firstChild) {
         canvas.replaceChild(svgElement, canvas.firstChild);
     } else {
         canvas.appendChild(svgElement);
     }
-    circulitos = d3
-        .selectAll("#canvas_svg circle[stroke='black']")
-        .classed("draggable-circle", true);
+    circulitos = d3.selectAll("#canvas_svg circle.draggable-circle");
 
-    const draggableCircles = d3
-        .selectAll("#canvas_svg circle[stroke='black']")
-        .classed("draggable-circle", true)
+    var draggableCircles = circulitos
         .on("mousedown", dragStarted)
         .on("wheel", wheel);
+
     svgElement.addEventListener("wheel", wheel);
 
     let activeCircle = null;

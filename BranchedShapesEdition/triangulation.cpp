@@ -4553,8 +4553,8 @@ bool &round_termination){
       for(int k=0;k<10;k++) sV.push_back(5);
       for(int k=0;k<5;k++) sV.push_back(6);
       for(int k=0;k<5;k++) sV.push_back(7);
-      for(int k=0;k<20;k++) sV.push_back(8);
-      for(int k=0;k<20;k++) sV.push_back(9);
+      for(int k=0;k<10;k++) sV.push_back(8);
+      for(int k=0;k<10;k++) sV.push_back(9);
       for(int k=0;k<2;k++) sV.push_back(10);
 
       shape_type = sV[rand()%sV.size()];
@@ -4648,6 +4648,8 @@ bool &round_termination){
   if((argc<11 || (argc>10 && atof(argv[10])<0)) && shape_type==9) MaxNeigbors=32;
 
   round_termination = rand()%2==0?true:false;
+
+  if(shape_type==5) average_node_distance*=2;
 
   /************* END EXTRA CONDITIONS IMPOSED TO PARAMETERS */
 
@@ -4773,6 +4775,16 @@ NodeTree NodeTree_random_generator(int shape_type){
       nT.r_[k]*=scale;
     }
 
+    nT.extrema(xmin,ymin,xmax,ymax);
+    double dx=512.-(xmax+xmin)/2.;
+    double dy=512.-(ymax+ymin)/2.;
+
+    for(int k=0;k<nT.n_.size();k++){
+      nT.n_[k].x += dx;
+      nT.n_[k].y += dy;
+    }
+
+
     nT.shape_type =  shape_type ;
     nT.random_seed =  random_seed;
     nT.average_node_distance =  average_node_distance;
@@ -4789,6 +4801,8 @@ NodeTree NodeTree_random_generator(int shape_type){
     nT.MaxNodes =  MaxNodes;
     nT.round_termination = round_termination;
 
+    nT.print_params();
+
     return nT;
 
 
@@ -4799,6 +4813,8 @@ NodeTree NodeTree_random_generator(int shape_type){
 /// GENERATION OF A SIMILAR SHAPE
 NodeTree NodeTree_similar_generation(NodeTree &nTo){
     srand (time(NULL)); rand();
+
+    nTo.print_params();
 
     /// PARAMETERS
     int shape_type=nTo.shape_type;
@@ -4891,6 +4907,16 @@ NodeTree NodeTree_similar_generation(NodeTree &nTo){
       nT.n_[k].y = 1024-(border + (nT.n_[k].y-ymin)*scale);
       nT.r_[k]*=scale;
     }
+
+    nT.extrema(xmin,ymin,xmax,ymax);
+    double dx=512.-(xmax+xmin)/2.;
+    double dy=512.-(ymax+ymin)/2.;
+
+    for(int k=0;k<nT.n_.size();k++){
+      nT.n_[k].x += dx;
+      nT.n_[k].y += dy;
+    }
+
 
     nT.shape_type =  shape_type ;
     nT.random_seed =  random_seed;

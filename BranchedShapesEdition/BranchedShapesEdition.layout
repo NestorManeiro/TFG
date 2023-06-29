@@ -2,19 +2,19 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
+	<File name="triangulation.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="-7" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="20950" topLine="453" />
+		</Cursor>
+	</File>
 	<File name="mainBranchedShapesEdition.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="-7" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="223" topLine="0" />
+			<Cursor1 position="1997" topLine="40" />
 		</Cursor>
 	</File>
 	<File name="triangulation.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="-5" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="154342" topLine="4829" />
-		</Cursor>
-	</File>
-	<File name="triangulation.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="-7" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="14203" topLine="251" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
