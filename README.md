@@ -19,7 +19,6 @@ primero esta el numero de circulos, luego su posicion, luego su tamaño y el res
 
 ---ACTUALIZACION---
 
-Al hacer download las cosas que estan un poco arriba, no aparecen en el dibujo final.
 
 La speed del raton hay que mirarla, ni siquiera creo que que exista speed sea algo  que debiera existir.
 
@@ -28,3 +27,13 @@ hay que hacer algo con los draggeable-circles, esa clase deberia estar estanciad
 A nivel de codigo, no permitir que se pueda intentar colocar un punto entre dos, si no existe el segmento.
 
 Optmizar, es inhumano lo mal que va cunado hay muchos circulos, hay que mirarlo. Incluso sale un error de out of memory o algo asi.
+
+el zoom, hay que mejorarlo,
+
+tambien con muchos circulos no se puede ni arrastrar casi
+
+tambein ahora lo del circulo en medio es clickando en un circulo y leugo en otro, no en medio.
+
+similar generation
+
+UI: ALgo que indique que estas esperando a que clickes circulos o algo, experiencia de usuario xd
