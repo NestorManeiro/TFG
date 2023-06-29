@@ -1,4 +1,5 @@
 var circulitos;
+const speed = 2.6;
 function drawFigure() {
     const svgContent = svgOutput.value;
     const parser = new DOMParser();
@@ -20,6 +21,7 @@ function drawFigure() {
         .on("wheel", wheel);
 
     svgElement.addEventListener("wheel", wheel);
+    //svgElement.addEventListener("mousemove", X);
 
     let activeCircle = null;
     let initialX, initialY, deltaX, deltaY;
@@ -41,13 +43,11 @@ function drawFigure() {
     }
 
     function dragged(event) {
-        if (!activeCircle) return;
-
-        const speed = 2.1;
         const offsetX = (event.clientX - deltaX - initialX) * speed;
         const offsetY = (event.clientY - deltaY - initialY) * speed;
         const newX = initialX + offsetX;
         const newY = initialY + offsetY;
+
         activeCircle.setAttribute("cx", newX);
         activeCircle.setAttribute("cy", newY);
         isDragging = true;
@@ -58,21 +58,14 @@ function drawFigure() {
         const isScrollUp = event.deltaY < 0;
         const isScrollDown = event.deltaY > 0;
         const isShiftPressed = event.shiftKey;
-
         if (!activeCircle) {
-            const canvasRect = canvas.getBoundingClientRect();
-            const mouseX = event.clientX - canvasRect.left + window.scrollX;
-            const mouseY = event.clientY - canvasRect.top + window.scrollY;
+            const canvas_svg = document.getElementById('canvas_svg');
 
-            const zoomCenterX = (mouseX - window.scrollX) / canvasRect.width;
-            const zoomCenterY = (mouseY - window.scrollY) / canvasRect.height;
-
-            const transformOrigin = `${zoomCenterX * 100}% ${zoomCenterY * 100}%`;
+            const mouseX = event.clientX - canvas_svg.offsetLeft;
+            const mouseY = event.clientY - canvas_svg.offsetTop-20;
 
             zoom += isScrollUp ? 0.06 : -0.06;
-
-            svgElement.style.transformOrigin = transformOrigin;
-            svgElement.style.transform = `scale(${zoom})`;
+            transform(zoom, mouseX*speed, mouseY*speed, 0, 0)
         } else {
             if (!isShiftPressed && (isScrollUp || isScrollDown)) {
                 const currentRadius = parseFloat(activeCircle.getAttribute("r"));
@@ -329,6 +322,15 @@ function middleCircle(circleIndex1, circleIndex2) {
         "string", // tipo de retorno
         ["number", "number"], // tipos de argumentos
         [circleIndex1, circleIndex2] // argumentos
+    );
+    computeShape();
+}
+function transform(zoom_factor, zx, zy, dx, dy) {
+    shapeInput.value = Module.ccall(
+        "_Z9transformfffff", // nombre de la función C
+        "string", // tipo de retorno
+        ["float", "float", "float", "float", "float"], // tipos de argumentos
+        [zoom_factor, zx, zy, dx, dy] // argumentos
     );
     computeShape();
 }

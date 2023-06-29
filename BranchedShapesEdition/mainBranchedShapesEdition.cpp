@@ -118,3 +118,10 @@ char* insertpointmiddle(int argc, int argv) {
     nT.svg_generation("shape_new.svg", true);
     return allocateAndExtract();
 }
+
+EMSCRIPTEN_KEEPALIVE
+char* transform(float zoom_factor, float zx, float zy, float dx, float dy) {
+   nT.transformation(zoom_factor, zx, zy, dx, dy);
+   nT.svg_generation("shape_new.svg", true);
+   return allocateAndExtract();
+}
