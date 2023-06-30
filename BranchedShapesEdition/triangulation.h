@@ -1017,6 +1017,11 @@ class NodeTree{ ///AAA
     for(int k=0;k<(int) n_.size();k++){
       if(i_[k].size()==0){
         fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"none\" fill=\"red\" /> \n",n_[k].x,n_[k].y,r_[k]);
+         if(draw_nodes==true){
+            float r=r_[k]>=10?5:r_[k]/2.;
+            fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"none\" fill=\"black\" /> \n",n_[k].x,n_[k].y,r);
+            fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"black\" stroke-width=\"1\" fill=\"none\" class=\"draggable-circle\"/> \n",n_[k].x,n_[k].y,r_[k]);
+        }
         continue;
       }
       for(int m=0;m<(int) i_[k].size();m++){

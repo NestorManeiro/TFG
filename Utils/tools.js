@@ -1,5 +1,6 @@
 var circulitos;
-const speed = 2.6;
+let isDragging = false;
+
 function drawFigure() {
     const svgContent = svgOutput.value;
     const parser = new DOMParser();
@@ -7,8 +8,18 @@ function drawFigure() {
     const svgElement = doc.documentElement;
     let zoom = 1;
 
-    // Reemplazar el SVG existente en lugar de eliminar y agregar elementos
+    let initialX = 0;
+    let initialY = 0;
+
+    let activeCircle = null;
+    let animationFrameId = null;
+    let hasDataChanged = false;
+    var deltaX , deltaY;
     const canvas = document.getElementById("canvas_svg");
+    const canvasSize = Math.min(canvas.offsetWidth, canvas.offsetHeight);
+    const windowSize = Math.min(window.innerWidth, window.innerHeight);
+    let proportion = windowSize / canvasSize;
+
     if (canvas.firstChild) {
         canvas.replaceChild(svgElement, canvas.firstChild);
     } else {
@@ -16,38 +27,26 @@ function drawFigure() {
     }
     circulitos = d3.selectAll("#canvas_svg circle.draggable-circle");
 
+    svgElement.addEventListener("wheel", wheelcanvas);
     var draggableCircles = circulitos
-        .on("mousedown", dragStarted)
-        .on("wheel", wheel);
-
-    svgElement.addEventListener("wheel", wheel);
-    //svgElement.addEventListener("mousemove", X);
-
-    let activeCircle = null;
-    let initialX, initialY, deltaX, deltaY;
-    let isDragging = false;
-    let animationFrameId = null;
-    let hasDataChanged = false;
+        .on("mousedown", dragStarted);
 
     function dragStarted(event) {
         activeCircle = this;
-
         initialX = parseFloat(activeCircle.getAttribute("cx"));
         initialY = parseFloat(activeCircle.getAttribute("cy"));
-        deltaX = event.clientX - initialX;
-        deltaY = event.clientY - initialY;
-
+        deltaX = event.clientX ;
+        deltaY = event.clientY;
         document.addEventListener("mousemove", dragged);
         document.addEventListener("mouseup", dragEnded);
         document.addEventListener("wheel", wheel);
     }
 
     function dragged(event) {
-        const offsetX = (event.clientX - deltaX - initialX) * speed;
-        const offsetY = (event.clientY - deltaY - initialY) * speed;
+        const offsetX = (event.clientX - deltaX) * proportion;
+        const offsetY = (event.clientY - deltaY) * proportion;
         const newX = initialX + offsetX;
         const newY = initialY + offsetY;
-
         activeCircle.setAttribute("cx", newX);
         activeCircle.setAttribute("cy", newY);
         isDragging = true;
@@ -58,15 +57,7 @@ function drawFigure() {
         const isScrollUp = event.deltaY < 0;
         const isScrollDown = event.deltaY > 0;
         const isShiftPressed = event.shiftKey;
-        if (!activeCircle) {
-            const canvas_svg = document.getElementById('canvas_svg');
-
-            const mouseX = event.clientX - canvas_svg.offsetLeft;
-            const mouseY = event.clientY - canvas_svg.offsetTop-20;
-
-            zoom += isScrollUp ? 0.06 : -0.06;
-            transform(zoom, mouseX*speed, mouseY*speed, 0, 0)
-        } else {
+        if(activeCircle){
             if (!isShiftPressed && (isScrollUp || isScrollDown)) {
                 const currentRadius = parseFloat(activeCircle.getAttribute("r"));
                 const scaleFactor = isScrollUp ? 2 : -2;
@@ -79,7 +70,26 @@ function drawFigure() {
             }
         }
     }
+    function wheelcanvas(event) {
+        if(isDragging) return;
+        const isScrollUp = event.deltaY < 0;
+        // Obtener el elemento div "canvas_svg"
+        var canvas = document.getElementById("canvas_svg");
 
+        var offsetX = event.clientX;
+        var offsetY = event.clientY;
+
+        // Obtener la posición del div en relación con la ventana del navegador
+        var rect = canvas.getBoundingClientRect();
+
+        // Calcular las coordenadas relativas al div
+        offsetX -= rect.left;
+        offsetY -= rect.top;
+
+        // Tu lógica para el zoom y la transformación usando las coordenadas X e Y
+        zoom += isScrollUp ? 0.06 : -0.06;
+        transform(zoom, offsetX * proportion, offsetY * proportion, 0, 0);
+    }
     function updateCircleData(circle, newX, newY, newRadius, smoothFactor) {
         const shapeInput = document.getElementById("shapeInput");
         const circleIndex = Array.from(draggableCircles.nodes()).indexOf(circle);

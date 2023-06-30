@@ -88,7 +88,6 @@ button:hover {
     align-items: flex-start;
 }
 #canvas_svg {
-    margin-top: 20px;
     border: 1px solid #ccc;
     width: 454px; !important;
     height: 454px; !important;
@@ -140,10 +139,7 @@ div.emscripten_border {
     border: 1px solid black;
 }
 
-canvas.emscripten {
-    border: 0 none;
-    background-color: black;
-}
+
 
 /* Estilos específicos para spinner */
 .spinner {

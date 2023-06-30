@@ -1,39 +1,49 @@
 # TFG
 
-Atm, we've introduced the use of d3.js and allowed the movement of circles (specific circles have been assigned a particular class: "draggable-circle", atm only wich ones with "stroke" == "black" ). 
-The speed variable in the dragged function is set to 2 (subject to revision), and the recalculation is pending.
-
+Algun dia pondre algo bonito aqui cuando este acabado todo en ingles :) Empeze a hacerlo en ingles, pero perdia cordura por momentos (:
 
 ##### Notas ####
 
-Se han pasado metodos que estaban en el index a app.js, el resto de metodos nuevos estan en tools.js.
-
-Existe la funcion drafigure para dibujar la figura. Drag start es para cuando empieza el arrastre y luego esta dragged para cuando se mueve que cambia la posicion del circulo y change radius que cambia
-el radio del circulo con la ruedita. updatecircle data actualiza el formato base con el que luego se genera el svg, por lo tanto luego gracias a animate se vuelve a generar el svg y a traves de ese nuevo svg volvemos a crear la nueva figura. dragended es para limpiar cositas.
-
-animate como se dijo simplemente llama al actualizador del svg que automaticamente pinta luego. Luego se tienen unas funciones para evitar que funcione la rueda del raton encima del svg para que sea mas comodo.
-
-y estamos pendiente de añadir nuevo circulo.
-
-primero esta el numero de circulos, luego su posicion, luego su tamaño y el resto no se.
-
----ACTUALIZACION---
+-----------------------------------------------------Por arreglar/Hacer-----------------------------------------------------
 
 
-La speed del raton hay que mirarla, ni siquiera creo que que exista speed sea algo  que debiera existir.
+Ahora se usa proporciones en vez de una speed falseada. Ese mejor, mas no perfecto0
 
-hay que hacer algo con los draggeable-circles, esa clase deberia estar estanciada desde el prinicpio.
+A nivel de codigo, no permitir que se pueda intentar colocar un punto entre dos, si no existe el segmento. A veces inclusive lo pone a uno aleatorio si no lo tiene xd
 
-A nivel de codigo, no permitir que se pueda intentar colocar un punto entre dos, si no existe el segmento.
+Optmizar, es inhumano lo mal que va cuando hay muchos circulos, hay que mirarlo. Incluso sale un error de out of memory o algo asi.
 
-Optmizar, es inhumano lo mal que va cunado hay muchos circulos, hay que mirarlo. Incluso sale un error de out of memory o algo asi.
+Tambien con muchos circulos no se puede ni arrastrar casi, sera lo de la memoria?
 
-el zoom, hay que mejorarlo,
+Similar generation, no se que pasa.
 
-tambien con muchos circulos no se puede ni arrastrar casi
+Recordar que querian cambiar los gestos.
 
-tambein ahora lo del circulo en medio es clickando en un circulo y leugo en otro, no en medio.
+Los puntos huerfanos, si son todos huerfanos no hay problema, pero a la que los hay y no lo hay, da errores en los indices.
 
-similar generation
+**TRANSFORM-> si no clickas en nada se mueve toda la figura, es una mierda, por el dragstarted de mierda, no quieroo duplicar codigo, soy incapaz de juntarlo.
 
-UI: ALgo que indique que estas esperando a que clickes circulos o algo, experiencia de usuario xd
+El create circle, tambien esta pendiente de programar, de todos modos, es una tonteria desde que se fixee del todo lo de los huerfanos.
+
+*******************************************************Mejoras ?*******************************************************
+
+ALgo que indique que estas esperando a que clickes circulos o algo, experiencia de usuario xd
+
+Quizas quede bien un boton, para intercalar el que se vea con los circulos o no, una prevista de lo que seria descargarlo.
+
+Me parece buena idea tambien, poder guardar tu shape. Eso daria mas juego a que exista el cuadro para poner tu shape.
+Serviria inclusive para poder guardar el trabajo que llevaras o las pruebas a un determinado momento. Si no es tu figura definitiva,
+pero va por buen camino.
+
+Con react podriamos poner español/ingles
+
+Segun chatgtp d3,js se centra en la manipulacion directa del DOM, para crear visualizaicones interactivas. 
+React, por otro lado, utiliza el Virtual DOM para realizar actualizaciones eficientes en la interfaz de usuario. 
+Al combinar ambos, puedes aprovechar la potencia de d3.js para la manipulación de SVG y utilizar React para manejar la representación 
+y actualización eficiente de los componentes que contienen las visualizaciones.
+
+Bibliotecas complementarias: Existen bibliotecas y herramientas que facilitan la integración de d3.js con React, como react-d3-library
+o react-vis. Estas bibliotecas proporcionan componentes de React que encapsulan funcionalidades de d3.js, simplificando así la 
+integración y el uso conjunto de ambas tecnologías.
+
+Suena a que me estan vendiendo la moto, tendre que preguntar
