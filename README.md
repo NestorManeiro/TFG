@@ -7,7 +7,7 @@ Algun dia pondre algo bonito aqui cuando este acabado todo en ingles :) Empeze a
 -----------------------------------------------------Por arreglar/Hacer-----------------------------------------------------
 
 
-Ahora se usa proporciones en vez de una speed falseada. Ese mejor, mas no perfecto0
+Ahora se usa proporciones en vez de una speed falseada. Ese mejor, mas no perfecto.
 
 A nivel de codigo, no permitir que se pueda intentar colocar un punto entre dos, si no existe el segmento. A veces inclusive lo pone a uno aleatorio si no lo tiene xd
 
@@ -15,15 +15,9 @@ Optmizar, es inhumano lo mal que va cuando hay muchos circulos, hay que mirarlo.
 
 Tambien con muchos circulos no se puede ni arrastrar casi, sera lo de la memoria?
 
-Similar generation, no se que pasa.
-
 Recordar que querian cambiar los gestos.
 
-Los puntos huerfanos, si son todos huerfanos no hay problema, pero a la que los hay y no lo hay, da errores en los indices.
-
 **TRANSFORM-> si no clickas en nada se mueve toda la figura, es una mierda, por el dragstarted de mierda, no quieroo duplicar codigo, soy incapaz de juntarlo.
-
-El create circle, tambien esta pendiente de programar, de todos modos, es una tonteria desde que se fixee del todo lo de los huerfanos.
 
 *******************************************************Mejoras ?*******************************************************
 

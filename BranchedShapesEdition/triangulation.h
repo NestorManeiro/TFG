@@ -378,19 +378,20 @@ class NodeTree{ ///AAA
       }
     }
 
+
     if (feof(f)) {return -1;} fscanf(f,"%d\n",&shape_type);
     if (feof(f)) {return -1;} fscanf(f,"%d\n",&random_seed);
-    if (feof(f)) {return -1;} fscanf(f,"%lf\n",&average_node_distance);
-    if (feof(f)) {return -1;} fscanf(f,"%lf\n",&average_radius);
-    if (feof(f)) {return -1;} fscanf(f,"%lf\n",&smoothing_factor);
+    if (feof(f)) {return -1;} fscanf(f,"%f\n",&average_node_distance);
+    if (feof(f)) {return -1;} fscanf(f,"%f\n",&average_radius);
+    if (feof(f)) {return -1;} fscanf(f,"%f\n",&smoothing_factor);
     if (feof(f)) {return -1;} fscanf(f,"%d\n",&branched_finished_in_peak);
     if (feof(f)) {return -1;} fscanf(f,"%d\n",&Xperiods);
     if (feof(f)) {return -1;} fscanf(f,"%d\n",&Yperiods);
-    if (feof(f)) {return -1;} fscanf(f,"%lf\n",&joint_extrema_probability);
+    if (feof(f)) {return -1;} fscanf(f,"%f\n",&joint_extrema_probability);
     if (feof(f)) {return -1;} fscanf(f,"%d\n",&MaxNeigbors);
     int temp; if (feof(f)) {return -1;} fscanf(f,"%d\n",&temp);
     allow_branche_intersection =(bool) temp;
-    if (feof(f)) {return -1;} fscanf(f,"%lf\n",&node_radius_reduction_factor);
+    if (feof(f)) {return -1;} fscanf(f,"%f\n",&node_radius_reduction_factor);
     if (feof(f)) {return -1;} fscanf(f,"%d\n",&MaxAngles);
     if (feof(f)) {return -1;} fscanf(f,"%d\n",&temp);
     MaxNodes=(unsigned int) temp;
@@ -1017,11 +1018,6 @@ class NodeTree{ ///AAA
     for(int k=0;k<(int) n_.size();k++){
       if(i_[k].size()==0){
         fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"none\" fill=\"red\" /> \n",n_[k].x,n_[k].y,r_[k]);
-         if(draw_nodes==true){
-            float r=r_[k]>=10?5:r_[k]/2.;
-            fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"none\" fill=\"black\" /> \n",n_[k].x,n_[k].y,r);
-            fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"black\" stroke-width=\"1\" fill=\"none\" class=\"draggable-circle\"/> \n",n_[k].x,n_[k].y,r_[k]);
-        }
         continue;
       }
       for(int m=0;m<(int) i_[k].size();m++){
@@ -1255,6 +1251,9 @@ class NodeTree{ ///AAA
   if(draw_nodes==true){
     for(int k=0;k<(int) n_.size();k++){
       if(i_[k].size()==0){
+        float r=r_[k]>=10?5:r_[k]/2.;
+        fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"none\" fill=\"black\" /> \n",n_[k].x,n_[k].y,r);
+        fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"black\" stroke-width=\"1\" fill=\"none\" class=\"draggable-circle\"/> \n",n_[k].x,n_[k].y,r_[k]);
         continue;
       }
       for(int m=0;m<(int) i_[k].size();m++){
