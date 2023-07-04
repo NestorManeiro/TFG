@@ -29,6 +29,8 @@ Me parece buena idea tambien, poder guardar tu shape. Eso daria mas juego a que 
 Serviria inclusive para poder guardar el trabajo que llevaras o las pruebas a un determinado momento. Si no es tu figura definitiva,
 pero va por buen camino.
 
+Que cuando se de click, se quede seleccionado y puedas en un una gui modificar parametros
+
 Con react podriamos poner español/ingles
 
 Segun chatgtp d3,js se centra en la manipulacion directa del DOM, para crear visualizaicones interactivas. 
