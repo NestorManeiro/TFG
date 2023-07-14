@@ -4649,6 +4649,8 @@ var __Z15disconnectnodesii = Module["__Z15disconnectnodesii"] = createExportWrap
 /** @type {function(...*):?} */
 var __Z17insertpointmiddleii = Module["__Z17insertpointmiddleii"] = createExportWrapper("_Z17insertpointmiddleii");
 /** @type {function(...*):?} */
+var __Z11insertpointiii = Module["__Z11insertpointiii"] = createExportWrapper("_Z11insertpointiii");
+/** @type {function(...*):?} */
 var __Z9transformfffff = Module["__Z9transformfffff"] = createExportWrapper("_Z9transformfffff");
 /** @type {function(...*):?} */
 var _main = Module["_main"] = createExportWrapper("main");

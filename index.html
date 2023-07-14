@@ -20,7 +20,10 @@
 </div>
 <p>Modify the shape or write a new one, and press the 'Compute Shape' button:</p>
 <textarea id="shapeInput" rows="5" cols="50"></textarea>
-<button id="mybutton">Compute Shape</button>
+<div class="inline-buttons">
+    <button id="mybutton">Compute Shape</button>
+    <button id="exportButton">Export Shape</button>
+</div>
 <hr>
 <textarea id="svgOutput" rows="10" cols="50" hidden></textarea>
 <div id="container">
@@ -38,7 +41,7 @@
             <button id="middlecircle">New circle in the middle of a segment</button>
         </div>
         <div class="inline-buttons">
-            <button id="createButton">Create a circle(WIP)</button>
+            <button onclick="addpoint(500,5,2)">Create a circle(WIP)</button>
             <button id="eraseButton">Erase a circle</button>
         </div>
         <div class="inline-buttons">

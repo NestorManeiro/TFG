@@ -76,7 +76,6 @@ function computeShape(){
     );
     drawFigure();
 }
-
 // para cargar el shape.txt en el textarea al principio
 window.addEventListener('load', function() {
     // Crear una nueva solicitud XMLHttpRequest

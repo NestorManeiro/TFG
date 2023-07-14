@@ -1,147 +1,145 @@
 var circulitos;
 let isDragging = false;
-
+var selectedcircle = null;
+var draggableCircles;
+var deltaX, deltaY;
+var initialX = 0;
+var initialY = 0;
+const canvas = document.getElementById("canvas_svg");
+var windowSize = Math.min(window.innerWidth, window.innerHeight);
+var canvasSize = Math.min(canvas.offsetWidth, canvas.offsetHeight);
+var proportion = windowSize / canvasSize;
+var activeCircle=false;
+var hasDataChanged;
 function drawFigure() {
     const svgContent = svgOutput.value;
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgContent, "image/svg+xml");
     const svgElement = doc.documentElement;
-    let zoom = 1;
-
-    let initialX = 0;
-    let initialY = 0;
-
-    let activeCircle = null;
-    let animationFrameId = null;
-    let hasDataChanged = false;
-    var deltaX , deltaY;
-    const canvas = document.getElementById("canvas_svg");
-    const canvasSize = Math.min(canvas.offsetWidth, canvas.offsetHeight);
-    const windowSize = Math.min(window.innerWidth, window.innerHeight);
-    let proportion = windowSize / canvasSize;
 
     if (canvas.firstChild) {
         canvas.replaceChild(svgElement, canvas.firstChild);
     } else {
         canvas.appendChild(svgElement);
     }
+    addEvents();
+}
+function addEvents(){
+    if(activeCircle) return;
     circulitos = d3.selectAll("#canvas_svg circle.draggable-circle");
+    draggableCircles = circulitos.on("mousedown", dragStarted);
+    canvas.addEventListener("wheel", wheelcanvas);
 
-    svgElement.addEventListener("wheel", wheelcanvas);
-    var draggableCircles = circulitos
-        .on("mousedown", dragStarted);
+}
 
-    function dragStarted(event) {
-        activeCircle = this;
-        initialX = parseFloat(activeCircle.getAttribute("cx"));
-        initialY = parseFloat(activeCircle.getAttribute("cy"));
-        deltaX = event.clientX ;
-        deltaY = event.clientY;
-        document.addEventListener("mousemove", dragged);
-        document.addEventListener("mouseup", dragEnded);
-        document.addEventListener("wheel", wheel);
+function dragStarted(event) {
+    activeCircle = this;
+    initialX = parseFloat(activeCircle.getAttribute("cx"));
+    initialY = parseFloat(activeCircle.getAttribute("cy"));
+
+    deltaX = event.clientX;
+    deltaY = event.clientY;
+
+    selectedcircle=null;
+
+    if (selectedcircle == null) {
+        selectedcircle = activeCircle;
+        selectedcircle.setAttribute("stroke", "blue");
+        selectedcircle.setAttribute("stroke-width", "3");
+    } else {
+        selectedcircle.setAttribute("stroke", "black");
+        selectedcircle.setAttribute("stroke-width", "1");
+        selectedcircle = null;
     }
 
-    function dragged(event) {
+    isDragging = true; // Marcar como arrastrando
+    document.addEventListener("mousemove", dragged);
+    document.addEventListener("mouseup", dragEnded);
+    document.addEventListener("wheel", wheel);
+}
+
+
+function dragged(event) {
+    if (isDragging && activeCircle) {
         const offsetX = (event.clientX - deltaX) * proportion;
         const offsetY = (event.clientY - deltaY) * proportion;
         const newX = initialX + offsetX;
         const newY = initialY + offsetY;
+
         activeCircle.setAttribute("cx", newX);
         activeCircle.setAttribute("cy", newY);
-        isDragging = true;
+        hasDataChanged = true; // Marcar como datos modificados
         updateCircleData(activeCircle, newX, newY);
     }
+}
 
-    function wheel(event) {
-        const isScrollUp = event.deltaY < 0;
-        const isScrollDown = event.deltaY > 0;
-        const isShiftPressed = event.shiftKey;
-        if(activeCircle){
-            if (!isShiftPressed && (isScrollUp || isScrollDown)) {
-                const currentRadius = parseFloat(activeCircle.getAttribute("r"));
-                const scaleFactor = isScrollUp ? 2 : -2;
-                const newRadius = Math.max(currentRadius + scaleFactor, 1);
-                activeCircle.setAttribute("r", newRadius);
-                updateCircleData(activeCircle, null, null, newRadius);
-            } else if (isShiftPressed && (isScrollUp || isScrollDown)) {
-                const smoothFactor = isScrollUp ? 0.2 : -0.2;
-                updateCircleData(activeCircle, null, null, undefined, smoothFactor);
-            }
-        }
-    }
-    function wheelcanvas(event) {
-        if(isDragging) return;
-        const isScrollUp = event.deltaY < 0;
-        // Obtener el elemento div "canvas_svg"
-        var canvas = document.getElementById("canvas_svg");
 
-        var offsetX = event.clientX;
-        var offsetY = event.clientY;
-
-        // Obtener la posición del div en relación con la ventana del navegador
-        var rect = canvas.getBoundingClientRect();
-
-        // Calcular las coordenadas relativas al div
-        offsetX -= rect.left;
-        offsetY -= rect.top;
-
-        // Tu lógica para el zoom y la transformación usando las coordenadas X e Y
-        zoom += isScrollUp ? 0.06 : -0.06;
-        transform(zoom, offsetX * proportion, offsetY * proportion, 0, 0);
-    }
-    function updateCircleData(circle, newX, newY, newRadius, smoothFactor) {
-        const shapeInput = document.getElementById("shapeInput");
-        const circleIndex = Array.from(draggableCircles.nodes()).indexOf(circle);
-        const lines = shapeInput.value.split("\n");
-        const firstLine = lines[0].trim();
-
-        if (newX !== null && newY !== null) {
-            lines[circleIndex + 1] = `${newX} ${newY}`;
-            hasDataChanged = true;
-        }
-
-        if (newRadius !== undefined) {
-            lines[circleIndex + parseInt(firstLine) + 1] = `${newRadius}`;
-            hasDataChanged = true;
-        }
-
-        if (smoothFactor !== undefined) {
-            const currentSmooth = parseFloat(lines[circleIndex + parseInt(firstLine) * 2 + 1]);
-            lines[circleIndex + parseInt(firstLine) * 2 + 1] = Math.max(Math.min(currentSmooth + smoothFactor, 2), 0).toString();
-            hasDataChanged = true;
-        }
-
-        shapeInput.value = lines.join("\n");
-
-        if (isDragging && !animationFrameId) {
-            animationFrameId = requestAnimationFrame(animate);
-        } else if (!isDragging && animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-            animationFrameId = null;
-        }
-    }
-
-    function dragEnded() {
-        isDragging = false;
-        activeCircle = null;
-
-        document.removeEventListener("mousemove", dragged);
-        document.removeEventListener("mouseup", dragEnded);
-    }
-
-    function animate() {
-        if (isDragging) {
-            if (hasDataChanged) {
-                computeShape();
-                hasDataChanged = false;
-            }
-            requestAnimationFrame(animate);
-        } else {
-            animationFrameId = null;
-        }
+function wheel(event) {
+    const isScrollUp = event.deltaY < 0;
+    if (selectedcircle != null) {
+        const currentRadius = parseFloat(selectedcircle.getAttribute("r"));
+        const scaleFactor = isScrollUp ? 2 : -2;
+        const newRadius = Math.max(currentRadius + scaleFactor, 1);
+        hasDataChanged=true;
+        selectedcircle.setAttribute("r", newRadius);
+        updateCircleData(selectedcircle, null, null, newRadius);
     }
 }
+
+function updateCircleData(circle, newX, newY, newRadius, smoothFactor) {
+    const shapeInput = document.getElementById("shapeInput");
+    const circleIndex = Array.from(draggableCircles.nodes()).indexOf(circle);
+    if (circleIndex == -1) return;
+    const lines = shapeInput.value.split("\n");
+    const firstLine = lines[0].trim();
+
+    if (newX !== null && newY !== null) {
+        lines[circleIndex + 1] = `${newX} ${newY}`;
+    }
+
+    if (newRadius !== undefined) {
+        lines[circleIndex + parseInt(firstLine) + 1] = `${newRadius}`;
+    }
+
+    if (smoothFactor !== undefined) {
+        const currentSmooth = parseFloat(lines[circleIndex + parseInt(firstLine) * 2 + 1]);
+        lines[circleIndex + parseInt(firstLine) * 2 + 1] = Math.max(Math.min(currentSmooth + smoothFactor, 2), 0).toString();
+    }
+
+    shapeInput.value = lines.join("\n");
+
+    animationFrameId = requestAnimationFrame(animate);
+}
+
+function wheelcanvas(event) {
+    // Tu lógica para el zoom y la transformación usando las coordenadas X e Y
+    // var canvas = document.getElementById("canvas_svg");
+    // var offsetX = event.clientX;
+    // var offsetY = event.clientY;
+    // var rect = canvas.getBoundingClientRect();
+    // offsetX -= rect.left;
+    // offsetY -= rect.top;
+    // zoom += isScrollUp ? 0.06 : -0.06;
+    // transform(zoom, offsetX * proportion, offsetY * proportion, 0, 0);
+}
+
+function dragEnded() {
+    isDragging = false;
+    activeCircle=false;
+    document.removeEventListener("mouseup", dragEnded);
+    document.removeEventListener("mousemove", dragged);
+    addEvents()
+}
+
+function animate() {
+    if (hasDataChanged) {
+        computeShape();
+        hasDataChanged = false;
+    }
+    requestAnimationFrame(animate);
+}
+
+
 
 //Prevent mouse
 const svgElement = document.getElementById("canvas_svg");
@@ -276,16 +274,16 @@ erasecon.addEventListener("click", function() {
             // Obtiene el índice del círculo en el array de nodos
             const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
             // Realiza cualquier acción que necesites con el índice del círculo
-            if (typeof erasecon.firstCircleIndex === "undefined") {
+            if (typeof eraseConnection.firstCircleIndex === "undefined") {
                 // Almacena el índice del primer círculo
-                erasecon.firstCircleIndex = circleIndex;
+                eraseConnection.firstCircleIndex = circleIndex;
             } else {
                 // Almacena el índice del segundo círculo
                 const secondCircleIndex = circleIndex;
                 // Llama a la función eraseconection con los índices de los círculos como parámetros
-                eraseConnection(erasecon.firstCircleIndex, secondCircleIndex);
+                eraseConnection(eraseConnection.firstCircleIndex, secondCircleIndex);
                 // Reinicia el primer índice almacenado para futuras conexiones
-                delete erasecon.firstCircleIndex;
+                delete eraseConnection.firstCircleIndex;
             }
         });
     }
@@ -334,6 +332,16 @@ function middleCircle(circleIndex1, circleIndex2) {
     );
     computeShape();
 }
+function addpoint(x, r,s) {
+    shapeInput.value = Module.ccall(
+        "_Z11insertpointiii", // nombre de la función C
+        "string", // tipo de retorno
+        ["number", "number"], // tipos de argumentos
+        [x, r,s] // argumentos
+    );
+    computeShape();
+}
+
 function transform(zoom_factor, zx, zy, dx, dy) {
     shapeInput.value = Module.ccall(
         "_Z9transformfffff", // nombre de la función C
@@ -342,4 +350,26 @@ function transform(zoom_factor, zx, zy, dx, dy) {
         [zoom_factor, zx, zy, dx, dy] // argumentos
     );
     computeShape();
+}
+
+const exportButton = document.getElementById('exportButton');
+exportButton.addEventListener('click', exportShape);
+
+function exportShape() {
+    const shapeInput = document.getElementById('shapeInput');
+    const shapeContent = shapeInput.value;
+
+    const blob = new Blob([shapeContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'shape.txt';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
