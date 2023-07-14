@@ -4801,7 +4801,7 @@ NodeTree NodeTree_random_generator(int shape_type){
     nT.MaxNodes =  MaxNodes;
     nT.round_termination = round_termination;
 
-    nT.print_params();
+   // nT.print_params();
 
     return nT;
 
@@ -4814,7 +4814,7 @@ NodeTree NodeTree_random_generator(int shape_type){
 NodeTree NodeTree_similar_generation(NodeTree &nTo){
     srand (time(NULL)); rand();
 
-    nTo.print_params();
+    //nTo.print_params();
 
     /// PARAMETERS
     int shape_type=nTo.shape_type;

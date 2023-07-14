@@ -105,6 +105,7 @@ char* connectnodes(int argc, int argv) {
 
 EMSCRIPTEN_KEEPALIVE
 char* disconnectnodes(int argc, int argv) {
+    if(nT.node_connected_checking(argc,argv)==true) return allocateAndExtract();
     nT.disconnect_nodes(argc,argv);
     nT.svg_generation("shape_new.svg", true);
     return allocateAndExtract();
@@ -112,6 +113,7 @@ char* disconnectnodes(int argc, int argv) {
 
 EMSCRIPTEN_KEEPALIVE
 char* insertpointmiddle(int argc, int argv) {
+  if(nT.node_connected_checking(argc,argv)==false) return allocateAndExtract();
   nT.insert_point((nT.n_[argc]+nT.n_[argv])*0.5,
                   (nT.r_[argc]+nT.r_[argv])*0.5,
                   (nT.s_[argc]+nT.s_[argv])*0.5,0,1);

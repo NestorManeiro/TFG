@@ -89,8 +89,8 @@ button:hover {
 }
 #canvas_svg {
     border: 1px solid #ccc;
-    width: 454px; !important;
-    height: 454px; !important;
+    width: 1024px; !important;
+    height: 1024px; !important;
     overflow: auto;
     display: flex;
     align-items: stretch;

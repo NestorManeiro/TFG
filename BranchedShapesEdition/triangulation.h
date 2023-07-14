@@ -253,6 +253,17 @@ class NodeTree{ ///AAA
     }
   }
 
+  /// *************************************************************
+  /// CHECKING IF 2 NODES ARE CONNECTED
+  /// *************************************************************
+  bool node_connected_checking(int i,int j){
+    if(i<0 || i>=(int) i_.size()) return false;
+    for(int k=0;k<(int) i_[i].size();k++){
+      if(i_[i][k]==j) return true;
+    }
+    return false;
+  }
+
 
 
 
@@ -1000,7 +1011,7 @@ class NodeTree{ ///AAA
 
     //fprintf(svgFile,"<svg width=\"%dcm\" height=\"%dcm\" viewBox=\"%d %d %d %d\" \n",(int) (xmax-xmin+dis)/85,(int) (ymax-ymin+dis)/85,0,0,(int) xmax+dis,(int) ymax+dis);
     // fprintf(svgFile,"<svg width=\"%dcm\" height=\"%dcm\" viewBox=\"0 0 %d %d\" \n",12*Xperiods,12*Yperiods,1024*Xperiods,1024*Yperiods);
-    fprintf(svgFile,"<svg width=\"12cm\" height=\"12cm\" viewBox=\"0 0 1024 1024\" \n");
+    fprintf(svgFile,"<svg width=\"1024px\" height=\"1024px\" viewBox=\"0 0 1024 1024\" \n");
     fprintf(svgFile,"xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"> \n");
 
     //fprintf(svgFile,"<svg width=1024 height=1024 viewBox=\"0 0 1024 1024\"> \n");

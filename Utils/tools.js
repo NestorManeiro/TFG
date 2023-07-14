@@ -311,7 +311,6 @@ middlecircle.addEventListener("click", function() {
             const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
             // Realiza cualquier acción que necesites con el índice del círculo
             if (typeof erasecon.firstCircleIndex === "undefined") {
-                // Almacena el índice del primer círculo
                 erasecon.firstCircleIndex = circleIndex;
             } else {
                 // Almacena el índice del segundo círculo

@@ -1,15 +1,12 @@
 # TFG
 
-Algun dia pondre algo bonito aqui cuando este acabado todo en ingles :) Empeze a hacerlo en ingles, pero perdia cordura por momentos (:
+Algun dia pondre algo bonito aqui cuando este acabado todo en ingles :)
 
 ##### Notas ####
 
 -----------------------------------------------------Por arreglar/Hacer-----------------------------------------------------
 
-
-Ahora se usa proporciones en vez de una speed falseada. Ese mejor, mas no perfecto.
-
-A nivel de codigo, no permitir que se pueda intentar colocar un punto entre dos, si no existe el segmento. A veces inclusive lo pone a uno aleatorio si no lo tiene xd
+Lo del error "node 5 is neighbor of 0 but it is not true the other way around"
 
 Optmizar, es inhumano lo mal que va cuando hay muchos circulos, hay que mirarlo. Incluso sale un error de out of memory o algo asi.
 
@@ -19,9 +16,10 @@ Recordar que querian cambiar los gestos.
 
 **TRANSFORM-> si no clickas en nada se mueve toda la figura, es una mierda, por el dragstarted de mierda, no quieroo duplicar codigo, soy incapaz de juntarlo.
 
+Que al clickar en uno se mantenga activado, rueda para agrandarlo y boton + - para smoothing factor e ir viendo.
 *******************************************************Mejoras ?*******************************************************
 
-ALgo que indique que estas esperando a que clickes circulos o algo, experiencia de usuario xd
+Algo que indique que estas esperando a que clickes circulos o algo, experiencia de usuario xd
 
 Quizas quede bien un boton, para intercalar el que se vea con los circulos o no, una prevista de lo que seria descargarlo.
 
