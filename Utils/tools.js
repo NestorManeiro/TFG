@@ -24,13 +24,62 @@ function drawFigure() {
     }
     addEvents();
 }
+
+
+
 function addEvents(){
     if(activeCircle) return;
     circulitos = d3.selectAll("#canvas_svg circle.draggable-circle");
-    draggableCircles = circulitos.on("mousedown", dragStarted);
+    draggableCircles = circulitos.on("mousedown", dragStarted).on("dblclick", doubleClick);
     canvas.addEventListener("wheel", wheelcanvas);
 
 }
+
+function showPopup(mouseX, mouseY) {
+    const popup = document.getElementById("popup");
+    const circleData = selectedcircle.getAttribute("data-info");
+
+    var shapeInput = document.getElementById("shapeInput");
+    var circleIndex = Array.from(draggableCircles.nodes()).indexOf(selectedcircle);
+    var lines = shapeInput.value.split("\n");
+    var currentRadius = parseFloat(selectedcircle.getAttribute("r")).toFixed(2);
+    var currentX = parseFloat(selectedcircle.getAttribute("cx")).toFixed(2);
+    var currentY = parseFloat(selectedcircle.getAttribute("cy")).toFixed(2);
+    var currentSmooth = parseFloat(lines[circleIndex + parseInt(lines[0].trim()) * 2 + 1]);
+
+    popup.style.display = "block";
+    popup.style.left = mouseX + "px";
+    popup.style.top = mouseY + "px";
+
+    popup.innerHTML = `<label>Radio:</label>
+    <input type="number" value="${currentRadius}" step="0.01" min="0"><br>
+    <label>Suavidad:</label>
+    <input type="range" value="${currentSmooth}" min="0" max="2" step="0.1"><br>
+    <label>X:</label>
+    <input type="number" value="${currentX}" step="0.01"><br>
+    <label>Y:</label>
+    <input type="number" value="${currentY}" step="0.01"><br>
+    <label>Índice:</label>
+    ${circleIndex}`;
+}
+
+
+
+
+function doubleClick(event) {
+    if (selectedcircle == null) {
+        selectedcircle = this;
+        selectedcircle.setAttribute("stroke", "blue");
+        selectedcircle.setAttribute("stroke-width", "3");
+        showPopup(event.clientX, event.clientY);
+    } else {
+        selectedcircle.setAttribute("stroke", "black");
+        selectedcircle.setAttribute("stroke-width", "1");
+        selectedcircle = null;
+        popup.style.display = "none";
+    }
+}
+
 
 function dragStarted(event) {
     activeCircle = this;
@@ -40,18 +89,12 @@ function dragStarted(event) {
     deltaX = event.clientX;
     deltaY = event.clientY;
 
-    selectedcircle=null;
-
-    if (selectedcircle == null) {
-        selectedcircle = activeCircle;
-        selectedcircle.setAttribute("stroke", "blue");
-        selectedcircle.setAttribute("stroke-width", "3");
-    } else {
+    if(selectedcircle!=null){
         selectedcircle.setAttribute("stroke", "black");
         selectedcircle.setAttribute("stroke-width", "1");
         selectedcircle = null;
+        popup.style.display = "none";
     }
-
     isDragging = true; // Marcar como arrastrando
     document.addEventListener("mousemove", dragged);
     document.addEventListener("mouseup", dragEnded);
@@ -76,13 +119,13 @@ function dragged(event) {
 
 function wheel(event) {
     const isScrollUp = event.deltaY < 0;
-    if (selectedcircle != null) {
-        const currentRadius = parseFloat(selectedcircle.getAttribute("r"));
+    if (activeCircle) {
+        const currentRadius = parseFloat(activeCircle.getAttribute("r"));
         const scaleFactor = isScrollUp ? 2 : -2;
         const newRadius = Math.max(currentRadius + scaleFactor, 1);
         hasDataChanged=true;
-        selectedcircle.setAttribute("r", newRadius);
-        updateCircleData(selectedcircle, null, null, newRadius);
+        activeCircle.setAttribute("r", newRadius);
+        updateCircleData(activeCircle, null, null, newRadius);
     }
 }
 
@@ -124,11 +167,13 @@ function wheelcanvas(event) {
 }
 
 function dragEnded() {
+
     isDragging = false;
     activeCircle=false;
     document.removeEventListener("mouseup", dragEnded);
     document.removeEventListener("mousemove", dragged);
     addEvents()
+
 }
 
 function animate() {

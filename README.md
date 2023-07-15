@@ -8,8 +8,6 @@ Algun dia pondre algo bonito aqui cuando este acabado todo en ingles :)
 
 Lo del error "node 5 is neighbor of 0 but it is not true the other way around"
 
-Con el create a circle, da error al añadir 2.
-
 memory access out of bounds
 at blackbox.wasm:0xd746
 at blackbox.js:716:22
@@ -17,9 +15,6 @@ at Object.ccall (blackbox.js:4354:22)
 at computeShape (app.js:70:30)
 at animate (tools.js:136:9)
 $
-
-Se puede no solo añadir el esto azul del seleccionado si no una clase aparte.
-Que al clickar en uno se mantenga activado, rueda para agrandarlo y boton + - para smoothing factor e ir viendo.(WIP)
 
 Que cuando se de click, se quede seleccionado y puedas en un una gui modificar parametros(WIP)
 

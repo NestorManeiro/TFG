@@ -1332,6 +1332,18 @@ class NodeTree{ ///AAA
     //node_angles_computation();
   };
 
+  /// *************************************************************
+  /// INSERT A NEW ISOLATED NODE
+  /// *************************************************************
+  void insert_point(point2d q,float radius,float smooth_factor){
+
+    n_.push_back(q);
+    r_.push_back(radius);
+    s_.push_back(smooth_factor);
+    i_.push_back(vector<int>());
+
+  };
+
   float average_length_segment(){
     float d=0;
     int N=0;

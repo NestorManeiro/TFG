@@ -123,7 +123,7 @@ char* insertpointmiddle(int argc, int argv) {
 
 EMSCRIPTEN_KEEPALIVE
 char* insertpoint(int argc, int argv, int args) {
-  nT.insert_point(argc, argv, args, 0, 1);
+  nT.insert_point(point2d(argc,argc),argv,args);
   nT.svg_generation("shape_new.svg", true);
   return allocateAndExtract();
 }

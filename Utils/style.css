@@ -2,39 +2,40 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 1.25em;
+    user-select: none;
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 1.5em;
     font-weight: bold;
     color: red;
     text-align: center;
 }
 
 hr {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
     border: none;
-    border-top: 1px solid #ccc;
+    border-top: 0.0625em solid #ccc;
 }
 
 textarea {
     width: 100%;
-    padding: 10px;
+    padding: 0.625em;
     font-family: Consolas, monospace;
-    max-width: 500px; /* Ancho máximo deseado */
-    box-sizing: border-box; /* Incluir el padding en el ancho total */
+    max-width: 31.25em;
+    box-sizing: border-box;
 }
 
 button {
-    padding: 10px 20px;
+    padding: 0.625em 1.25em;
     background-color: #4CAF50;
     color: white;
     border: none;
     cursor: pointer;
-    display: block; /* Mostrar los botones como bloques */
-    margin-top: 10px; /* Espacio entre los botones y los textareas */
+    display: block;
+    margin-top: 0.625em;
 }
 
 button:hover {
@@ -48,11 +49,11 @@ button:hover {
 }
 
 .spinner {
-    margin: 20px auto;
-    width: 50px;
-    height: 50px;
+    margin: 1.25em auto;
+    width: 3.125em;
+    height: 3.125em;
     border-radius: 50%;
-    border: 5px solid #f3f3f3;
+    border: 0.3125em solid #f3f3f3;
     border-top-color: #3498db;
     animation: spin 1s infinite linear;
 }
@@ -60,6 +61,29 @@ button:hover {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+#popup {
+    position: absolute;
+    background-color: white;
+    border: 0.0625em solid black;
+    padding: 0.625em;
+    border-radius: 0.3125em;
+    box-shadow: 0 0.125em 0.3125em rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
+}
+
+#popup input[type="number"],
+#popup input[type="range"] {
+    width: 8em;
+    padding: 0.25em;
+    margin-bottom: 0.3125em;
+}
+
+#popup label {
+    display: block;
+    margin-bottom: 0.625em;
+    font-weight: bold;
 }
 
 .spinner-text {
@@ -83,41 +107,46 @@ button:hover {
 .console {
     resize: none;
 }
+
 #container {
     display: flex;
     align-items: flex-start;
 }
+
 #canvas_svg {
-    border: 1px solid #ccc;
-    width: 1024px; !important;
-    height: 1024px; !important;
+    border: 0.0625em solid #ccc;
+    width: 64em;
+    height: 64em;
     overflow: auto;
     display: flex;
     align-items: stretch;
 }
+
 #canvas_svg svg {
     flex: 1;
     overflow: hidden;
 }
+
 #instructions {
     display: inline-block;
-    margin-left: 20px; /* Ajusta el margen según sea necesario */
+    margin-left: 1.25em;
     vertical-align: top;
 }
+
 .zoom-instructions {
     list-style-type: disc;
-    padding-left: 20px;
+    padding-left: 1.25em;
 }
+
 .inline-buttons button {
     display: inline-block;
-    margin-right: 10px; /* Espacio entre los botones */
+    margin-right: 0.625em;
 }
 
 /* Estilos específicos para draggable-circle */
 .draggable-circle {
     pointer-events: all;
 }
-
 
 .emscripten {
     padding-right: 0;
@@ -136,26 +165,24 @@ div.emscripten {
 }
 
 div.emscripten_border {
-    border: 1px solid black;
+    border: 0.0625em solid black;
 }
-
-
 
 /* Estilos específicos para spinner */
 .spinner {
-    height: 50px;
-    width: 50px;
+    height: 3.125em;
+    width: 3.125em;
     margin: 0 auto;
-    -webkit-animation: rotation .8s linear infinite;
-    -moz-animation: rotation .8s linear infinite;
-    -o-animation: rotation .8s linear infinite;
+    -webkit-animation: rotation 0.8s linear infinite;
+    -moz-animation: rotation 0.8s linear infinite;
+    -o-animation: rotation 0.8s linear infinite;
     animation: rotation 0.8s linear infinite;
-    border-left: 10px solid rgb(0,150,240);
-    border-right: 10px solid rgb(0,150,240);
-    border-bottom: 10px solid rgb(0,150,240);
-    border-top: 10px solid rgb(100,0,200);
+    border-left: 0.625em solid rgb(0, 150, 240);
+    border-right: 0.625em solid rgb(0, 150, 240);
+    border-bottom: 0.625em solid rgb(0, 150, 240);
+    border-top: 0.625em solid rgb(100, 0, 200);
     border-radius: 100%;
-    background-color: rgb(200,100,250);
+    background-color: rgb(200, 100, 250);
 }
 
 @-webkit-keyframes rotation {
@@ -177,4 +204,3 @@ div.emscripten_border {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
-
