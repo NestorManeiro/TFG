@@ -1290,7 +1290,11 @@ class NodeTree{ ///AAA
   /// *************************************************************
   void insert_point(point2d q,float radius, float smooth_factor,int i,int j){
     int pos=n_.size();
-    if(i<0 || i>=pos || j<0 || j>=pos) return;
+    if(i<0 || i>=pos || j<0 || j>=pos || i==j) return;
+
+    if(node_connected_checking(i,j)==true){
+      disconnect_nodes(i,j);
+    }
 
     n_.push_back(q);
     r_.push_back(radius);
@@ -1300,18 +1304,22 @@ class NodeTree{ ///AAA
     i_[pos][0]=i;
     i_[pos][1]=j;
 
-    for(int k=0;k<(int) i_[i].size();k++){
-      if(i_[i][k]==j){
-        i_[i][k]=pos;
-        break;
-      }
-    }
-    for(int k=0;k<(int) i_[j].size();k++){
-      if(i_[j][k]==i){
-        i_[j][k]=pos;
-        break;
-      }
-    }
+    i_[i].push_back(pos);
+    i_[j].push_back(pos);
+
+
+//    for(int k=0;k<(int) i_[i].size();k++){
+//      if(i_[i][k]==j){
+//        i_[i][k]=pos;
+//        break;
+//      }
+//    }
+//    for(int k=0;k<(int) i_[j].size();k++){
+//      if(i_[j][k]==i){
+//        i_[j][k]=pos;
+//        break;
+//      }
+//    }
     //node_angles_computation();
   };
 
@@ -1335,7 +1343,19 @@ class NodeTree{ ///AAA
   /// *************************************************************
   /// INSERT A NEW ISOLATED NODE
   /// *************************************************************
-  void insert_point(point2d q,float radius,float smooth_factor){
+  void insert_point(point2d q,float radius=-1,float smooth_factor=-1){
+
+    if(radius<0){
+      radius=0;
+      for(unsigned int k=0;k<r_.size();k++) radius+=r_[k];
+      radius/=r_.size();
+    }
+
+    if(smooth_factor<0){
+      smooth_factor=0;
+      for(unsigned int k=0;k<r_.size();k++) smooth_factor+=s_[k];
+      smooth_factor/=s_.size();
+    }
 
     n_.push_back(q);
     r_.push_back(radius);

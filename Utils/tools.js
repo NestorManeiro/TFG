@@ -5,12 +5,25 @@ var draggableCircles;
 var deltaX, deltaY;
 var initialX = 0;
 var initialY = 0;
-const canvas = document.getElementById("canvas_svg");
-var windowSize = Math.min(window.innerWidth, window.innerHeight);
-var canvasSize = Math.min(canvas.offsetWidth, canvas.offsetHeight);
-var proportion = windowSize / canvasSize;
-var activeCircle=false;
+var activeCircle = false;
 var hasDataChanged;
+const waitingMessage = document.getElementById("waiting-message"); // Reemplaza "waiting-message" con el ID correspondiente a tu elemento HTML
+
+const canvas = document.getElementById("canvas_svg");
+
+canvas.addEventListener("mousedown", function (event) {
+    initialClickX = event.clientX - canvas.getBoundingClientRect().left;
+    initialClickY = event.clientY - canvas.getBoundingClientRect().top;
+});
+
+canvas.addEventListener("mousemove", function (event) {
+    if (event.buttons === 1) {
+        movecanvas(event);
+    }
+});
+
+canvas.addEventListener("wheel", wheelcanvas);
+
 function drawFigure() {
     const svgContent = svgOutput.value;
     const parser = new DOMParser();
@@ -24,17 +37,18 @@ function drawFigure() {
     }
     addEvents();
 }
-
-
-
-function addEvents(){
-    if(activeCircle) return;
+function addEvents() {
+    if (activeCircle || selectedcircle !=null) return;
     circulitos = d3.selectAll("#canvas_svg circle.draggable-circle");
     draggableCircles = circulitos.on("mousedown", dragStarted).on("dblclick", doubleClick);
     canvas.addEventListener("wheel", wheelcanvas);
-
 }
 
+function apanio(){
+    selectedcircle=null;
+    addEvents()
+    popup.style.display = "none";
+}
 function showPopup(mouseX, mouseY) {
     const popup = document.getElementById("popup");
     const circleData = selectedcircle.getAttribute("data-info");
@@ -62,10 +76,6 @@ function showPopup(mouseX, mouseY) {
     <label>Índice:</label>
     ${circleIndex}`;
 }
-
-
-
-
 function doubleClick(event) {
     if (selectedcircle == null) {
         selectedcircle = this;
@@ -80,7 +90,6 @@ function doubleClick(event) {
     }
 }
 
-
 function dragStarted(event) {
     activeCircle = this;
     initialX = parseFloat(activeCircle.getAttribute("cx"));
@@ -89,7 +98,7 @@ function dragStarted(event) {
     deltaX = event.clientX;
     deltaY = event.clientY;
 
-    if(selectedcircle!=null){
+    if (selectedcircle != null) {
         selectedcircle.setAttribute("stroke", "black");
         selectedcircle.setAttribute("stroke-width", "1");
         selectedcircle = null;
@@ -101,11 +110,10 @@ function dragStarted(event) {
     document.addEventListener("wheel", wheel);
 }
 
-
 function dragged(event) {
     if (isDragging && activeCircle) {
-        const offsetX = (event.clientX - deltaX) * proportion;
-        const offsetY = (event.clientY - deltaY) * proportion;
+        const offsetX = event.clientX - deltaX;
+        const offsetY = event.clientY - deltaY;
         const newX = initialX + offsetX;
         const newY = initialY + offsetY;
 
@@ -116,16 +124,15 @@ function dragged(event) {
     }
 }
 
-
 function wheel(event) {
     const isScrollUp = event.deltaY < 0;
-    if (activeCircle) {
-        const currentRadius = parseFloat(activeCircle.getAttribute("r"));
+    if (selectedcircle) {
+        const currentRadius = parseFloat(selectedcircle.getAttribute("r"));
         const scaleFactor = isScrollUp ? 2 : -2;
         const newRadius = Math.max(currentRadius + scaleFactor, 1);
-        hasDataChanged=true;
-        activeCircle.setAttribute("r", newRadius);
-        updateCircleData(activeCircle, null, null, newRadius);
+        hasDataChanged = true;
+        selectedcircle.setAttribute("r", newRadius);
+        updateCircleData(selectedcircle, null, null, newRadius);
     }
 }
 
@@ -152,28 +159,56 @@ function updateCircleData(circle, newX, newY, newRadius, smoothFactor) {
     shapeInput.value = lines.join("\n");
 
     animationFrameId = requestAnimationFrame(animate);
+
 }
 
 function wheelcanvas(event) {
-    // Tu lógica para el zoom y la transformación usando las coordenadas X e Y
-    // var canvas = document.getElementById("canvas_svg");
-    // var offsetX = event.clientX;
-    // var offsetY = event.clientY;
-    // var rect = canvas.getBoundingClientRect();
-    // offsetX -= rect.left;
-    // offsetY -= rect.top;
-    // zoom += isScrollUp ? 0.06 : -0.06;
-    // transform(zoom, offsetX * proportion, offsetY * proportion, 0, 0);
+    if (selectedcircle == null) {
+        var isScrollUp = event.deltaY < 0;
+        var offsetX = event.clientX;
+        var offsetY = event.clientY;
+        var rect = canvas.getBoundingClientRect();
+        offsetX -= rect.left;
+        offsetY -= rect.top;
+        var zoom = isScrollUp ? 1.03 : 0.97;
+        transform(zoom, offsetX, offsetY, 0, 0);
+    }
 }
 
-function dragEnded() {
+var initialMouseX = 0;
+var initialMouseY = 0;
 
+function movecanvas(event) {
+        apanio()
+    if (activeCircle == false) {
+        var rect = canvas.getBoundingClientRect();
+        var currentMouseX = event.clientX - rect.left;
+        var currentMouseY = event.clientY - rect.top;
+
+        var movementX = currentMouseX - initialMouseX;
+        var movementY = currentMouseY - initialMouseY;
+
+        transform(1, null, null, movementX, movementY);
+
+        initialMouseX = currentMouseX;
+        initialMouseY = currentMouseY;
+    }
+}
+
+canvas.addEventListener("mousedown", function (event) {
+    var rect = canvas.getBoundingClientRect();
+    initialMouseX = event.clientX - rect.left;
+    initialMouseY = event.clientY - rect.top;
+});
+
+canvas.addEventListener("wheel", wheelcanvas);
+
+function dragEnded() {
     isDragging = false;
-    activeCircle=false;
+    activeCircle = false;
     document.removeEventListener("mouseup", dragEnded);
     document.removeEventListener("mousemove", dragged);
-    addEvents()
-
+    addEvents();
 }
 
 function animate() {
@@ -183,8 +218,6 @@ function animate() {
     }
     requestAnimationFrame(animate);
 }
-
-
 
 //Prevent mouse
 const svgElement = document.getElementById("canvas_svg");
@@ -196,7 +229,6 @@ svgElement.addEventListener("wheel", handleWheelEvent, { passive: false });
 function handleWheelEvent(event) {
     if (isMouseOverSVG(event)) {
         event.preventDefault(); // Evita el desplazamiento predeterminado de la página
-
     }
 }
 
@@ -214,185 +246,205 @@ function isMouseOverSVG(event) {
     );
 }
 
-
 var eraseButton = document.getElementById("eraseButton");
-eraseButton.addEventListener("click", function() {
+eraseButton.addEventListener("click", function () {
     if (circulitos) {
-        // Asigna el evento click a los círculos
-        circulitos.on("click", function() {
-            // Obtiene el índice del círculo en el array de nodos
+        waitingMessage.style.display = "block";
+        circulitos.on("click", function () {
             const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
-            // Realiza cualquier acción que necesites con el índice del círculo
             erasePoint(circleIndex);
+            waitingMessage.style.display = "none";
         });
     }
+
+});
+var bpreview = document.getElementById("preview");
+
+bpreview.addEventListener("mousedown", function() {
+    svgOutput.value = preview();
+    drawFigure();
 });
 
-//New functionalities
+bpreview.addEventListener("mouseup", function() {
+    computeShape();
+});
+
+
+var addButton = document.getElementById("addcircle");
+
+// Agrega el evento de escucha al botón
+addButton.addEventListener("click", function () {
+    // Muestra el elemento de espera
+    waitingMessage.style.display = "block";
+
+    const rect = canvas.getBoundingClientRect();
+    const divOffsetX = rect.left;
+    const divOffsetY = rect.top;
+
+    canvas.addEventListener("click", function (event) {
+        const offsetX = event.clientX - divOffsetX;
+        const offsetY = event.clientY - divOffsetY;
+
+        addpoint(offsetX, offsetY);
+
+        // Oculta el elemento de espera después de agregar el punto
+        waitingMessage.style.display = "none";
+    }, { once: true });
+});
+
 function erasePoint(i) {
     shapeInput.value = Module.ccall(
-        "_Z10erasepointi", // nombre de la función C
-        "string", // tipo de retorno
-        ["number"], // tipos de argumentos
-        [i] // argumentos
+        "_Z10erasepointi",
+        "string",
+        ["number"],
+        [i]
     );
     computeShape();
 }
-function downloadsvg(){
-    var aux =  Module.ccall(
-        "_Z11downloadsvgv", // nombre de la función C
-        "string", // tipo de retorno
-        ["number"], // tipos de argumentos
-        [] // argumentos
+
+function preview() {
+    var aux = Module.ccall(
+        "_Z11downloadsvgv",
+        "string",
+        ["number"],
+        []
+    );
+    return aux;
+}
+function downloadsvg() {
+    var aux = Module.ccall(
+        "_Z11downloadsvgv",
+        "string",
+        ["number"],
+        []
     );
 
-    // Crear un elemento <a> para descargar el archivo
     var enlaceDescarga = document.createElement('a');
     enlaceDescarga.setAttribute('href', 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(aux));
     enlaceDescarga.setAttribute('download', 'imagen.svg');
     enlaceDescarga.style.display = 'none';
 
-    // Agregar el elemento <a> al documento
     document.body.appendChild(enlaceDescarga);
-
-    // Simular un clic en el enlace de descarga
     enlaceDescarga.click();
-
-    // Eliminar el elemento <a> del documento
     document.body.removeChild(enlaceDescarga);
 }
+
 function randomGenerate() {
     shapeInput.value = Module.ccall(
-        "_Z16randomgenerationv", // nombre de la función C
-        "string", // tipo de retorno
+        "_Z16randomgenerationv",
+        "string"
     );
     computeShape();
 }
 
 function similarGenerate() {
     shapeInput.value = Module.ccall(
-        "_Z17similargenerationv", // nombre de la función C
-        "string", // tipo de retorno
+        "_Z17similargenerationv",
+        "string"
     );
     computeShape();
 }
 
 var createcon = document.getElementById("createconection");
-createcon.addEventListener("click", function() {
+createcon.addEventListener("click", function () {
     if (circulitos) {
-        // Asigna el evento click a los círculos
-        circulitos.on("click", function() {
-            // Obtiene el índice del círculo en el array de nodos
+        waitingMessage.style.display = "block";
+        circulitos.on("click", function () {
             const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
-            // Realiza cualquier acción que necesites con el índice del círculo
             if (typeof createconection.firstCircleIndex === "undefined") {
-                // Almacena el índice del primer círculo
                 createconection.firstCircleIndex = circleIndex;
             } else {
-                // Almacena el índice del segundo círculo
                 const secondCircleIndex = circleIndex;
-                // Llama a la función createconection con los índices de los círculos como parámetros
                 createconection(createconection.firstCircleIndex, secondCircleIndex);
-                // Reinicia el primer índice almacenado para futuras conexiones
                 delete createconection.firstCircleIndex;
+                waitingMessage.style.display = "none";
             }
         });
     }
 });
 
-// Nuevas funcionalidades
 function createconection(circleIndex1, circleIndex2) {
     shapeInput.value = Module.ccall(
-        "_Z12connectnodesii", // nombre de la función C
-        "string", // tipo de retorno
-        ["number", "number"], // tipos de argumentos
-        [circleIndex1, circleIndex2] // argumentos
+        "_Z12connectnodesii",
+        "string",
+        ["number", "number"],
+        [circleIndex1, circleIndex2]
     );
     computeShape();
 }
 
 var erasecon = document.getElementById("eraseconection");
-erasecon.addEventListener("click", function() {
+erasecon.addEventListener("click", function () {
     if (circulitos) {
-        // Asigna el evento click a los círculos
-        circulitos.on("click", function() {
-            // Obtiene el índice del círculo en el array de nodos
+        waitingMessage.style.display = "block";
+        circulitos.on("click", function () {
             const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
-            // Realiza cualquier acción que necesites con el índice del círculo
             if (typeof eraseConnection.firstCircleIndex === "undefined") {
-                // Almacena el índice del primer círculo
                 eraseConnection.firstCircleIndex = circleIndex;
             } else {
-                // Almacena el índice del segundo círculo
                 const secondCircleIndex = circleIndex;
-                // Llama a la función eraseconection con los índices de los círculos como parámetros
                 eraseConnection(eraseConnection.firstCircleIndex, secondCircleIndex);
-                // Reinicia el primer índice almacenado para futuras conexiones
                 delete eraseConnection.firstCircleIndex;
+                waitingMessage.style.display = "none";
             }
         });
     }
 });
 
-// Nuevas funcionalidades
 function eraseConnection(circleIndex1, circleIndex2) {
     shapeInput.value = Module.ccall(
-        "_Z15disconnectnodesii", // nombre de la función C
-        "string", // tipo de retorno
-        ["number", "number"], // tipos de argumentos
-        [circleIndex1, circleIndex2] // argumentos
+        "_Z15disconnectnodesii",
+        "string",
+        ["number", "number"],
+        [circleIndex1, circleIndex2]
     );
     computeShape();
 }
 
 var middlecircle = document.getElementById("middlecircle");
-middlecircle.addEventListener("click", function() {
+middlecircle.addEventListener("click", function () {
     if (circulitos) {
-        // Asigna el evento click a los círculos
-        circulitos.on("click", function() {
-            // Obtiene el índice del círculo en el array de nodos
+        waitingMessage.style.display = "block";
+        circulitos.on("click", function () {
             const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
-            // Realiza cualquier acción que necesites con el índice del círculo
             if (typeof erasecon.firstCircleIndex === "undefined") {
                 erasecon.firstCircleIndex = circleIndex;
             } else {
-                // Almacena el índice del segundo círculo
                 const secondCircleIndex = circleIndex;
-                // Llama a la función eraseconection con los índices de los círculos como parámetros
                 middleCircle(erasecon.firstCircleIndex, secondCircleIndex);
-                // Reinicia el primer índice almacenado para futuras conexiones
                 delete erasecon.firstCircleIndex;
+                waitingMessage.style.display = "none";
             }
         });
     }
 });
 
-// Nuevas funcionalidades
 function middleCircle(circleIndex1, circleIndex2) {
     shapeInput.value = Module.ccall(
-        "_Z17insertpointmiddleii", // nombre de la función C
-        "string", // tipo de retorno
-        ["number", "number"], // tipos de argumentos
-        [circleIndex1, circleIndex2] // argumentos
+        "_Z17insertpointmiddleii",
+        "string",
+        ["number", "number"],
+        [circleIndex1, circleIndex2]
     );
     computeShape();
 }
-function addpoint(x, r,s) {
+
+function addpoint(x, r) {
     shapeInput.value = Module.ccall(
-        "_Z11insertpointiii", // nombre de la función C
-        "string", // tipo de retorno
-        ["number", "number"], // tipos de argumentos
-        [x, r,s] // argumentos
+        "_Z11insertpointii",
+        "string",
+        ["number", "number"],
+        [x, r]
     );
     computeShape();
 }
 
 function transform(zoom_factor, zx, zy, dx, dy) {
     shapeInput.value = Module.ccall(
-        "_Z9transformfffff", // nombre de la función C
-        "string", // tipo de retorno
-        ["float", "float", "float", "float", "float"], // tipos de argumentos
-        [zoom_factor, zx, zy, dx, dy] // argumentos
+        "_Z9transformfffff",
+        "string",
+        ["float", "float", "float", "float", "float"],
+        [zoom_factor, zx, zy, dx, dy]
     );
     computeShape();
 }

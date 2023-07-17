@@ -136,6 +136,11 @@ button:hover {
 .zoom-instructions {
     list-style-type: disc;
     padding-left: 1.25em;
+
+}
+.zoom-instructions li{
+    margin-bottom: 0.5em;
+
 }
 
 .inline-buttons button {
@@ -203,4 +208,25 @@ div.emscripten_border {
 @keyframes rotation {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
+}
+
+#canvas_svg {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+}
+
+#waiting-message {
+    position: absolute;
+    display: none;
+    top: 0;
+    background-color: rgba(255, 255, 0, 0.8);
+    color: #333;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
 }

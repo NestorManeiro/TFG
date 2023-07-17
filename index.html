@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="Utils/style.css">
 </head>
 <body>
+
 <figure id="spinner">
     <div class="spinner"></div>
     <div class="spinner-text">emscripten</div>
@@ -19,27 +20,33 @@
 <textarea id="svgOutput" rows="10" cols="50" hidden></textarea>
 <div id="container">
     <div id="canvas_svg">
+        <div id="waiting-message">
+            Waiting for click⏱
+        </div>
     </div>
     <div id="instructions">
+
         <p>Modify the shape or write a new one, and press the 'Compute Shape' button:</p>
         <textarea id="shapeInput" rows="5" cols="50"></textarea>
         <div class="inline-buttons">
             <button id="mybutton">Compute Shape</button>
             <button id="exportButton">Export Shape</button>
+            <button id="preview"> Preview</button>
         </div>
-       <hr>
+        <hr>
         <ol class="zoom-instructions">
-            <li>Mouse wheel, while hovering over the SVG, will zoom in (only within the SVG, not the div).</li>
-            <li>If you click and hold a node, you can drag it.</li>
-            <li>While holding a node and using the mouse wheel, you can resize it.</li>
-            <li>Double Click a node will show a popup with the data and you can change it</li>
+            <li>The mouse wheel allows you to zoom in and out.</li>
+            <li>If you click and drag a node, you can move it.</li>
+            <li>If you do the same without selecting a node, you will move the entire figure.</li>
+            <li>Double-clicking selects a node, allowing you to view and modify its information.</li>
+            <li>When a node is selected, the mouse wheel will change its radius.</li>
         </ol>
         <div class="inline-buttons">
             <button onclick="downloadsvg()">Download SVG</button>
             <button id="middlecircle">New circle in the middle of a segment</button>
         </div>
         <div class="inline-buttons">
-            <button onclick="addpoint(500,50,1)">Create a circle(WIP)</button>
+            <button id="addcircle">Create a circle</button>
             <button id="eraseButton">Erase a circle</button>
         </div>
         <div class="inline-buttons">
@@ -50,6 +57,7 @@
             <button onclick="randomGenerate()">Generate random SVG</button>
             <button onclick="similarGenerate()">Generate similar SVG</button>
         </div>
+
     </div>
 </div>
 <div id="popup" style="display: none;">
