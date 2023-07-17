@@ -65,12 +65,13 @@ button:hover {
 
 #popup {
     position: absolute;
-    background-color: white;
+    background-color: #E6E6E6;
     border: 0.0625em solid black;
     padding: 0.625em;
     border-radius: 0.3125em;
     box-shadow: 0 0.125em 0.3125em rgba(0, 0, 0, 0.2);
     font-family: Arial, sans-serif;
+    z-index: 99999;
 }
 
 #popup input[type="number"],
@@ -148,6 +149,51 @@ button:hover {
     margin-right: 0.625em;
 }
 
+#popuphelp {
+    position: fixed;
+    display: none;
+    top: 43%;
+    left: 71%;
+    max-width: 90%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: #E6E6E6;
+    border: 0.0625em solid black;
+    padding: 0.625em;
+    border-radius: 0.3125em;
+    box-shadow: 0 0.125em 0.3125em rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
+}
+
+#popuphelp h2 {
+    margin-top: 0;
+}
+
+#popuphelp ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#popuphelp ul li {
+    margin-bottom: 10px;
+}
+
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
 /* Estilos específicos para draggable-circle */
 .draggable-circle {
     pointer-events: all;

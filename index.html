@@ -32,6 +32,7 @@
             <button id="mybutton">Compute Shape</button>
             <button id="exportButton">Export Shape</button>
             <button id="preview"> Preview</button>
+            <button id="helpButton">?</button>
         </div>
         <hr>
         <ol class="zoom-instructions">
@@ -41,24 +42,41 @@
             <li>Double-clicking selects a node, allowing you to view and modify its information.</li>
             <li>When a node is selected, the mouse wheel will change its radius.</li>
         </ol>
-        <div class="inline-buttons">
-            <button onclick="downloadsvg()">Download SVG</button>
-            <button id="middlecircle">New circle in the middle of a segment</button>
-        </div>
-        <div class="inline-buttons">
-            <button id="addcircle">Create a circle</button>
-            <button id="eraseButton">Erase a circle</button>
-        </div>
-        <div class="inline-buttons">
-            <button id="createconection">New circle connection</button>
-            <button id="eraseconection">Remove circle connection</button>
-        </div>
-        <div class="inline-buttons">
-            <button onclick="randomGenerate()">Generate random SVG</button>
-            <button onclick="similarGenerate()">Generate similar SVG</button>
-        </div>
-
+            <div class="inline-buttons">
+                <button onclick="downloadsvg()">Download SVG</button>
+                <button id="middlecircle">New circle in the middle of a segment</button>
+            </div>
+            <div class="inline-buttons">
+                <button id="addcircle">Create a circle</button>
+                <button id="eraseButton">Erase a circle</button>
+            </div>
+            <div class="inline-buttons">
+                <button id="createconection">New circle connection</button>
+                <button id="eraseconection">Remove circle connection</button>
+            </div>
+            <div class="inline-buttons">
+                <button onclick="randomGenerate()">Generate random SVG</button>
+                <button onclick="similarGenerate()">Generate similar SVG</button>
+            </div>
     </div>
+
+</div>
+<div id="popuphelp">
+    <span class="close">&times;</span>
+    <h2>Button Descriptions</h2>
+    <ul>
+        <li><strong>Compute Shape:</strong> Calculates the shape based on the input.</li>
+        <li><strong>Export Shape:</strong> Exports the shape to a text file.</li>
+        <li><strong>Preview:</strong> Shows a preview of the shape (without the black lines and circles).</li>
+        <li><strong>New circle in the middle of a segment:</strong> Clicking on two circles adds a circle in the segment that connects them.</li>
+        <li><strong>Create a circle:</strong> Clicking adds a circle.</li>
+        <li><strong>Erase a circle:</strong> Clicking removes a circle.</li>
+        <li><strong>New circle connection:</strong> Clicking on two circles connects them.</li>
+        <li><strong>Remove circle connection:</strong> Clicking on two circles removes the connection.</li>
+        <li><strong>Generate random SVG:</strong> Generates a random SVG shape.</li>
+        <li><strong>Generate similar SVG:</strong> Generates a similar SVG shape.</li>
+
+    </ul>
 </div>
 <div id="popup" style="display: none;">
 </div>

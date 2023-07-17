@@ -11,13 +11,20 @@ const waitingMessage = document.getElementById("waiting-message"); // Reemplaza 
 
 const canvas = document.getElementById("canvas_svg");
 
-canvas.addEventListener("mousedown", function (event) {
+var isCanvasClicked = false;
+
+canvas.addEventListener('mousedown', function(event) {
     initialClickX = event.clientX - canvas.getBoundingClientRect().left;
     initialClickY = event.clientY - canvas.getBoundingClientRect().top;
+    isCanvasClicked = true;
 });
 
-canvas.addEventListener("mousemove", function (event) {
-    if (event.buttons === 1) {
+canvas.addEventListener('mouseup', function(event) {
+    isCanvasClicked = false;
+});
+
+canvas.addEventListener('mousemove', function(event) {
+    if (isCanvasClicked) {
         movecanvas(event);
     }
 });
@@ -51,8 +58,6 @@ function apanio(){
 }
 function showPopup(mouseX, mouseY) {
     const popup = document.getElementById("popup");
-    const circleData = selectedcircle.getAttribute("data-info");
-
     var shapeInput = document.getElementById("shapeInput");
     var circleIndex = Array.from(draggableCircles.nodes()).indexOf(selectedcircle);
     var lines = shapeInput.value.split("\n");
@@ -470,3 +475,13 @@ function exportShape() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
+var helpButton = document.getElementById("helpButton");
+var closeBtn = document.getElementsByClassName("close")[0];
+
+helpButton.addEventListener("click", function () {
+    popuphelp.style.display = "block";
+});
+
+closeBtn.addEventListener("click", function () {
+    popuphelp.style.display = "none";
+});
