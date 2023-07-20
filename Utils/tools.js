@@ -14,15 +14,17 @@ const canvas = document.getElementById("canvas_svg");
 var isCanvasClicked = false;
 
 canvas.addEventListener('mousedown', function(event) {
+    if(selectedcircle) unselect();
     initialClickX = event.clientX - canvas.getBoundingClientRect().left;
     initialClickY = event.clientY - canvas.getBoundingClientRect().top;
     isCanvasClicked = true;
 });
 
-canvas.addEventListener('mouseup', function(event) {
+canvas.addEventListener('mouseup', function() {
     isCanvasClicked = false;
 });
 
+canvas.addEventListener("wheel", wheelcanvas);
 canvas.addEventListener('mousemove', function(event) {
     if (isCanvasClicked) {
         movecanvas(event);
@@ -43,17 +45,38 @@ function drawFigure() {
         canvas.appendChild(svgElement);
     }
     addEvents();
+    if (selectedcircle) {
+        const cx = parseFloat(selectedcircle.getAttribute("cx"));
+        const cy = parseFloat(selectedcircle.getAttribute("cy"));
+        const circles = canvas.querySelectorAll("circle.draggable-circle");
+
+        circles.forEach(circle => {
+            const circleCx = parseFloat(circle.getAttribute("cx"));
+            const circleCy = parseFloat(circle.getAttribute("cy"));
+
+            if (cx === circleCx && cy === circleCy) {
+                circle.setAttribute("stroke", "blue");
+                circle.setAttribute("stroke-width", "3");
+            } else {
+                circle.setAttribute("stroke", "black");
+                circle.setAttribute("stroke-width", "1");
+            }
+        });
+    }
 }
 function addEvents() {
-    if (activeCircle || selectedcircle !=null) return;
+    if (activeCircle || selectedcircle != null) return;
     circulitos = d3.selectAll("#canvas_svg circle.draggable-circle");
     draggableCircles = circulitos.on("mousedown", dragStarted).on("dblclick", doubleClick);
-    canvas.addEventListener("wheel", wheelcanvas);
+
+
 }
 
-function apanio(){
+function unselect(){
+    selectedcircle.setAttribute("stroke", "black");
+    selectedcircle.setAttribute("stroke-width", "1");
     selectedcircle=null;
-    addEvents()
+    drawFigure()
     popup.style.display = "none";
 }
 function showPopup(mouseX, mouseY) {
@@ -71,16 +94,50 @@ function showPopup(mouseX, mouseY) {
     popup.style.top = mouseY + "px";
 
     popup.innerHTML = `<label>Radio:</label>
-    <input type="number" value="${currentRadius}" step="0.01" min="0"><br>
+    <input type="number" id="radiusInput" value="${currentRadius}" step="0.01" min="0"><br>
     <label>Suavidad:</label>
-    <input type="range" value="${currentSmooth}" min="0" max="2" step="0.1"><br>
+    <input type="range" id="smoothInput" value="${currentSmooth}" min="0" max="2" step="0.1"><br>
     <label>X:</label>
-    <input type="number" value="${currentX}" step="0.01"><br>
+    <input type="number" id="xInput" value="${currentX}" step="0.01"><br>
     <label>Y:</label>
-    <input type="number" value="${currentY}" step="0.01"><br>
+    <input type="number" id="yInput" value="${currentY}" step="0.01"><br>
     <label>Índice:</label>
     ${circleIndex}`;
+
+    // Agrega eventos a los campos del popup para actualizar los datos del círculo seleccionado
+    const radiusInput = document.getElementById("radiusInput");
+    const smoothInput = document.getElementById("smoothInput");
+    const xInput = document.getElementById("xInput");
+    const yInput = document.getElementById("yInput");
+
+    radiusInput.addEventListener("input", function () {
+        const newRadius = parseFloat(this.value);
+        selectedcircle.setAttribute("r", newRadius);
+        hasDataChanged = true;
+        updateCircleData(selectedcircle, null, null, newRadius);
+    });
+
+    smoothInput.addEventListener("input", function () {
+        const smoothFactor = parseFloat(smoothInput.value);
+        hasDataChanged = true;
+        updateCircleData(selectedcircle, null, null, null, smoothFactor);
+    });
+
+    xInput.addEventListener("input", function () {
+        const newX = parseFloat(this.value);
+        selectedcircle.setAttribute("cx", newX);
+        hasDataChanged = true;
+        updateCircleData(selectedcircle, newX, currentY);
+    });
+
+    yInput.addEventListener("input", function () {
+        const newY = parseFloat(this.value);
+        selectedcircle.setAttribute("cy", newY);
+        hasDataChanged = true;
+        updateCircleData(selectedcircle, currentX, newY );
+    });
 }
+
 function doubleClick(event) {
     if (selectedcircle == null) {
         selectedcircle = this;
@@ -88,10 +145,7 @@ function doubleClick(event) {
         selectedcircle.setAttribute("stroke-width", "3");
         showPopup(event.clientX, event.clientY);
     } else {
-        selectedcircle.setAttribute("stroke", "black");
-        selectedcircle.setAttribute("stroke-width", "1");
-        selectedcircle = null;
-        popup.style.display = "none";
+        unselect()
     }
 }
 
@@ -144,7 +198,7 @@ function wheel(event) {
 function updateCircleData(circle, newX, newY, newRadius, smoothFactor) {
     const shapeInput = document.getElementById("shapeInput");
     const circleIndex = Array.from(draggableCircles.nodes()).indexOf(circle);
-    if (circleIndex == -1) return;
+    if (circleIndex === -1) return;
     const lines = shapeInput.value.split("\n");
     const firstLine = lines[0].trim();
 
@@ -152,13 +206,12 @@ function updateCircleData(circle, newX, newY, newRadius, smoothFactor) {
         lines[circleIndex + 1] = `${newX} ${newY}`;
     }
 
-    if (newRadius !== undefined) {
+    if (newRadius !== undefined && newRadius !== null) {
         lines[circleIndex + parseInt(firstLine) + 1] = `${newRadius}`;
     }
 
-    if (smoothFactor !== undefined) {
-        const currentSmooth = parseFloat(lines[circleIndex + parseInt(firstLine) * 2 + 1]);
-        lines[circleIndex + parseInt(firstLine) * 2 + 1] = Math.max(Math.min(currentSmooth + smoothFactor, 2), 0).toString();
+    if (smoothFactor !== null && smoothFactor !== undefined) {
+        lines[circleIndex + parseInt(firstLine) * 2 + 1] = smoothFactor;
     }
 
     shapeInput.value = lines.join("\n");
@@ -184,8 +237,7 @@ var initialMouseX = 0;
 var initialMouseY = 0;
 
 function movecanvas(event) {
-        apanio()
-    if (activeCircle == false) {
+    if (activeCircle === false) {
         var rect = canvas.getBoundingClientRect();
         var currentMouseX = event.clientX - rect.left;
         var currentMouseY = event.clientY - rect.top;
@@ -308,13 +360,12 @@ function erasePoint(i) {
 }
 
 function preview() {
-    var aux = Module.ccall(
+    return Module.ccall(
         "_Z11downloadsvgv",
         "string",
         ["number"],
         []
     );
-    return aux;
 }
 function downloadsvg() {
     var aux = Module.ccall(
@@ -359,8 +410,7 @@ createcon.addEventListener("click", function () {
             if (typeof createconection.firstCircleIndex === "undefined") {
                 createconection.firstCircleIndex = circleIndex;
             } else {
-                const secondCircleIndex = circleIndex;
-                createconection(createconection.firstCircleIndex, secondCircleIndex);
+                createconection(createconection.firstCircleIndex, circleIndex);
                 delete createconection.firstCircleIndex;
                 waitingMessage.style.display = "none";
             }
@@ -387,8 +437,7 @@ erasecon.addEventListener("click", function () {
             if (typeof eraseConnection.firstCircleIndex === "undefined") {
                 eraseConnection.firstCircleIndex = circleIndex;
             } else {
-                const secondCircleIndex = circleIndex;
-                eraseConnection(eraseConnection.firstCircleIndex, secondCircleIndex);
+                eraseConnection(eraseConnection.firstCircleIndex, circleIndex);
                 delete eraseConnection.firstCircleIndex;
                 waitingMessage.style.display = "none";
             }
@@ -415,8 +464,7 @@ middlecircle.addEventListener("click", function () {
             if (typeof erasecon.firstCircleIndex === "undefined") {
                 erasecon.firstCircleIndex = circleIndex;
             } else {
-                const secondCircleIndex = circleIndex;
-                middleCircle(erasecon.firstCircleIndex, secondCircleIndex);
+                middleCircle(erasecon.firstCircleIndex, circleIndex);
                 delete erasecon.firstCircleIndex;
                 waitingMessage.style.display = "none";
             }
