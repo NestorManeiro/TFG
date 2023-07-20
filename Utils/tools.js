@@ -385,20 +385,40 @@ function downloadsvg() {
     document.body.removeChild(enlaceDescarga);
 }
 
+// Declara una variable global para almacenar el puntero al SVG generado
+let svgPtr;
+
 function randomGenerate() {
+    // Antes de generar un nuevo SVG, verifica si ya hay uno previo y libera la memoria
+    if (typeof svgPtr !== 'undefined') {
+        Module['_free'](svgPtr); // Liberar la memoria del SVG anterior
+    }
+
     shapeInput.value = Module.ccall(
         "_Z16randomgenerationv",
         "string"
     );
     computeShape();
+
+    // Guarda el nuevo puntero a la memoria del SVG generado
+    svgPtr = Module.ccall("_Z19ComputeSVGFromShapePc", "number", ["string"], [shapeInput.value]);
 }
 
+
 function similarGenerate() {
+    // Antes de generar un nuevo SVG, verifica si ya hay uno previo y libera la memoria
+    if (typeof svgPtr !== 'undefined') {
+        Module['_free'](svgPtr); // Liberar la memoria del SVG anterior
+    }
+
     shapeInput.value = Module.ccall(
         "_Z17similargenerationv",
         "string"
     );
     computeShape();
+
+    // Guarda el nuevo puntero a la memoria del SVG generado
+    svgPtr = Module.ccall("_Z19ComputeSVGFromShapePc", "number", ["string"], [shapeInput.value]);
 }
 
 var createcon = document.getElementById("createconection");
