@@ -93,15 +93,15 @@ function showPopup(mouseX, mouseY) {
     popup.style.left = mouseX + "px";
     popup.style.top = mouseY + "px";
 
-    popup.innerHTML = `<label>Radio:</label>
+    popup.innerHTML = `<label>Radius:</label>
     <input type="number" id="radiusInput" value="${currentRadius}" step="0.01" min="0"><br>
-    <label>Suavidad:</label>
+    <label>Smooth:</label>
     <input type="range" id="smoothInput" value="${currentSmooth}" min="0" max="2" step="0.1"><br>
     <label>X:</label>
     <input type="number" id="xInput" value="${currentX}" step="0.01"><br>
     <label>Y:</label>
     <input type="number" id="yInput" value="${currentY}" step="0.01"><br>
-    <label>Índice:</label>
+    <label>Index:</label>
     ${circleIndex}`;
 
     // Agrega eventos a los campos del popup para actualizar los datos del círculo seleccionado
