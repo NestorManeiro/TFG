@@ -87,6 +87,7 @@ function drawFigure() {
         });
     }
     addAllCanvasEvents();
+    console.log("hola")
 }
 
 function addEvents() {
@@ -100,12 +101,12 @@ function addEvents() {
 function showPopup(mouseX, mouseY) {
     const popup = document.getElementById("popup");
     var shapeInput = document.getElementById("shapeInput");
-    var circleIndex = Array.from(draggableCircles.nodes()).indexOf(selectedcircle);
+    var circleIndex = Array.from(draggableCircles.nodes()).indexOf(selectedcircle)+1;
     var lines = shapeInput.value.split("\n");
     var currentRadius = parseFloat(selectedcircle.getAttribute("r")).toFixed(2);
     var currentX = parseFloat(selectedcircle.getAttribute("cx")).toFixed(2);
     var currentY = parseFloat(selectedcircle.getAttribute("cy")).toFixed(2);
-    var currentSmooth = parseFloat(lines[circleIndex + parseInt(lines[0].trim()) * 2 + 1]);
+    var currentSmooth = parseFloat(lines[circleIndex + parseInt(lines[0].trim()) * 2]);
 
     popup.style.display = "block";
     popup.style.left = mouseX + "px";
@@ -209,21 +210,21 @@ function wheel(event) {
 
 function updateCircleData(circle, newX, newY, newRadius, smoothFactor) {
     const shapeInput = document.getElementById("shapeInput");
-    const circleIndex = Array.from(draggableCircles.nodes()).indexOf(circle);
+    const circleIndex = Array.from(draggableCircles.nodes()).indexOf(circle)+1;
     if (circleIndex === -1) return;
     const lines = shapeInput.value.split("\n");
     const firstLine = lines[0].trim();
 
     if (newX !== null && newY !== null) {
-        lines[circleIndex + 1] = `${newX} ${newY}`;
+        lines[circleIndex] = `${newX} ${newY}`;
     }
 
     if (newRadius !== undefined && newRadius !== null) {
-        lines[circleIndex + parseInt(firstLine) + 1] = `${newRadius}`;
+        lines[circleIndex + parseInt(firstLine)] = `${newRadius}`;
     }
 
     if (smoothFactor !== null && smoothFactor !== undefined) {
-        lines[circleIndex + parseInt(firstLine) * 2 + 1] = smoothFactor;
+        lines[circleIndex + parseInt(firstLine) * 2] = smoothFactor;
     }
 
     shapeInput.value = lines.join("\n");
@@ -243,6 +244,7 @@ function wheelcanvas(event) {
         console.log(offsetX,offsetY)
         var zoom = isScrollUp ? 1.03 : 0.97;
         transform(zoom, offsetX, offsetY, 0, 0);
+        computeShape();
 
     }
 }
@@ -260,6 +262,7 @@ function movecanvas(event) {
             var movementY = currentMouseY - initialMouseY;
 
             transform(1, null, null, movementX, movementY);
+            computeShape();
 
             initialMouseX = currentMouseX;
             initialMouseY = currentMouseY;
@@ -546,7 +549,6 @@ function transform(zoom_factor, zx, zy, dx, dy) {
         "_Z9transformfffff",
         "string", ["float", "float", "float", "float", "float"], [zoom_factor, zx, zy, dx, dy]
     );
-    computeShape();
 }
 
 const exportButton = document.getElementById('exportButton');

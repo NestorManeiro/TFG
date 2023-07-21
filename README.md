@@ -8,6 +8,7 @@ Algun dia pondre algo bonito aqui cuando este acabado todo en ingles :)
 
 Siempre se puede optimizar. -> memory access out of bounds
 
+Tengo que usar transform para arreglar el error de los circulos con su index
 
 *******************************************************Mejoras ?*******************************************************
 
