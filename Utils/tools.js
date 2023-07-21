@@ -86,6 +86,7 @@ function drawFigure() {
             }
         });
     }
+    addAllCanvasEvents();
 }
 
 function addEvents() {
