@@ -31,15 +31,20 @@
         <div class="inline-buttons">
             <button id="mybutton">Compute Shape</button>
             <button id="exportButton">Export Shape</button>
-            <button id="preview"> Preview</button>
-            <button id="helpButton">?</button>
+            <!-- Botón personalizado para cargar archivos -->
+            <button class="custom-upload-button" onclick="uploadFile()">Seleccionar archivo</button>
+            <!-- Elemento real para cargar el archivo (oculto) -->
+            <input type="file" id="upload" accept=".txt" style="display: none;">
+
+            <button id="preview">Preview</button>
+            <button id="helpButton">Help</button>
         </div>
         <hr>
         <ol class="zoom-instructions">
             <li>The mouse wheel allows you to zoom in and out.</li>
             <li>If you click and drag a node, you can move it.</li>
             <li>If you do the same without selecting a node, you will move the entire figure.</li>
-            <li>Double-clicking selects a node, allowing you to view and modify its information.</li>
+            <li>Click selects a node, allowing you to view and modify its information.</li>
             <li>When a node is selected, the mouse wheel will change its radius.</li>
         </ol>
             <div class="inline-buttons">
@@ -49,6 +54,7 @@
             <div class="inline-buttons">
                 <button id="addcircle">Create a circle</button>
                 <button id="eraseButton">Erase a circle</button>
+                <button id="noAction">Normal click</button>
             </div>
             <div class="inline-buttons">
                 <button id="createconection">New circle connection</button>
@@ -67,6 +73,7 @@
     <ul>
         <li><strong>Compute Shape:</strong> Calculates the shape based on the input.</li>
         <li><strong>Export Shape:</strong> Exports the shape to a text file.</li>
+        <li><strong>Upload Shape:</strong> Import a shape from a text file.</li>
         <li><strong>Preview:</strong> Shows a preview of the shape (without the black lines and circles).</li>
         <li><strong>New circle in the middle of a segment:</strong> Clicking on two circles adds a circle in the segment that connects them.</li>
         <li><strong>Create a circle:</strong> Clicking adds a circle.</li>

@@ -14,24 +14,47 @@ const canvas = document.getElementById("canvas_svg");
 var isCanvasClicked = false;
 
 canvas.addEventListener('mousedown', function(event) {
-    if(selectedcircle) unselect();
+    if (selectedcircle) unselect();
     initialClickX = event.clientX - canvas.getBoundingClientRect().left;
     initialClickY = event.clientY - canvas.getBoundingClientRect().top;
     isCanvasClicked = true;
-});
 
+});
+function unselect() {
+    selectedcircle.setAttribute("stroke", "black");
+    selectedcircle.setAttribute("stroke-width", "1");
+    selectedcircle = null;
+    popup.style.display = "none";
+    drawFigure()
+}
 canvas.addEventListener('mouseup', function() {
     isCanvasClicked = false;
 });
 
 canvas.addEventListener("wheel", wheelcanvas);
-canvas.addEventListener('mousemove', function(event) {
-    if (isCanvasClicked) {
-        movecanvas(event);
-    }
+canvas.addEventListener('mousemove', movecanvas);
+
+
+const uploadButton = document.getElementById("upload");
+uploadButton.addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (!file) return; // Si no se seleccionó ningún archivo, salimos de la función.
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const fileContent = event.target.result;
+        const trimmedContent = fileContent.trim(); // Eliminar espacios en blanco y saltos de línea al inicio y al final
+        shapeInput.value = trimmedContent;
+        computeShape();
+    };
+
+    // Leer el contenido del archivo como texto
+    reader.readAsText(file, "UTF-8");
 });
 
-canvas.addEventListener("wheel", wheelcanvas);
+function uploadFile() {
+    document.getElementById("upload").click();
+}
 
 function drawFigure() {
     const svgContent = svgOutput.value;
@@ -50,10 +73,10 @@ function drawFigure() {
         const cy = parseFloat(selectedcircle.getAttribute("cy"));
         const circles = canvas.querySelectorAll("circle.draggable-circle");
 
+
         circles.forEach(circle => {
             const circleCx = parseFloat(circle.getAttribute("cx"));
             const circleCy = parseFloat(circle.getAttribute("cy"));
-
             if (cx === circleCx && cy === circleCy) {
                 circle.setAttribute("stroke", "blue");
                 circle.setAttribute("stroke-width", "3");
@@ -64,21 +87,15 @@ function drawFigure() {
         });
     }
 }
+
 function addEvents() {
     if (activeCircle || selectedcircle != null) return;
     circulitos = d3.selectAll("#canvas_svg circle.draggable-circle");
-    draggableCircles = circulitos.on("mousedown", dragStarted).on("dblclick", doubleClick);
-
+    draggableCircles = circulitos.on("mousedown", dragStarted).on("mouseup", doubleClick);
 
 }
 
-function unselect(){
-    selectedcircle.setAttribute("stroke", "black");
-    selectedcircle.setAttribute("stroke-width", "1");
-    selectedcircle=null;
-    drawFigure()
-    popup.style.display = "none";
-}
+
 function showPopup(mouseX, mouseY) {
     const popup = document.getElementById("popup");
     var shapeInput = document.getElementById("shapeInput");
@@ -94,13 +111,13 @@ function showPopup(mouseX, mouseY) {
     popup.style.top = mouseY + "px";
 
     popup.innerHTML = `<label>Radius:</label>
-    <input type="number" id="radiusInput" value="${currentRadius}" step="0.01" min="0"><br>
+    <input type="number" id="radiusInput" value="${currentRadius}" step="1" min="0"><br>
     <label>Smooth:</label>
     <input type="range" id="smoothInput" value="${currentSmooth}" min="0" max="2" step="0.1"><br>
     <label>X:</label>
-    <input type="number" id="xInput" value="${currentX}" step="0.01"><br>
+    <input type="number" id="xInput" value="${currentX}" step="1"><br>
     <label>Y:</label>
-    <input type="number" id="yInput" value="${currentY}" step="0.01"><br>
+    <input type="number" id="yInput" value="${currentY}" step="1"><br>
     <label>Index:</label>
     ${circleIndex}`;
 
@@ -109,32 +126,33 @@ function showPopup(mouseX, mouseY) {
     const smoothInput = document.getElementById("smoothInput");
     const xInput = document.getElementById("xInput");
     const yInput = document.getElementById("yInput");
-
-    radiusInput.addEventListener("input", function () {
+    var newX = currentX;
+    var newY = currentY;
+    radiusInput.addEventListener("input", function() {
         const newRadius = parseFloat(this.value);
         selectedcircle.setAttribute("r", newRadius);
         hasDataChanged = true;
         updateCircleData(selectedcircle, null, null, newRadius);
     });
 
-    smoothInput.addEventListener("input", function () {
+    smoothInput.addEventListener("input", function() {
         const smoothFactor = parseFloat(smoothInput.value);
         hasDataChanged = true;
         updateCircleData(selectedcircle, null, null, null, smoothFactor);
     });
 
-    xInput.addEventListener("input", function () {
-        const newX = parseFloat(this.value);
+    xInput.addEventListener("input", function() {
+        newX = parseFloat(this.value);
         selectedcircle.setAttribute("cx", newX);
         hasDataChanged = true;
-        updateCircleData(selectedcircle, newX, currentY);
+        updateCircleData(selectedcircle, newX, newY);
     });
 
-    yInput.addEventListener("input", function () {
-        const newY = parseFloat(this.value);
+    yInput.addEventListener("input", function() {
+        newY = parseFloat(this.value);
         selectedcircle.setAttribute("cy", newY);
         hasDataChanged = true;
-        updateCircleData(selectedcircle, currentX, newY );
+        updateCircleData(selectedcircle, newX, newY);
     });
 }
 
@@ -143,7 +161,7 @@ function doubleClick(event) {
         selectedcircle = this;
         selectedcircle.setAttribute("stroke", "blue");
         selectedcircle.setAttribute("stroke-width", "3");
-        showPopup(event.clientX, event.clientY);
+        showPopup(event.clientX+20, event.clientY-20);
     } else {
         unselect()
     }
@@ -156,13 +174,6 @@ function dragStarted(event) {
 
     deltaX = event.clientX;
     deltaY = event.clientY;
-
-    if (selectedcircle != null) {
-        selectedcircle.setAttribute("stroke", "black");
-        selectedcircle.setAttribute("stroke-width", "1");
-        selectedcircle = null;
-        popup.style.display = "none";
-    }
     isDragging = true; // Marcar como arrastrando
     document.addEventListener("mousemove", dragged);
     document.addEventListener("mouseup", dragEnded);
@@ -228,31 +239,34 @@ function wheelcanvas(event) {
         var rect = canvas.getBoundingClientRect();
         offsetX -= rect.left;
         offsetY -= rect.top;
+        console.log(offsetX,offsetY)
         var zoom = isScrollUp ? 1.03 : 0.97;
         transform(zoom, offsetX, offsetY, 0, 0);
+
     }
 }
-
 var initialMouseX = 0;
 var initialMouseY = 0;
 
 function movecanvas(event) {
-    if (activeCircle === false) {
-        var rect = canvas.getBoundingClientRect();
-        var currentMouseX = event.clientX - rect.left;
-        var currentMouseY = event.clientY - rect.top;
+    if (isCanvasClicked) {
+        if (activeCircle === false) {
+            var rect = canvas.getBoundingClientRect();
+            var currentMouseX = event.clientX - rect.left;
+            var currentMouseY = event.clientY - rect.top;
 
-        var movementX = currentMouseX - initialMouseX;
-        var movementY = currentMouseY - initialMouseY;
+            var movementX = currentMouseX - initialMouseX;
+            var movementY = currentMouseY - initialMouseY;
 
-        transform(1, null, null, movementX, movementY);
+            transform(1, null, null, movementX, movementY);
 
-        initialMouseX = currentMouseX;
-        initialMouseY = currentMouseY;
+            initialMouseX = currentMouseX;
+            initialMouseY = currentMouseY;
+        }
     }
 }
 
-canvas.addEventListener("mousedown", function (event) {
+canvas.addEventListener("mousedown", function(event) {
     var rect = canvas.getBoundingClientRect();
     initialMouseX = event.clientX - rect.left;
     initialMouseY = event.clientY - rect.top;
@@ -280,7 +294,9 @@ function animate() {
 const svgElement = document.getElementById("canvas_svg");
 
 // Agrega un listener para el evento wheel en el elemento SVG
-svgElement.addEventListener("wheel", handleWheelEvent, { passive: false });
+svgElement.addEventListener("wheel", handleWheelEvent, {
+    passive: false
+});
 
 // Función para manejar el evento wheel
 function handleWheelEvent(event) {
@@ -302,18 +318,38 @@ function isMouseOverSVG(event) {
         mouseY <= svgRect.bottom
     );
 }
+function removeAllCanvasEvents() {
+    if(selectedcircle) unselect()
+    canvas.removeEventListener('mousemove', movecanvas);
+    canvas.removeEventListener("wheel", wheelcanvas);
+    draggableCircles.on("mousedown", null).on("mouseup", null);
+}
+
 
 var eraseButton = document.getElementById("eraseButton");
-eraseButton.addEventListener("click", function () {
+eraseButton.addEventListener("click", function() {
     if (circulitos) {
         waitingMessage.style.display = "block";
-        circulitos.on("click", function () {
+        removeAllCanvasEvents();
+        circulitos.on("click", function() {
             const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
             erasePoint(circleIndex);
             waitingMessage.style.display = "none";
         });
     }
+});
 
+function addAllCanvasEvents() {
+    canvas.addEventListener('mousemove', movecanvas);
+    canvas.addEventListener("wheel", wheelcanvas);
+    draggableCircles.on("mousedown", dragStarted).on("mouseup", doubleClick);
+    circulitos.on("click", function() {
+    });
+    waitingMessage.style.display = "none";
+}
+var noaction = document.getElementById("noAction");
+noaction.addEventListener("click", function() {
+    addAllCanvasEvents();
 });
 var bpreview = document.getElementById("preview");
 
@@ -330,15 +366,15 @@ bpreview.addEventListener("mouseup", function() {
 var addButton = document.getElementById("addcircle");
 
 // Agrega el evento de escucha al botón
-addButton.addEventListener("click", function () {
+addButton.addEventListener("click", function() {
     // Muestra el elemento de espera
     waitingMessage.style.display = "block";
-
+    removeAllCanvasEvents();
     const rect = canvas.getBoundingClientRect();
     const divOffsetX = rect.left;
     const divOffsetY = rect.top;
 
-    canvas.addEventListener("click", function (event) {
+    canvas.addEventListener("click", function(event) {
         const offsetX = event.clientX - divOffsetX;
         const offsetY = event.clientY - divOffsetY;
 
@@ -346,15 +382,15 @@ addButton.addEventListener("click", function () {
 
         // Oculta el elemento de espera después de agregar el punto
         waitingMessage.style.display = "none";
-    }, { once: true });
+    }, {
+        once: true
+    });
 });
 
 function erasePoint(i) {
     shapeInput.value = Module.ccall(
         "_Z10erasepointi",
-        "string",
-        ["number"],
-        [i]
+        "string", ["number"], [i]
     );
     computeShape();
 }
@@ -362,22 +398,19 @@ function erasePoint(i) {
 function preview() {
     return Module.ccall(
         "_Z11downloadsvgv",
-        "string",
-        ["number"],
-        []
+        "string", ["number"], []
     );
 }
+
 function downloadsvg() {
     var aux = Module.ccall(
         "_Z11downloadsvgv",
-        "string",
-        ["number"],
-        []
+        "string", ["number"], []
     );
 
     var enlaceDescarga = document.createElement('a');
     enlaceDescarga.setAttribute('href', 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(aux));
-    enlaceDescarga.setAttribute('download', 'imagen.svg');
+    enlaceDescarga.setAttribute('download', 'shape.svg');
     enlaceDescarga.style.display = 'none';
 
     document.body.appendChild(enlaceDescarga);
@@ -422,10 +455,11 @@ function similarGenerate() {
 }
 
 var createcon = document.getElementById("createconection");
-createcon.addEventListener("click", function () {
+createcon.addEventListener("click", function() {
     if (circulitos) {
         waitingMessage.style.display = "block";
-        circulitos.on("click", function () {
+        removeAllCanvasEvents();
+        circulitos.on("click", function() {
             const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
             if (typeof createconection.firstCircleIndex === "undefined") {
                 createconection.firstCircleIndex = circleIndex;
@@ -441,18 +475,17 @@ createcon.addEventListener("click", function () {
 function createconection(circleIndex1, circleIndex2) {
     shapeInput.value = Module.ccall(
         "_Z12connectnodesii",
-        "string",
-        ["number", "number"],
-        [circleIndex1, circleIndex2]
+        "string", ["number", "number"], [circleIndex1, circleIndex2]
     );
     computeShape();
 }
 
 var erasecon = document.getElementById("eraseconection");
-erasecon.addEventListener("click", function () {
+erasecon.addEventListener("click", function() {
     if (circulitos) {
         waitingMessage.style.display = "block";
-        circulitos.on("click", function () {
+        removeAllCanvasEvents();
+        circulitos.on("click", function() {
             const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
             if (typeof eraseConnection.firstCircleIndex === "undefined") {
                 eraseConnection.firstCircleIndex = circleIndex;
@@ -468,18 +501,17 @@ erasecon.addEventListener("click", function () {
 function eraseConnection(circleIndex1, circleIndex2) {
     shapeInput.value = Module.ccall(
         "_Z15disconnectnodesii",
-        "string",
-        ["number", "number"],
-        [circleIndex1, circleIndex2]
+        "string", ["number", "number"], [circleIndex1, circleIndex2]
     );
     computeShape();
 }
 
 var middlecircle = document.getElementById("middlecircle");
-middlecircle.addEventListener("click", function () {
+middlecircle.addEventListener("click", function() {
     if (circulitos) {
         waitingMessage.style.display = "block";
-        circulitos.on("click", function () {
+        removeAllCanvasEvents();
+        circulitos.on("click", function() {
             const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
             if (typeof erasecon.firstCircleIndex === "undefined") {
                 erasecon.firstCircleIndex = circleIndex;
@@ -495,9 +527,7 @@ middlecircle.addEventListener("click", function () {
 function middleCircle(circleIndex1, circleIndex2) {
     shapeInput.value = Module.ccall(
         "_Z17insertpointmiddleii",
-        "string",
-        ["number", "number"],
-        [circleIndex1, circleIndex2]
+        "string", ["number", "number"], [circleIndex1, circleIndex2]
     );
     computeShape();
 }
@@ -505,9 +535,7 @@ function middleCircle(circleIndex1, circleIndex2) {
 function addpoint(x, r) {
     shapeInput.value = Module.ccall(
         "_Z11insertpointii",
-        "string",
-        ["number", "number"],
-        [x, r]
+        "string", ["number", "number"], [x, r]
     );
     computeShape();
 }
@@ -515,9 +543,7 @@ function addpoint(x, r) {
 function transform(zoom_factor, zx, zy, dx, dy) {
     shapeInput.value = Module.ccall(
         "_Z9transformfffff",
-        "string",
-        ["float", "float", "float", "float", "float"],
-        [zoom_factor, zx, zy, dx, dy]
+        "string", ["float", "float", "float", "float", "float"], [zoom_factor, zx, zy, dx, dy]
     );
     computeShape();
 }
@@ -529,7 +555,9 @@ function exportShape() {
     const shapeInput = document.getElementById('shapeInput');
     const shapeContent = shapeInput.value;
 
-    const blob = new Blob([shapeContent], { type: 'text/plain' });
+    const blob = new Blob([shapeContent], {
+        type: 'text/plain'
+    });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement('a');
@@ -546,10 +574,10 @@ function exportShape() {
 var helpButton = document.getElementById("helpButton");
 var closeBtn = document.getElementsByClassName("close")[0];
 
-helpButton.addEventListener("click", function () {
+helpButton.addEventListener("click", function() {
     popuphelp.style.display = "block";
 });
 
-closeBtn.addEventListener("click", function () {
+closeBtn.addEventListener("click", function() {
     popuphelp.style.display = "none";
 });

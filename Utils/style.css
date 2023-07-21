@@ -42,6 +42,29 @@ button:hover {
     background-color: #45a049;
 }
 
+/* Estilos específicos para el botón de cargar archivo */
+.custom-upload-button {
+    /* Puedes personalizar los estilos del botón personalizado aquí si es necesario */
+    /* Incluye los estilos comunes de los botones */
+    padding: 0.625em 1.25em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 0.625em;
+    border-radius: 4px;
+}
+
+.custom-upload-button:hover {
+    background-color: #45a049;
+}
+
+/* Ocultar el botón real */
+#upload {
+    display: none;
+}
+
 /* Estilos específicos */
 #spinner {
     overflow: visible;
@@ -194,6 +217,7 @@ button:hover {
     text-decoration: none;
     cursor: pointer;
 }
+
 /* Estilos específicos para draggable-circle */
 .draggable-circle {
     pointer-events: all;
