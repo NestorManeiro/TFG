@@ -32,7 +32,7 @@
             <button id="mybutton">Compute Shape</button>
             <button id="exportButton">Export Shape</button>
             <!-- Botón personalizado para cargar archivos -->
-            <button class="custom-upload-button" onclick="uploadFile()">Seleccionar archivo</button>
+            <button class="custom-upload-button" onclick="uploadFile()">Upload Shape</button>
             <!-- Elemento real para cargar el archivo (oculto) -->
             <input type="file" id="upload" accept=".txt" style="display: none;">
 
@@ -54,7 +54,6 @@
             <div class="inline-buttons">
                 <button id="addcircle">Create a circle</button>
                 <button id="eraseButton">Erase a circle</button>
-                <button id="noAction">Normal click</button>
             </div>
             <div class="inline-buttons">
                 <button id="createconection">New circle connection</button>
@@ -64,6 +63,7 @@
                 <button onclick="randomGenerate()">Generate random SVG</button>
                 <button onclick="similarGenerate()">Generate similar SVG</button>
             </div>
+        <button id="noAction">Reset action</button>
     </div>
 
 </div>

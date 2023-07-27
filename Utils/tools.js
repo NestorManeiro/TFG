@@ -87,7 +87,6 @@ function drawFigure() {
         });
     }
     addAllCanvasEvents();
-    console.log("hola")
 }
 
 function addEvents() {
@@ -241,7 +240,6 @@ function wheelcanvas(event) {
         var rect = canvas.getBoundingClientRect();
         offsetX -= rect.left;
         offsetY -= rect.top;
-        console.log(offsetX,offsetY)
         var zoom = isScrollUp ? 1.03 : 0.97;
         transform(zoom, offsetX, offsetY, 0, 0);
         computeShape();
@@ -326,12 +324,16 @@ function removeAllCanvasEvents() {
     if(selectedcircle) unselect()
     canvas.removeEventListener('mousemove', movecanvas);
     canvas.removeEventListener("wheel", wheelcanvas);
+    canvas.removeEventListener("click",addcircle);
     draggableCircles.on("mousedown", null).on("mouseup", null);
 }
 
 
 var eraseButton = document.getElementById("eraseButton");
 eraseButton.addEventListener("click", function() {
+    // Cambiar el color del botón "eraseButton" para remarcar que está seleccionado
+    eraseButton.style.backgroundColor = "#ff9800"; // Puedes usar cualquier color que desees
+
     if (circulitos) {
         waitingMessage.style.display = "block";
         removeAllCanvasEvents();
@@ -339,6 +341,9 @@ eraseButton.addEventListener("click", function() {
             const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
             erasePoint(circleIndex);
             waitingMessage.style.display = "none";
+
+            // Restablecer el color del botón "eraseButton" después de completar la lógica
+            eraseButton.style.backgroundColor = "#4CAF50"; // Color inicial
         });
     }
 });
@@ -353,6 +358,7 @@ function addAllCanvasEvents() {
 }
 var noaction = document.getElementById("noAction");
 noaction.addEventListener("click", function() {
+    removeAllCanvasEvents();
     addAllCanvasEvents();
 });
 var bpreview = document.getElementById("preview");
@@ -371,25 +377,31 @@ var addButton = document.getElementById("addcircle");
 
 // Agrega el evento de escucha al botón
 addButton.addEventListener("click", function() {
+    // Cambiar el color del botón "addButton" para remarcar que está seleccionado
+    addButton.style.backgroundColor = "#ff9800"; // Puedes usar cualquier color que desees
+
     // Muestra el elemento de espera
     waitingMessage.style.display = "block";
     removeAllCanvasEvents();
+
+    canvas.addEventListener("click", addcircle, { once: true });
+});
+
+function addcircle(event) {
     const rect = canvas.getBoundingClientRect();
     const divOffsetX = rect.left;
     const divOffsetY = rect.top;
+    const offsetX = event.clientX - divOffsetX;
+    const offsetY = event.clientY - divOffsetY;
 
-    canvas.addEventListener("click", function(event) {
-        const offsetX = event.clientX - divOffsetX;
-        const offsetY = event.clientY - divOffsetY;
+    addpoint(offsetX, offsetY);
 
-        addpoint(offsetX, offsetY);
+    // Restablecer el color del botón "addButton" después de completar la lógica
+    addButton.style.backgroundColor = "#4CAF50"; // Color inicial
 
-        // Oculta el elemento de espera después de agregar el punto
-        waitingMessage.style.display = "none";
-    }, {
-        once: true
-    });
-});
+    // Oculta el elemento de espera después de agregar el punto
+    waitingMessage.style.display = "none";
+}
 
 function erasePoint(i) {
     shapeInput.value = Module.ccall(
@@ -460,6 +472,9 @@ function similarGenerate() {
 
 var createcon = document.getElementById("createconection");
 createcon.addEventListener("click", function() {
+    // Cambiar el color del botón "createcon" para remarcar que está seleccionado
+    createcon.style.backgroundColor = "#ff9800"; // Puedes usar cualquier color que desees
+
     if (circulitos) {
         waitingMessage.style.display = "block";
         removeAllCanvasEvents();
@@ -471,10 +486,14 @@ createcon.addEventListener("click", function() {
                 createconection(createconection.firstCircleIndex, circleIndex);
                 delete createconection.firstCircleIndex;
                 waitingMessage.style.display = "none";
+
+                // Restablecer el color del botón "createcon" después de completar la lógica
+                createcon.style.backgroundColor = "#4CAF50"; // Color inicial
             }
         });
     }
 });
+
 
 function createconection(circleIndex1, circleIndex2) {
     shapeInput.value = Module.ccall(
@@ -486,6 +505,9 @@ function createconection(circleIndex1, circleIndex2) {
 
 var erasecon = document.getElementById("eraseconection");
 erasecon.addEventListener("click", function() {
+    // Cambiar el color del botón "erasecon" para remarcar que está seleccionado
+    erasecon.style.backgroundColor = "#ff9800"; // Puedes usar cualquier color que desees
+
     if (circulitos) {
         waitingMessage.style.display = "block";
         removeAllCanvasEvents();
@@ -497,6 +519,9 @@ erasecon.addEventListener("click", function() {
                 eraseConnection(eraseConnection.firstCircleIndex, circleIndex);
                 delete eraseConnection.firstCircleIndex;
                 waitingMessage.style.display = "none";
+
+                // Restablecer el color del botón "erasecon" después de completar la lógica
+                erasecon.style.backgroundColor = "#4CAF50"; // Color inicial
             }
         });
     }
@@ -513,6 +538,9 @@ function eraseConnection(circleIndex1, circleIndex2) {
 var middlecircle = document.getElementById("middlecircle");
 middlecircle.addEventListener("click", function() {
     if (circulitos) {
+        // Cambiar el color del botón para remarcar que está seleccionado
+        middlecircle.style.backgroundColor = "#ff9800"; // Puedes usar cualquier color que desees
+
         waitingMessage.style.display = "block";
         removeAllCanvasEvents();
         circulitos.on("click", function() {
@@ -523,10 +551,14 @@ middlecircle.addEventListener("click", function() {
                 middleCircle(erasecon.firstCircleIndex, circleIndex);
                 delete erasecon.firstCircleIndex;
                 waitingMessage.style.display = "none";
+
+                // Restablecer el color del botón después de completar la lógica
+                middlecircle.style.backgroundColor = "#4CAF50"; // Color inicial
             }
         });
     }
 });
+
 
 function middleCircle(circleIndex1, circleIndex2) {
     shapeInput.value = Module.ccall(
