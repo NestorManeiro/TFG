@@ -95,6 +95,7 @@ button:hover {
     box-shadow: 0 0.125em 0.3125em rgba(0, 0, 0, 0.2);
     font-family: Arial, sans-serif;
     z-index: 99999;
+    cursor: grab;
 }
 
 #popup input[type="number"],

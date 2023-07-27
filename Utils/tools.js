@@ -14,7 +14,7 @@ const canvas = document.getElementById("canvas_svg");
 var isCanvasClicked = false;
 
 canvas.addEventListener('mousedown', function(event) {
-    if (selectedcircle) unselect();
+    if(!isRightClick(event) || popup.style.display === "block") return;
     initialClickX = event.clientX - canvas.getBoundingClientRect().left;
     initialClickY = event.clientY - canvas.getBoundingClientRect().top;
     isCanvasClicked = true;
@@ -68,16 +68,26 @@ function drawFigure() {
         canvas.appendChild(svgElement);
     }
     addEvents();
-    if (selectedcircle) {
-        const cx = parseFloat(selectedcircle.getAttribute("cx"));
-        const cy = parseFloat(selectedcircle.getAttribute("cy"));
-        const circles = canvas.querySelectorAll("circle.draggable-circle");
+    highlightCircles(activeCircle, canvas.querySelectorAll("circle.draggable-circle"));
+    highlightCircles(selectedcircle, canvas.querySelectorAll("circle.draggable-circle"));
 
+    addAllCanvasEvents();
+}
 
-        circles.forEach(circle => {
+function highlightCircles(centerCircle, circlesToHighlight) {
+    if (centerCircle && centerCircle.tagName === "circle") {
+        const cx = parseFloat(centerCircle.getAttribute("cx"));
+        const cy = parseFloat(centerCircle.getAttribute("cy"));
+        const tolerance = 0.1;
+
+        circlesToHighlight.forEach(circle => {
             const circleCx = parseFloat(circle.getAttribute("cx"));
             const circleCy = parseFloat(circle.getAttribute("cy"));
-            if (cx === circleCx && cy === circleCy) {
+
+            const dx = Math.abs(cx - circleCx);
+            const dy = Math.abs(cy - circleCy);
+
+            if (dx <= tolerance && dy <= tolerance) {
                 circle.setAttribute("stroke", "blue");
                 circle.setAttribute("stroke-width", "3");
             } else {
@@ -86,13 +96,12 @@ function drawFigure() {
             }
         });
     }
-    addAllCanvasEvents();
 }
 
 function addEvents() {
     if (activeCircle || selectedcircle != null) return;
     circulitos = d3.selectAll("#canvas_svg circle.draggable-circle");
-    draggableCircles = circulitos.on("mousedown", dragStarted).on("mouseup", doubleClick);
+    draggableCircles = circulitos.on("mousedown", dragStarted).on("contextmenu", rightClick);
 
 }
 
@@ -110,7 +119,24 @@ function showPopup(mouseX, mouseY) {
     popup.style.display = "block";
     popup.style.left = mouseX + "px";
     popup.style.top = mouseY + "px";
+    popup.addEventListener("mousedown", function(event) {
+        isDragging = true;
+        offsetX = event.clientX - popup.getBoundingClientRect().left;
+        offsetY = event.clientY - popup.getBoundingClientRect().top;
+        popup.style.cursor = "grabbing";
+    });
 
+    document.addEventListener("mousemove", function(event) {
+        if (isDragging) {
+            popup.style.left = event.clientX - offsetX + "px";
+            popup.style.top = event.clientY - offsetY + "px";
+        }
+    });
+
+    document.addEventListener("mouseup", function() {
+        isDragging = false;
+        popup.style.cursor = "grab";
+    });
     popup.innerHTML = `<label>Radius:</label>
     <input type="number" id="radiusInput" value="${currentRadius}" step="1" min="0"><br>
     <label>Smooth:</label>
@@ -120,7 +146,14 @@ function showPopup(mouseX, mouseY) {
     <label>Y:</label>
     <input type="number" id="yInput" value="${currentY}" step="1"><br>
     <label>Index:</label>
-    ${circleIndex}`;
+    ${circleIndex}
+    <button id="closeButton">Cerrar</button>`;
+
+    // Agregamos el evento click al botón "Cerrar" para ocultar el popup
+    const closeButton = document.getElementById("closeButton");
+    closeButton.addEventListener("click", function() {
+        unselect();
+    });
 
     // Agrega eventos a los campos del popup para actualizar los datos del círculo seleccionado
     const radiusInput = document.getElementById("radiusInput");
@@ -136,7 +169,8 @@ function showPopup(mouseX, mouseY) {
         updateCircleData(selectedcircle, null, null, newRadius);
     });
 
-    smoothInput.addEventListener("input", function() {
+    smoothInput.addEventListener("mousemove", function() {
+        event.stopPropagation();
         const smoothFactor = parseFloat(smoothInput.value);
         hasDataChanged = true;
         updateCircleData(selectedcircle, null, null, null, smoothFactor);
@@ -157,22 +191,40 @@ function showPopup(mouseX, mouseY) {
     });
 }
 
-function doubleClick(event) {
+function rightClick(event) {
+    event.preventDefault();
     if (selectedcircle == null) {
         selectedcircle = this;
         selectedcircle.setAttribute("stroke", "blue");
         selectedcircle.setAttribute("stroke-width", "3");
         showPopup(event.clientX+20, event.clientY-20);
-    } else {
-        unselect()
     }
 }
 
+function isRightClick(event) {
+    // Verificar si es el botón derecho o izquierdo del ratón
+    if ("which" in event) {
+        if (event.which === 3) {
+            return(false);
+        } else if (event.which === 1) {
+            return(true);
+        }
+    } else if ("button" in event) {
+        if (event.button === 2) {
+            return(false);
+        } else if (event.button === 0) {
+            return(true);
+        }
+    }
+}
 function dragStarted(event) {
+    if(!isRightClick(event) || popup.style.display === "block") return;
     activeCircle = this;
+    selectedcircle = activeCircle;
     initialX = parseFloat(activeCircle.getAttribute("cx"));
     initialY = parseFloat(activeCircle.getAttribute("cy"));
-
+    activeCircle.setAttribute("stroke", "blue");
+    activeCircle.setAttribute("stroke-width", "3");
     deltaX = event.clientX;
     deltaY = event.clientY;
     isDragging = true; // Marcar como arrastrando
@@ -195,15 +247,23 @@ function dragged(event) {
     }
 }
 
+function dragEnded() {
+    isDragging = false;
+    activeCircle = false;
+    document.removeEventListener("mouseup", dragEnded);
+    document.removeEventListener("mousemove", dragged);
+    drawFigure();
+    unselect();
+}
 function wheel(event) {
     const isScrollUp = event.deltaY < 0;
-    if (selectedcircle) {
-        const currentRadius = parseFloat(selectedcircle.getAttribute("r"));
+    if (activeCircle) {
+        const currentRadius = parseFloat(activeCircle.getAttribute("r"));
         const scaleFactor = isScrollUp ? 2 : -2;
         const newRadius = Math.max(currentRadius + scaleFactor, 1);
         hasDataChanged = true;
-        selectedcircle.setAttribute("r", newRadius);
-        updateCircleData(selectedcircle, null, null, newRadius);
+        activeCircle.setAttribute("r", newRadius);
+        updateCircleData(activeCircle, null, null, newRadius);
     }
 }
 
@@ -250,6 +310,7 @@ var initialMouseX = 0;
 var initialMouseY = 0;
 
 function movecanvas(event) {
+    if(!isRightClick(event) || popup.style.display === "block") return;
     if (isCanvasClicked) {
         if (activeCircle === false) {
             var rect = canvas.getBoundingClientRect();
@@ -276,13 +337,7 @@ canvas.addEventListener("mousedown", function(event) {
 
 canvas.addEventListener("wheel", wheelcanvas);
 
-function dragEnded() {
-    isDragging = false;
-    activeCircle = false;
-    document.removeEventListener("mouseup", dragEnded);
-    document.removeEventListener("mousemove", dragged);
-    addEvents();
-}
+
 
 function animate() {
     if (hasDataChanged) {
@@ -351,7 +406,7 @@ eraseButton.addEventListener("click", function() {
 function addAllCanvasEvents() {
     canvas.addEventListener('mousemove', movecanvas);
     canvas.addEventListener("wheel", wheelcanvas);
-    draggableCircles.on("mousedown", dragStarted).on("mouseup", doubleClick);
+    draggableCircles.on("mousedown", dragStarted).on("contextmenu", rightClick);
     circulitos.on("click", function() {
     });
     waitingMessage.style.display = "none";
@@ -360,7 +415,18 @@ var noaction = document.getElementById("noAction");
 noaction.addEventListener("click", function() {
     removeAllCanvasEvents();
     addAllCanvasEvents();
+    setButtonStyle();
 });
+
+function setButtonStyle() {
+    // Obtener todos los elementos de botón en el documento
+    const buttons = document.getElementsByTagName("button");
+
+    // Aplicar el estilo de fondo verde (#4CAF50) a todos los botones
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].style.backgroundColor = "#4CAF50";
+    }
+}
 var bpreview = document.getElementById("preview");
 
 bpreview.addEventListener("mousedown", function() {
