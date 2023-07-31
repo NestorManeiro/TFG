@@ -147,7 +147,7 @@ function showPopup(mouseX, mouseY) {
     <input type="number" id="yInput" value="${currentY}" step="1"><br>
     <label>Index:</label>
     ${circleIndex}
-    <button id="closeButton">Cerrar</button>`;
+    <button id="closeButton">Close</button>`;
 
     // Agregamos el evento click al botón "Cerrar" para ocultar el popup
     const closeButton = document.getElementById("closeButton");

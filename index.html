@@ -26,7 +26,7 @@
     </div>
     <div id="instructions">
 
-        <p>Modify the shape or write a new one, and press the 'Compute Shape' button:</p>
+        <p>Shape parameters: An advanced user can modify the shape parameters by hand. To render the shape press the “Compute Shape” button.</p>
         <textarea id="shapeInput" rows="5" cols="50"></textarea>
         <div class="inline-buttons">
             <button id="mybutton">Compute Shape</button>
@@ -41,14 +41,15 @@
         </div>
         <hr>
         <ol class="zoom-instructions">
-            <li>The mouse wheel allows you to zoom in and out.</li>
-            <li>If you click and drag a node, you can move it.</li>
-            <li>If you do the same without selecting a node, you will move the entire figure.</li>
-            <li>Click selects a node, allowing you to view and modify its information.</li>
-            <li>When a node is selected, the mouse wheel will change its radius.</li>
+            <li>Shape can be edited using the action buttons below.</li>
+            <li>Right-clicking inside a circle opens a pop-up window that allows the user to modify the parameters of the selected circles.</li>
+            <li>Right-clicking outside of all the circles opens a pop-up window that allows the user to modify the parameters of all the circles. </li>
+            <li>Dragging the mouse with the left button pressed inside a circle allows to change the circle location</li>
+            <li>Dragging the mouse with the left mouse button pressed outside of all the circles allows to move the entire shape. </li>
+            <li>The mouse wheel allows zooming the entire shape.  </li>
         </ol>
             <div class="inline-buttons">
-                <button onclick="downloadsvg()">Download SVG</button>
+
                 <button id="middlecircle">New circle in the middle of a segment</button>
             </div>
             <div class="inline-buttons">
@@ -60,10 +61,13 @@
                 <button id="eraseconection">Remove circle connection</button>
             </div>
             <div class="inline-buttons">
-                <button onclick="randomGenerate()">Generate random SVG</button>
-                <button onclick="similarGenerate()">Generate similar SVG</button>
+                <button onclick="randomGenerate()">Generate random shape</button>
+                <button onclick="similarGenerate()">Generate similar shape</button>
             </div>
-        <button id="noAction">Reset action</button>
+            <div class="inline-buttons">
+                <button id="noAction">Reset action</button>
+                <button onclick="downloadsvg()">Download SVG</button>
+            </div>
     </div>
 
 </div>
