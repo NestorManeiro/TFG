@@ -10,9 +10,7 @@ Siempre se puede optimizar. -> memory access out of bounds
 
 Tengo que usar transform para arreglar el error de los circulos con su index!!!!!!!!!
 
-que el popup se pueda mover y Control Z
-
-Guardar las shapes y ya esta 10 movimientos xddd.
+Control Z -> Guardar las shapes y ya esta 10 movimientos xddd.
 
 *******************************************************Mejoras ?*******************************************************
 

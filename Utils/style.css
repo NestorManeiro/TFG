@@ -86,7 +86,7 @@ button:hover {
     100% { transform: rotate(360deg); }
 }
 
-#popup {
+.popup {
     position: absolute;
     background-color: #E6E6E6;
     border: 0.0625em solid black;
@@ -98,14 +98,14 @@ button:hover {
     cursor: grab;
 }
 
-#popup input[type="number"],
-#popup input[type="range"] {
+.popup input[type="number"],
+.popup input[type="range"] {
     width: 8em;
     padding: 0.25em;
     margin-bottom: 0.3125em;
 }
 
-#popup label {
+.popup label {
     display: block;
     margin-bottom: 0.625em;
     font-weight: bold;
