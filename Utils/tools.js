@@ -98,11 +98,24 @@ function highlightCircles(centerCircle, circlesToHighlight) {
     }
 }
 
+
 function addEvents() {
     if (activeCircle || selectedcircle != null) return;
     circulitos = d3.selectAll("#canvas_svg circle.draggable-circle");
-    draggableCircles = circulitos.on("mousedown", dragStarted).on("contextmenu", rightClick);
 
+    // Actualiza el radio mínimo de los círculos
+    circulitos.attr("r", function () {
+        // Obtiene el radio actual del círculo
+        const currentRadius = parseFloat(d3.select(this).attr("r"));
+
+        // Calcula el nuevo radio usando Math.max() para asegurarte de que sea al menos MIN_RADIUS
+        const newRadius = Math.max(currentRadius, 10);
+
+        // Devuelve el nuevo radio para actualizar el atributo "r" del círculo
+        return newRadius;
+    });
+
+    draggableCircles = circulitos.on("mousedown", dragStarted).on("contextmenu", rightClick);
 }
 
 
@@ -111,7 +124,7 @@ function showPopup(mouseX, mouseY) {
     var shapeInput = document.getElementById("shapeInput");
     var circleIndex = Array.from(draggableCircles.nodes()).indexOf(selectedcircle)+1;
     var lines = shapeInput.value.split("\n");
-    var currentRadius = parseFloat(selectedcircle.getAttribute("r")).toFixed(2);
+    var currentRadius = parseFloat(lines[circleIndex + parseInt(lines[0].trim()) * 1]);
     var currentX = parseFloat(selectedcircle.getAttribute("cx")).toFixed(2);
     var currentY = parseFloat(selectedcircle.getAttribute("cy")).toFixed(2);
     var currentSmooth = parseFloat(lines[circleIndex + parseInt(lines[0].trim()) * 2]);
@@ -218,6 +231,7 @@ function isRightClick(event) {
     }
 }
 function dragStarted(event) {
+    console.log("wiii")
     if(!isRightClick(event) || popup.style.display === "block") return;
     activeCircle = this;
     selectedcircle = activeCircle;
@@ -258,7 +272,9 @@ function dragEnded() {
 function wheel(event) {
     const isScrollUp = event.deltaY < 0;
     if (activeCircle) {
-        const currentRadius = parseFloat(activeCircle.getAttribute("r"));
+        const circleIndex = Array.from(draggableCircles.nodes()).indexOf(activeCircle)+1;
+        const lines = shapeInput.value.split("\n");
+        const currentRadius = parseFloat(lines[circleIndex + parseInt(lines[0].trim()) * 1]);;
         const scaleFactor = isScrollUp ? 2 : -2;
         const newRadius = Math.max(currentRadius + scaleFactor, 1);
         hasDataChanged = true;
