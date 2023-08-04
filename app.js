@@ -63,6 +63,7 @@ window.onerror = () => {
 
 // para ejecutar mi función
 document.getElementById("mybutton").addEventListener("click", () => {
+    addShape(shapeInput.value.split('\n'))
     computeShape();
 });
 

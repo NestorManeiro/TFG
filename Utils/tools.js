@@ -10,11 +10,56 @@ var hasDataChanged;
 const popup = document.getElementById("popup");
 const popup2 = document.getElementById("popupall");
 const waitingMessage = document.getElementById("waiting-message"); // Reemplaza "waiting-message" con el ID correspondiente a tu elemento HTML
-
 const canvas = document.getElementById("canvas_svg");
-
+const shapesArray = [];
 var isCanvasClicked = false;
 
+function addShape() {
+    const newShape = shapeInput.value.split('\n');
+    if (shapesArray.length >= 10) {
+        shapesArray.shift(); // Eliminar el primer elemento si ya hay 10
+    }
+    const lastShape = shapesArray[shapesArray.length - 1];
+
+    // Compara si el nuevo shape es igual al último shape almacenado
+    const shapesAreEqual = lastShape && arraysAreEqual(newShape, lastShape);
+
+    // Si los shapes son iguales, no lo agregues al historial
+    if (!shapesAreEqual) {
+        shapesArray.push(newShape);
+    }
+}
+
+function arraysAreEqual(arr1, arr2) {
+    // Verifica si ambos arreglos tienen una longitud antes de compararlos
+    if (!arr1 || !arr2 || arr1.length !== arr2.length) return false;
+    for (let i = 0; i < arr1.length; i++) {
+        if (arr1[i] !== arr2[i]) return false;
+    }
+    return true;
+}
+function updateShapeInput() {
+    const shapeInput = document.getElementById("shapeInput");
+    if (shapesArray.length > 1) {
+        // Clonar el penúltimo valor y asignarlo a shapeInput.value
+        shapeInput.value = shapesArray[shapesArray.length - 2].slice().join('\n');
+
+        // Eliminar el último valor de shapesArray
+        shapesArray.pop();
+    } else if (shapesArray.length === 1) {
+        // Si solo hay un valor, simplemente asignar ese valor a shapeInput.value
+        shapeInput.value = shapesArray[0].join('\n');
+    } else {
+        shapeInput.value = '';
+    }
+    computeShape();
+}
+document.addEventListener("keydown", function(event) {
+    // Verificar si se presionó la tecla "Control" (código 17) y la letra "z" (código 90)
+    if (event.ctrlKey && event.keyCode === 90) {
+        updateShapeInput();
+    }
+});
 canvas.addEventListener("mousedown", function (event) {
     if (!isRightClick(event) || popup.style.display === "block") return;
     initialClickX = event.clientX - canvas.getBoundingClientRect().left;
@@ -118,6 +163,7 @@ function openPopup(mouseX, mouseY) {
     }
 }
 function closePopup() {
+    addShape();
     popup2.style.display = "none";
 }
 function allcircles(radius, smooth) {
@@ -140,6 +186,8 @@ function allcircles(radius, smooth) {
     shapeInput.value = lines.join("\n");
     computeShape();
 }
+
+
 
 function drawFigure() {
     const svgContent = svgOutput.value;
@@ -258,6 +306,7 @@ function showPopup(mouseX, mouseY) {
     // Agregamos el evento click al botón "Cerrar" para ocultar el popup
     const closeButton = document.getElementById("closeButton");
     closeButton.addEventListener("click", function () {
+        addShape();
         unselect();
     });
 
@@ -440,6 +489,10 @@ function movecanvas(event) {
     }
 }
 
+canvas.addEventListener("mouseup", canvasMouseUp); // Agrega el evento mouseup
+function canvasMouseUp(event) {
+    addShape();
+}
 canvas.addEventListener("mousedown", function (event) {
     var rect = canvas.getBoundingClientRect();
     initialMouseX = event.clientX - rect.left;
@@ -769,7 +822,6 @@ const exportButton = document.getElementById("exportButton");
 exportButton.addEventListener("click", exportShape);
 
 function exportShape() {
-    const shapeInput = document.getElementById("shapeInput");
     const shapeContent = shapeInput.value;
 
     const blob = new Blob([shapeContent], {
