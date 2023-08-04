@@ -10,7 +10,7 @@ Siempre se puede optimizar. -> memory access out of bounds
 
 Tengo que usar transform para arreglar el error de los circulos con su index!!!!!!!!!
 
-Control Z -> Guardar las shapes y ya esta 10 movimientos xddd.
+Control Z -> Falta la ruedita
 
 *******************************************************Mejoras ?*******************************************************
 
