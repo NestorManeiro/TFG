@@ -1,25 +1,9 @@
-var circulitos;
-let isDragging = false;
-var selectedcircle = null;
-var draggableCircles;
-var deltaX, deltaY;
-var initialX = 0;
-var initialY = 0;
-var activeCircle = false;
-var hasDataChanged;
-const popup = document.getElementById("popup");
-const popup2 = document.getElementById("popupall");
-const waitingMessage = document.getElementById("waiting-message"); // Reemplaza "waiting-message" con el ID correspondiente a tu elemento HTML
-const canvas = document.getElementById("canvas_svg");
-var isCanvasClicked = false;
-let currentShapeIndex = -1;
-const shapesArray = [];
-
+//Functionality
 function fixit() {
-    transform(1, null, null, 0, 0)
+    transform(1, null, null, 0, 0);
 }
 function addShape() {
-    const newShape = shapeInput.value.split('\n');
+    const newShape = shapeInput.value.split("\n");
     if (currentShapeIndex < shapesArray.length - 1) {
         shapesArray.splice(currentShapeIndex + 1); // Eliminar figuras por encima de currentShapeIndex
     }
@@ -51,11 +35,11 @@ function updateShapeInput() {
     const shapeInput = document.getElementById("shapeInput");
     if (currentShapeIndex > 0) {
         currentShapeIndex--;
-        shapeInput.value = shapesArray[currentShapeIndex].slice().join('\n');
+        shapeInput.value = shapesArray[currentShapeIndex].slice().join("\n");
     } else if (currentShapeIndex === 0) {
-        shapeInput.value = shapesArray[0].join('\n');
+        shapeInput.value = shapesArray[0].join("\n");
     } else {
-        shapeInput.value = '';
+        shapeInput.value = "";
     }
     computeShape();
 }
@@ -64,27 +48,11 @@ function redoShapeInput() {
     const shapeInput = document.getElementById("shapeInput");
     if (currentShapeIndex < shapesArray.length - 1) {
         currentShapeIndex++;
-        shapeInput.value = shapesArray[currentShapeIndex].slice().join('\n');
+        shapeInput.value = shapesArray[currentShapeIndex].slice().join("\n");
         computeShape();
     }
 }
 
-document.addEventListener("keydown", function(event) {
-    // Verificar si se presionó la tecla "Control" (código 17) y la letra "z" (código 90)
-    if (event.ctrlKey && event.keyCode === 90) {
-        updateShapeInput();
-    }
-    // Verificar si se presionó la tecla "Control" (código 17) y la letra "y" (código 89)
-    else if (event.ctrlKey && event.keyCode === 89) {
-        redoShapeInput();
-    }
-});
-canvas.addEventListener("mousedown", function (event) {
-    if (!isRightClick(event) || popup.style.display === "block") return;
-    initialClickX = event.clientX - canvas.getBoundingClientRect().left;
-    initialClickY = event.clientY - canvas.getBoundingClientRect().top;
-    isCanvasClicked = true;
-});
 function unselect() {
     selectedcircle.setAttribute("stroke", "black");
     selectedcircle.setAttribute("stroke-width", "1");
@@ -93,39 +61,11 @@ function unselect() {
     popup2.style.display = "none";
     drawFigure();
 }
-canvas.addEventListener("mouseup", function () {
-    isCanvasClicked = false;
-});
-
-canvas.addEventListener("wheel", wheelcanvas);
-canvas.addEventListener("mousemove", movecanvas);
-
-const uploadButton = document.getElementById("upload");
-uploadButton.addEventListener("change", function (event) {
-    const file = event.target.files[0];
-    if (!file) return; // Si no se seleccionó ningún archivo, salimos de la función.
-
-    const reader = new FileReader();
-    reader.onload = function (event) {
-        const fileContent = event.target.result;
-         // Eliminar espacios en blanco y saltos de línea al inicio y al final
-        shapeInput.value = fileContent.trim();
-        computeShape();
-    };
-
-    // Leer el contenido del archivo como texto
-    reader.readAsText(file, "UTF-8");
-});
 
 function uploadFile() {
     document.getElementById("upload").click();
 }
-canvas.addEventListener("contextmenu", function (event) {
-    event.preventDefault();
-    openPopup(event.clientX, event.clientY);
-});
 
-var popupallAux = false;
 function openPopup(mouseX, mouseY) {
     event.stopPropagation();
     if (!selectedcircle) {
@@ -158,8 +98,7 @@ function openPopup(mouseX, mouseY) {
                 event.stopPropagation();
                 // Calcular la diferencia entre la posición anterior y la posición actual del slider
                 const currentRadiusValue = radiusInput.value;
-                const radiusDifference =
-                    currentRadiusValue - previousRadiusValue;
+                const radiusDifference = currentRadiusValue - previousRadiusValue;
 
                 allcircles(radiusDifference, 0); // Enviar la diferencia a la función allcircles
                 previousRadiusValue = currentRadiusValue; // Actualizar el valor anterior
@@ -169,8 +108,7 @@ function openPopup(mouseX, mouseY) {
                 event.stopPropagation();
                 // Calcular la diferencia entre la posición anterior y la posición actual del slider
                 const currentSmoothValue = smoothInput.value;
-                const smoothDifference =
-                    currentSmoothValue - previousSmoothValue;
+                const smoothDifference = currentSmoothValue - previousSmoothValue;
 
                 allcircles(0, smoothDifference); // Enviar la diferencia a la función allcircles
                 previousSmoothValue = currentSmoothValue; // Actualizar el valor anterior
@@ -207,8 +145,6 @@ function allcircles(radius, smooth) {
     shapeInput.value = lines.join("\n");
     computeShape();
 }
-
-
 
 function drawFigure() {
     const svgContent = svgOutput.value;
@@ -451,8 +387,7 @@ function wheel(event) {
 
 function updateCircleData(circle, newX, newY, newRadius, smoothFactor) {
     const shapeInput = document.getElementById("shapeInput");
-    const circleIndex =
-        Array.from(draggableCircles.nodes()).indexOf(circle) + 1;
+    const circleIndex = Array.from(draggableCircles.nodes()).indexOf(circle) + 1;
     if (circleIndex === -1) return;
     const lines = shapeInput.value.split("\n");
     const firstLine = lines[0].trim();
@@ -474,75 +409,12 @@ function updateCircleData(circle, newX, newY, newRadius, smoothFactor) {
     animationFrameId = requestAnimationFrame(animate);
 }
 
-function wheelcanvas(event) {
-    if (selectedcircle == null) {
-        var isScrollUp = event.deltaY < 0;
-        var offsetX = event.clientX;
-        var offsetY = event.clientY;
-        var rect = canvas.getBoundingClientRect();
-        offsetX -= rect.left;
-        offsetY -= rect.top;
-        var zoom = isScrollUp ? 1.03 : 0.97;
-        transform(zoom, offsetX, offsetY, 0, 0);
-        computeShape();
-    }
-}
-var initialMouseX = 0;
-var initialMouseY = 0;
-
-function movecanvas(event) {
-    if (!isRightClick(event) || popup.style.display === "block") return;
-    if (isCanvasClicked) {
-        if (activeCircle === false) {
-            var rect = canvas.getBoundingClientRect();
-            var currentMouseX = event.clientX - rect.left;
-            var currentMouseY = event.clientY - rect.top;
-
-            var movementX = currentMouseX - initialMouseX;
-            var movementY = currentMouseY - initialMouseY;
-
-            transform(1, null, null, movementX, movementY);
-            computeShape();
-
-            initialMouseX = currentMouseX;
-            initialMouseY = currentMouseY;
-        }
-    }
-}
-
-canvas.addEventListener("mouseup", canvasMouseUp); // Agrega el evento mouseup
-function canvasMouseUp(event) {
-    addShape();
-}
-canvas.addEventListener("mousedown", function (event) {
-    var rect = canvas.getBoundingClientRect();
-    initialMouseX = event.clientX - rect.left;
-    initialMouseY = event.clientY - rect.top;
-});
-
-canvas.addEventListener("wheel", wheelcanvas);
-
 function animate() {
     if (hasDataChanged) {
         computeShape();
         hasDataChanged = false;
     }
     requestAnimationFrame(animate);
-}
-
-//Prevent mouse
-const svgElement = document.getElementById("canvas_svg");
-
-// Agrega un listener para el evento wheel en el elemento SVG
-svgElement.addEventListener("wheel", handleWheelEvent, {
-    passive: false,
-});
-
-// Función para manejar el evento wheel
-function handleWheelEvent(event) {
-    if (isMouseOverSVG(event)) {
-        event.preventDefault(); // Evita el desplazamiento predeterminado de la página
-    }
 }
 
 // Función para verificar si el ratón está sobre el elemento SVG
@@ -560,44 +432,19 @@ function isMouseOverSVG(event) {
 }
 function removeAllCanvasEvents() {
     if (selectedcircle) unselect();
-    canvas.removeEventListener("mousemove", movecanvas);
-    canvas.removeEventListener("wheel", wheelcanvas);
+    canvas.removeEventListener("mousemove", HandleMovecanvas);
+    canvas.removeEventListener("wheel", handleWheelCanvas);
     canvas.removeEventListener("click", addcircle);
     draggableCircles.on("mousedown", null).on("mouseup", null);
 }
 
-var eraseButton = document.getElementById("eraseButton");
-eraseButton.addEventListener("click", function () {
-    // Cambiar el color del botón "eraseButton" para remarcar que está seleccionado
-    eraseButton.style.backgroundColor = "#ff9800"; // Puedes usar cualquier color que desees
-
-    if (circulitos) {
-        waitingMessage.style.display = "block";
-        removeAllCanvasEvents();
-        circulitos.on("click", function () {
-            const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
-            erasePoint(circleIndex);
-            waitingMessage.style.display = "none";
-
-            // Restablecer el color del botón "eraseButton" después de completar la lógica
-            eraseButton.style.backgroundColor = "#4CAF50"; // Color inicial
-        });
-    }
-});
-
 function addAllCanvasEvents() {
-    canvas.addEventListener("mousemove", movecanvas);
-    canvas.addEventListener("wheel", wheelcanvas);
+    canvas.addEventListener("mousemove", HandleMovecanvas);
+    canvas.addEventListener("wheel", handleWheelCanvas);
     draggableCircles.on("mousedown", dragStarted).on("contextmenu", rightClick);
     circulitos.on("click", function () {});
     waitingMessage.style.display = "none";
 }
-var noaction = document.getElementById("noAction");
-noaction.addEventListener("click", function () {
-    removeAllCanvasEvents();
-    addAllCanvasEvents();
-    setButtonStyle();
-});
 
 function setButtonStyle() {
     // Obtener todos los elementos de botón en el documento
@@ -608,30 +455,6 @@ function setButtonStyle() {
         buttons[i].style.backgroundColor = "#4CAF50";
     }
 }
-var bpreview = document.getElementById("preview");
-
-bpreview.addEventListener("mousedown", function () {
-    svgOutput.value = preview();
-    drawFigure();
-});
-
-bpreview.addEventListener("mouseup", function () {
-    computeShape();
-});
-
-var addButton = document.getElementById("addcircle");
-
-// Agrega el evento de escucha al botón
-addButton.addEventListener("click", function () {
-    // Cambiar el color del botón "addButton" para remarcar que está seleccionado
-    addButton.style.backgroundColor = "#ff9800"; // Puedes usar cualquier color que desees
-
-    // Muestra el elemento de espera
-    waitingMessage.style.display = "block";
-    removeAllCanvasEvents();
-
-    canvas.addEventListener("click", addcircle, { once: true });
-});
 
 function addcircle(event) {
     const rect = canvas.getBoundingClientRect();
@@ -650,12 +473,7 @@ function addcircle(event) {
 }
 
 function erasePoint(i) {
-    shapeInput.value = Module.ccall(
-        "_Z10erasepointi",
-        "string",
-        ["number"],
-        [i],
-    );
+    shapeInput.value = Module.ccall("_Z10erasepointi", "string", ["number"], [i]);
     computeShape();
 }
 
@@ -678,9 +496,6 @@ function downloadsvg() {
     enlaceDescarga.click();
     document.body.removeChild(enlaceDescarga);
 }
-
-// Declara una variable global para almacenar el puntero al SVG generado
-let svgPtr;
 
 function randomGenerate() {
     // Antes de generar un nuevo SVG, verifica si ya hay uno previo y libera la memoria
@@ -720,30 +535,6 @@ function similarGenerate() {
     fixit();
 }
 
-var createcon = document.getElementById("createconection");
-createcon.addEventListener("click", function () {
-    // Cambiar el color del botón "createcon" para remarcar que está seleccionado
-    createcon.style.backgroundColor = "#ff9800"; // Puedes usar cualquier color que desees
-
-    if (circulitos) {
-        waitingMessage.style.display = "block";
-        removeAllCanvasEvents();
-        circulitos.on("click", function () {
-            const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
-            if (typeof createconection.firstCircleIndex === "undefined") {
-                createconection.firstCircleIndex = circleIndex;
-            } else {
-                createconection(createconection.firstCircleIndex, circleIndex);
-                delete createconection.firstCircleIndex;
-                waitingMessage.style.display = "none";
-
-                // Restablecer el color del botón "createcon" después de completar la lógica
-                createcon.style.backgroundColor = "#4CAF50"; // Color inicial
-            }
-        });
-    }
-});
-
 function createconection(circleIndex1, circleIndex2) {
     shapeInput.value = Module.ccall(
         "_Z12connectnodesii",
@@ -754,30 +545,6 @@ function createconection(circleIndex1, circleIndex2) {
     computeShape();
 }
 
-var erasecon = document.getElementById("eraseconection");
-erasecon.addEventListener("click", function () {
-    // Cambiar el color del botón "erasecon" para remarcar que está seleccionado
-    erasecon.style.backgroundColor = "#ff9800"; // Puedes usar cualquier color que desees
-
-    if (circulitos) {
-        waitingMessage.style.display = "block";
-        removeAllCanvasEvents();
-        circulitos.on("click", function () {
-            const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
-            if (typeof eraseConnection.firstCircleIndex === "undefined") {
-                eraseConnection.firstCircleIndex = circleIndex;
-            } else {
-                eraseConnection(eraseConnection.firstCircleIndex, circleIndex);
-                delete eraseConnection.firstCircleIndex;
-                waitingMessage.style.display = "none";
-
-                // Restablecer el color del botón "erasecon" después de completar la lógica
-                erasecon.style.backgroundColor = "#4CAF50"; // Color inicial
-            }
-        });
-    }
-});
-
 function eraseConnection(circleIndex1, circleIndex2) {
     shapeInput.value = Module.ccall(
         "_Z15disconnectnodesii",
@@ -787,30 +554,6 @@ function eraseConnection(circleIndex1, circleIndex2) {
     );
     computeShape();
 }
-
-var middlecircle = document.getElementById("middlecircle");
-middlecircle.addEventListener("click", function () {
-    if (circulitos) {
-        // Cambiar el color del botón para remarcar que está seleccionado
-        middlecircle.style.backgroundColor = "#ff9800"; // Puedes usar cualquier color que desees
-
-        waitingMessage.style.display = "block";
-        removeAllCanvasEvents();
-        circulitos.on("click", function () {
-            const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
-            if (typeof erasecon.firstCircleIndex === "undefined") {
-                erasecon.firstCircleIndex = circleIndex;
-            } else {
-                middleCircle(erasecon.firstCircleIndex, circleIndex);
-                delete erasecon.firstCircleIndex;
-                waitingMessage.style.display = "none";
-
-                // Restablecer el color del botón después de completar la lógica
-                middlecircle.style.backgroundColor = "#4CAF50"; // Color inicial
-            }
-        });
-    }
-});
 
 function middleCircle(circleIndex1, circleIndex2) {
     shapeInput.value = Module.ccall(
@@ -840,36 +583,6 @@ function transform(zoom_factor, zx, zy, dx, dy) {
         [zoom_factor, zx, zy, dx, dy],
     );
 }
-
-const exportButton = document.getElementById("exportButton");
-exportButton.addEventListener("click", exportShape);
-
-function exportShape() {
-    const shapeContent = shapeInput.value;
-
-    const blob = new Blob([shapeContent], {
-        type: "text/plain",
-    });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "shape.txt";
-    a.style.display = "none";
-    document.body.appendChild(a);
-
-    a.click();
-
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+function buttonColor(elementoBoton, color) {
+    elementoBoton.style.backgroundColor = color;
 }
-var helpButton = document.getElementById("helpButton");
-var closeBtn = document.getElementsByClassName("close")[0];
-
-helpButton.addEventListener("click", function () {
-    popuphelp.style.display = "block";
-});
-
-closeBtn.addEventListener("click", function () {
-    popuphelp.style.display = "none";
-});
