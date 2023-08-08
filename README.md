@@ -8,7 +8,7 @@
 
 #### Notes ####
 
-  Por hacer [Lista de quehaceres]([https://github.com/tu-usuario/tu-repositorio](https://docs.google.com/document/d/1GtQtelN7FGx5gK_FEvt-q0SWJWtZPghOxBOqhI2w_kc/edit)).
+  Por hacer [Lista de quehaceres](https://github.com/tu-usuario/tu-repositorio](https://docs.google.com/document/d/1GtQtelN7FGx5gK_FEvt-q0SWJWtZPghOxBOqhI2w_kc/edit).
 
   blackbox.js: Created with WebAssembly.
   handleEvents.js: Contains all the functions used for event handling.
