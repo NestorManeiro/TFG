@@ -25,9 +25,13 @@
   Tracking of features [Documento en Google Docs](https://docs.google.com/document/d/1GtQtelN7FGx5gK_FEvt-q0SWJWtZPghOxBOqhI2w_kc/edit).
 
   blackbox.js: Created with WebAssembly.
+  
   handleEvents.js: Contains all the functions used for event handling.
+  
   init.js: Initializes all variables and adds all the necessary events.
+  
   tools.js: Contains various implemented functions.
+  
   app.js: Handles everything related to managing WebAssembly and initializing the webpage, such as loading the initial shape.txt.
 
 
