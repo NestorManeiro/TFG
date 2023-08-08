@@ -16,3 +16,12 @@ Por hacer [Documento en Google Docs](https://docs.google.com/document/d/1GtQtelN
   tools.js: Contains various implemented functions.
   app.js: Handles everything related to managing WebAssembly and initializing the webpage, such as loading the initial shape.txt.
   Is there anything else you need assistance with?
+
+
+### Issues ###
+
+En blackbox.js hay que sustituir:
+var _free = createExportWrapper("free"); 
+
+por esto:
+var _free = Module["_free"] = createExportWrapper("free");

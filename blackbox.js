@@ -4725,7 +4725,7 @@ var __Z9transformfffff = Module["__Z9transformfffff"] = createExportWrapper("_Z9
 /** @type {function(...*):?} */
 var _main = Module["_main"] = createExportWrapper("main");
 /** @type {function(...*):?} */
-var _free = createExportWrapper("free");
+var _free = Module["_free"] = createExportWrapper("free");
 /** @type {function(...*):?} */
 var ___errno_location = createExportWrapper("__errno_location");
 /** @type {function(...*):?} */
@@ -4786,7 +4786,6 @@ Module["FS_createLazyFile"] = FS.createLazyFile;
 Module["FS_createDevice"] = FS.createDevice;
 Module["FS_unlink"] = FS.unlink;
 Module["ccall"] = ccall;
-Module["_free"] = _free;
 Module["FS_createPreloadedFile"] = FS.createPreloadedFile;
 var missingLibrarySymbols = [
   'ydayFromDate',
