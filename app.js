@@ -65,6 +65,7 @@ window.onerror = () => {
 document.getElementById("mybutton").addEventListener("click", () => {
     addShape(shapeInput.value.split('\n'))
     computeShape();
+    fixit();
 });
 
 function computeShape(){
@@ -76,7 +77,6 @@ function computeShape(){
         [shapeInput.value], // arguments
     );
     drawFigure();
-    transform(1,null,null,0,0)
 }
 // para cargar el shape.txt en el textarea al principio
 window.addEventListener('load', function() {

@@ -11,11 +11,18 @@ const popup = document.getElementById("popup");
 const popup2 = document.getElementById("popupall");
 const waitingMessage = document.getElementById("waiting-message"); // Reemplaza "waiting-message" con el ID correspondiente a tu elemento HTML
 const canvas = document.getElementById("canvas_svg");
-const shapesArray = [];
 var isCanvasClicked = false;
+let currentShapeIndex = -1;
+const shapesArray = [];
 
+function fixit() {
+    transform(1, null, null, 0, 0)
+}
 function addShape() {
     const newShape = shapeInput.value.split('\n');
+    if (currentShapeIndex < shapesArray.length - 1) {
+        shapesArray.splice(currentShapeIndex + 1); // Eliminar figuras por encima de currentShapeIndex
+    }
     if (shapesArray.length >= 10) {
         shapesArray.shift(); // Eliminar el primer elemento si ya hay 10
     }
@@ -27,6 +34,7 @@ function addShape() {
     // Si los shapes son iguales, no lo agregues al historial
     if (!shapesAreEqual) {
         shapesArray.push(newShape);
+        currentShapeIndex = shapesArray.length - 1; // Actualizar el puntero al nuevo índice
     }
 }
 
@@ -38,26 +46,37 @@ function arraysAreEqual(arr1, arr2) {
     }
     return true;
 }
+
 function updateShapeInput() {
     const shapeInput = document.getElementById("shapeInput");
-    if (shapesArray.length > 1) {
-        // Clonar el penúltimo valor y asignarlo a shapeInput.value
-        shapeInput.value = shapesArray[shapesArray.length - 2].slice().join('\n');
-
-        // Eliminar el último valor de shapesArray
-        shapesArray.pop();
-    } else if (shapesArray.length === 1) {
-        // Si solo hay un valor, simplemente asignar ese valor a shapeInput.value
+    if (currentShapeIndex > 0) {
+        currentShapeIndex--;
+        shapeInput.value = shapesArray[currentShapeIndex].slice().join('\n');
+    } else if (currentShapeIndex === 0) {
         shapeInput.value = shapesArray[0].join('\n');
     } else {
         shapeInput.value = '';
     }
     computeShape();
 }
+
+function redoShapeInput() {
+    const shapeInput = document.getElementById("shapeInput");
+    if (currentShapeIndex < shapesArray.length - 1) {
+        currentShapeIndex++;
+        shapeInput.value = shapesArray[currentShapeIndex].slice().join('\n');
+        computeShape();
+    }
+}
+
 document.addEventListener("keydown", function(event) {
     // Verificar si se presionó la tecla "Control" (código 17) y la letra "z" (código 90)
     if (event.ctrlKey && event.keyCode === 90) {
         updateShapeInput();
+    }
+    // Verificar si se presionó la tecla "Control" (código 17) y la letra "y" (código 89)
+    else if (event.ctrlKey && event.keyCode === 89) {
+        redoShapeInput();
     }
 });
 canvas.addEventListener("mousedown", function (event) {
@@ -110,6 +129,7 @@ var popupallAux = false;
 function openPopup(mouseX, mouseY) {
     event.stopPropagation();
     if (!selectedcircle) {
+        removeAllCanvasEvents();
         popup2.style.display = "block";
         popup2.style.left = mouseX + "px";
         popup2.style.top = mouseY + "px";
@@ -164,6 +184,7 @@ function openPopup(mouseX, mouseY) {
 }
 function closePopup() {
     addShape();
+    addAllCanvasEvents();
     popup2.style.display = "none";
 }
 function allcircles(radius, smooth) {
@@ -677,6 +698,7 @@ function randomGenerate() {
         ["string"],
         [shapeInput.value],
     );
+    fixit();
 }
 
 function similarGenerate() {
@@ -695,6 +717,7 @@ function similarGenerate() {
         ["string"],
         [shapeInput.value],
     );
+    fixit();
 }
 
 var createcon = document.getElementById("createconection");

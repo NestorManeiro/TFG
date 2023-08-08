@@ -4,6 +4,7 @@ Algun dia pondre algo bonito aqui cuando este acabado todo en ingles :)
 
 ##### Notas ####
 
+https://docs.google.com/document/d/1GtQtelN7FGx5gK_FEvt-q0SWJWtZPghOxBOqhI2w_kc/edit
 -----------------------------------------------------Por arreglar/Hacer-----------------------------------------------------
 
 Siempre se puede optimizar. -> memory access out of bounds
