@@ -41,6 +41,7 @@ const addButton = document.getElementById("addcircle");
 const createcon = document.getElementById("createconection");
 const erasecon = document.getElementById("eraseconection");
 const middlecircle = document.getElementById("middlecircle");
+const computeButton = document.getElementById("computeButton");
 
 //Buttons Event Listeners
 middlecircle.addEventListener("click", handleMiddleCircleClick);
@@ -50,10 +51,10 @@ addButton.addEventListener("click", handleAddButtonClick);
 bpreview.addEventListener("mousedown", handleBPreviewMouseDown);
 bpreview.addEventListener("mouseup", handleBPreviewMouseUp);
 noaction.addEventListener("click", handleNoActionClick);
-
 eraseButton.addEventListener("click", handleEraseButtonClick);
 helpButton.addEventListener("click", handleHelpButtonClick);
 closeBtn.addEventListener("click", handleCloseButtonClick);
+computeButton.addEventListener("click", handleComputeButtonClick);
 customUploadButton.addEventListener("click", () => { uploadInput.click(); });
 uploadInput.addEventListener("change", handleFileUpload);
 exportButton.addEventListener("click", HandleExportShapeButtonClick);

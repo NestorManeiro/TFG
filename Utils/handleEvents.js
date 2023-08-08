@@ -111,12 +111,16 @@ function handleEraseButtonClick() {
         circulitos.on("click", handleCircleClickForErase);
     }
 }
-
 function handleCircleClickForErase() {
     const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
     erasePoint(circleIndex);
     waitingMessage.style.display = "none";
     buttonColor(eraseButton, "#4CAF50");
+}
+function handleComputeButtonClick() {
+    addShape(shapeInput.value.split("\n"));
+    computeShape();
+    fixit();
 }
 function handleHelpButtonClick() {
     popuphelp.style.display = "block";

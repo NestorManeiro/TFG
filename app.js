@@ -7,9 +7,6 @@ var Module = {
         return function (text) {
             if (arguments.length > 1)
                 text = Array.prototype.slice.call(arguments).join(" ");
-
-            //Comentar para tener mejora de rendimiento
-            console.log(text);
             if (element) {
                 element.value += text + "\n";
                 element.scrollTop = element.scrollHeight; // focus on bottom
@@ -65,12 +62,6 @@ window.onerror = () => {
     };
 };
 
-// para ejecutar mi función
-document.getElementById("mybutton").addEventListener("click", () => {
-    addShape(shapeInput.value.split("\n"));
-    computeShape();
-    fixit();
-});
 
 function computeShape() {
     svgOutput.value = Module.ccall(
@@ -103,3 +94,116 @@ window.addEventListener("load", function () {
     // Enviar la solicitud
     solicitud.send();
 });
+
+
+function erasePoint(i) {
+    shapeInput.value = Module.ccall("_Z10erasepointi", "string", ["number"], [i]);
+    computeShape();
+}
+
+function preview() {
+    return Module.ccall("_Z11downloadsvgv", "string", ["number"], []);
+}
+
+function downloadsvg() {
+    var aux = Module.ccall("_Z11downloadsvgv", "string", ["number"], []);
+
+    var enlaceDescarga = document.createElement("a");
+    enlaceDescarga.setAttribute(
+        "href",
+        "data:image/svg+xml;charset=utf-8," + encodeURIComponent(aux),
+    );
+    enlaceDescarga.setAttribute("download", "shape.svg");
+    enlaceDescarga.style.display = "none";
+
+    document.body.appendChild(enlaceDescarga);
+    enlaceDescarga.click();
+    document.body.removeChild(enlaceDescarga);
+}
+
+function randomGenerate() {
+    // Antes de generar un nuevo SVG, verifica si ya hay uno previo y libera la memoria
+    if (typeof svgPtr !== "undefined") {
+        Module["_free"](svgPtr); // Liberar la memoria del SVG anterior
+    }
+
+    shapeInput.value = Module.ccall("_Z16randomgenerationv", "string");
+    computeShape();
+
+    // Guarda el nuevo puntero a la memoria del SVG generado
+    svgPtr = Module.ccall(
+        "_Z19ComputeSVGFromShapePc",
+        "number",
+        ["string"],
+        [shapeInput.value],
+    );
+    fixit();
+}
+
+function similarGenerate() {
+    // Antes de generar un nuevo SVG, verifica si ya hay uno previo y libera la memoria
+    if (typeof svgPtr !== "undefined") {
+        Module["_free"](svgPtr); // Liberar la memoria del SVG anterior
+    }
+
+    shapeInput.value = Module.ccall("_Z17similargenerationv", "string");
+    computeShape();
+
+    // Guarda el nuevo puntero a la memoria del SVG generado
+    svgPtr = Module.ccall(
+        "_Z19ComputeSVGFromShapePc",
+        "number",
+        ["string"],
+        [shapeInput.value],
+    );
+    fixit();
+}
+
+function createconection(circleIndex1, circleIndex2) {
+    shapeInput.value = Module.ccall(
+        "_Z12connectnodesii",
+        "string",
+        ["number", "number"],
+        [circleIndex1, circleIndex2],
+    );
+    computeShape();
+}
+
+function eraseConnection(circleIndex1, circleIndex2) {
+    shapeInput.value = Module.ccall(
+        "_Z15disconnectnodesii",
+        "string",
+        ["number", "number"],
+        [circleIndex1, circleIndex2],
+    );
+    computeShape();
+}
+
+function middleCircle(circleIndex1, circleIndex2) {
+    shapeInput.value = Module.ccall(
+        "_Z17insertpointmiddleii",
+        "string",
+        ["number", "number"],
+        [circleIndex1, circleIndex2],
+    );
+    computeShape();
+}
+
+function addpoint(x, r) {
+    shapeInput.value = Module.ccall(
+        "_Z11insertpointii",
+        "string",
+        ["number", "number"],
+        [x, r],
+    );
+    computeShape();
+}
+
+function transform(zoom_factor, zx, zy, dx, dy) {
+    shapeInput.value = Module.ccall(
+        "_Z9transformfffff",
+        "string",
+        ["float", "float", "float", "float", "float"],
+        [zoom_factor, zx, zy, dx, dy],
+    );
+}
