@@ -62,10 +62,6 @@ function unselect() {
     drawFigure();
 }
 
-function uploadFile() {
-    document.getElementById("upload").click();
-}
-
 function openPopup(mouseX, mouseY) {
     event.stopPropagation();
     if (!selectedcircle) {
