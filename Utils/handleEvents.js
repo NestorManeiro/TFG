@@ -158,6 +158,17 @@ function handleCanvasMouseUp() {
     isCanvasClicked = false;
     addShape();
 }
+let wheelTimer;
+
+// Función para guardar la figura
+function saveFigure() {
+    addShape(); // Guardar la figura
+    // Restablecer el temporizador
+    clearTimeout(wheelTimer);
+    wheelTimer = null;
+}
+
+// Controlador de eventos para la rueda del ratón en el canvas
 function handleWheelCanvas(event) {
     if (selectedcircle == null) {
         var isScrollUp = event.deltaY < 0;
@@ -169,6 +180,10 @@ function handleWheelCanvas(event) {
         var zoom = isScrollUp ? 1.03 : 0.97;
         transform(zoom, offsetX, offsetY, 0, 0);
         computeShape();
+
+        // Reiniciar el temporizador cada vez que se usa la rueda del ratón
+        clearTimeout(wheelTimer);
+        wheelTimer = setTimeout(saveFigure, 300); // 300 milisegundos después de terminar el uso de la rueda
     }
 }
 function HandleMovecanvas(event) {

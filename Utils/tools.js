@@ -79,10 +79,11 @@ function openPopup(mouseX, mouseY) {
 
         popup2.addEventListener("mousemove", function (event) {
             if (isDragging) {
-                popup.style.left = event.clientX - offsetX + "px";
-                popup.style.top = event.clientY - offsetY + "px";
+                popup2.style.left = event.clientX - offsetX + "px";
+                popup2.style.top = event.clientY - offsetY + "px";
             }
         });
+
         popup2.addEventListener("mouseup", function () {
             isDragging = false;
             popup2.style.cursor = "grab";
