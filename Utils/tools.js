@@ -23,7 +23,7 @@ function addShape() {
 }
 
 function arraysAreEqual(arr1, arr2) {
-    // Verifica si ambos arreglos tienen una longitud antes de compararlos
+    // Verifica si ambos arreglos tienen una longitud antes de comparar  los
     if (!arr1 || !arr2 || arr1.length !== arr2.length) return false;
     for (let i = 0; i < arr1.length; i++) {
         if (arr1[i] !== arr2[i]) return false;
@@ -91,7 +91,7 @@ function openPopup(mouseX, mouseY) {
         var radiusInput = document.getElementById("radius");
         var smoothInput = document.getElementById("smooth");
         if (popupallAux === false) {
-            radiusInput.addEventListener("input", function (event) {
+            radiusInput.addEventListener("mousemove", function (event) {
                 event.stopPropagation();
                 // Calcular la diferencia entre la posición anterior y la posición actual del slider
                 const currentRadiusValue = radiusInput.value;
@@ -101,7 +101,7 @@ function openPopup(mouseX, mouseY) {
                 previousRadiusValue = currentRadiusValue; // Actualizar el valor anterior
             });
 
-            smoothInput.addEventListener("input", function () {
+            smoothInput.addEventListener("mousemove", function () {
                 event.stopPropagation();
                 // Calcular la diferencia entre la posición anterior y la posición actual del slider
                 const currentSmoothValue = smoothInput.value;
@@ -207,6 +207,7 @@ function addEvents() {
 
     draggableCircles = circulitos
         .on("mousedown", dragStarted)
+        .on("touchstart", touchStarted)
         .on("contextmenu", rightClick);
 }
 
@@ -326,6 +327,49 @@ function isRightClick(event) {
             return true;
         }
     }
+}
+
+function touchStarted(event) {
+    if ( popup.style.display === "block") return;
+
+    event.preventDefault(); // Evita el comportamiento predeterminado de la pulsación táctil
+    activeCircle = this;
+    selectedcircle = activeCircle;
+    initialX = parseFloat(activeCircle.getAttribute("cx"));
+    initialY = parseFloat(activeCircle.getAttribute("cy"));
+    activeCircle.setAttribute("stroke", "blue");
+    activeCircle.setAttribute("stroke-width", "3");
+    const touch = event.touches[0]; // Obtén el primer toque
+    deltaX = touch.clientX;
+    deltaY = touch.clientY;
+    isDragging = true;
+    document.addEventListener("touchmove", touchMoved);
+    document.addEventListener("touchend", touchEnded);
+    document.addEventListener("touchcancel", touchEnded);
+}
+
+function touchMoved(event) {
+    if (isDragging && activeCircle) {
+        const touch = event.touches[0]; // Obtén el primer toque
+        const offsetX = touch.clientX - deltaX;
+        const offsetY = touch.clientY - deltaY;
+        const newX = initialX + offsetX;
+        const newY = initialY + offsetY;
+
+        activeCircle.setAttribute("cx", newX);
+        activeCircle.setAttribute("cy", newY);
+        hasDataChanged = true;
+        updateCircleData(activeCircle, newX, newY);
+    }
+}
+
+function touchEnded() {
+    isDragging = false;
+    activeCircle = null;
+    document.removeEventListener("touchend", touchEnded);
+    document.removeEventListener("touchmove", touchMoved);
+    drawFigure();
+    unselect();
 }
 function dragStarted(event) {
     if (!isRightClick(event) || popup.style.display === "block") return;

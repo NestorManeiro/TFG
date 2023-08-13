@@ -138,6 +138,7 @@ function randomGenerate() {
         [shapeInput.value],
     );
     fixit();
+    addShape();
 }
 
 function similarGenerate() {
@@ -157,6 +158,7 @@ function similarGenerate() {
         [shapeInput.value],
     );
     fixit();
+    addShape();
 }
 
 function createconection(circleIndex1, circleIndex2) {
