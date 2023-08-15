@@ -53,6 +53,7 @@ function handleMiddleCircleConnectionClick() {
         waitingMessage.style.display = "none";
         buttonColor(middlecircle, "#4CAF50");
     }
+    addShape();
 }
 function handleEraseconClick() {
     buttonColor(erasecon, "#ff9800");
@@ -74,6 +75,7 @@ function handleEraseConnectionClick() {
         waitingMessage.style.display = "none";
         buttonColor(erasecon, "#4CAF50");
     }
+    addShape();
 }
 function handleCreateconClick() {
     buttonColor(createcon, "#ff9800");
@@ -95,6 +97,7 @@ function handleCreateConnectionClick() {
         waitingMessage.style.display = "none";
         buttonColor(createcon, "#4CAF50");
     }
+    addShape();
 }
 function handleAddButtonClick() {
     buttonColor(addButton, "#ff9800");
@@ -116,6 +119,7 @@ function handleCircleClickForErase() {
     erasePoint(circleIndex);
     waitingMessage.style.display = "none";
     buttonColor(eraseButton, "#4CAF50");
+    addShape();
 }
 function handleComputeButtonClick() {
     addShape(shapeInput.value.split("\n"));
