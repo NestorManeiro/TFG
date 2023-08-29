@@ -207,7 +207,6 @@ function handleCanvasMouseDown2(event) {
     initialMouseY = event.clientY - rect.top;
 }
 
-// Document Event Handler
 function handleDocumentKeyDown(event) {
     if (event.ctrlKey && event.keyCode === 90) {
         updateShapeInput();
