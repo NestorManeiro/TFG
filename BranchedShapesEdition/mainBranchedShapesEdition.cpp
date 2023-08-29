@@ -106,7 +106,7 @@ char* connectnodes(int argc, int argv) {
 EMSCRIPTEN_KEEPALIVE
 char* disconnectnodes(double x, double y) {
     int i = 0;
-    int j = nT.i_[i][0];
+    int j = 0;
     nT.segment_distance(x, y, i, j);
     nT.disconnect_nodes(i, j);  // Assuming disconnect_nodes() takes indices
     nT.svg_generation("shape_new.svg", true);
@@ -116,7 +116,7 @@ char* disconnectnodes(double x, double y) {
 EMSCRIPTEN_KEEPALIVE
 char* insertpointmiddle(double x, double y) {
     int i = 0;
-    int j = nT.i_[i][0];
+    int j = 0;
     nT.segment_distance(x, y, i, j);
     nT.insert_point((nT.n_[i] + nT.n_[j]) * 0.5,
                     (nT.r_[i] + nT.r_[j]) * 0.5,
