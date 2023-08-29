@@ -1,3 +1,13 @@
+# Index
+
+- [Information](#information)
+- [Notes](#notes)
+- [Distribution](#distribution)
+- [Maintenance](#maintenance)
+- [Modifications](#modifications)
+
+<br>
+
 # TFG
   
   In this project, I have adapted a C++ code using WebAssembly to enable interaction with it from a web page. I have taken the responsibility of giving the page a simple style and creating functions that allow the 
@@ -5,14 +15,7 @@
   
   To achieve real-time movement on the page, D3.js has been utilized. This framework allows us to interact with the elements of the figure, which in this case are circles.
 
-# Index
-
-- [Information](#Information)
-- [Notes](#notes)
-- [Distribution](#distribution)
-- [Maintenance](#maintenance)
-
-
+<br>
 
 # Information
 
@@ -23,6 +26,7 @@
   For modifications, users can move circles, increase the radius of these circles, or adjust the smooth factor (that affects their connections with other circles). Users can also add circles, delete them, add   
   connections, insert circles along segments, create random figures, and generate similar figures.
 
+<br>
 
 # Notes
 
@@ -30,6 +34,7 @@
   
   You can preview the page in [Website](https://nestormaneiro.github.io/TFG/).
 
+<br>
 
 # Distribution:
 
@@ -51,7 +56,7 @@
      
   5. **app.js**: Handles everything related to managing WebAssembly and initializing the webpage, such as loading the initial shape.txt.
 
-
+<br>
 
 # Maintenance ###
 
@@ -59,8 +64,7 @@
   This will make inside the folder:
   
   1. **blackbox.js**
-  2. 
-  3. **blackbox.wasm**
+  2. **blackbox.wasm**
   
   On blackbox.js you need to swap:
   
@@ -72,3 +76,15 @@
   
   Then just move this files to the root.
   
+<br>
+
+ # Modifications: ###
+
+  Within the BranchedShapedEdition folder, the following should be highlighted:
+  
+  1. mainBranchedShapesEdition -> The main one, contains functions used on the web.
+  2. triangulation.cpp
+  3. triangulation.h
+     
+  These last two (the triangulation files) are usually the ones that need to be replaced for code modifications, sometimes even the BranchedShapesEdition files. However, never replace the main file, as it contains necessary functions for the website, including     
+  declarations and method calls to the other files.
