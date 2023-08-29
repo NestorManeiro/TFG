@@ -218,5 +218,5 @@ window.onload = function() {
 
         // Simula un clic en el botón
         computeButton.click();
-    }, 10);
+    }, 11);
 };
