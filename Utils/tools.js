@@ -90,6 +90,8 @@ function openPopup(mouseX, mouseY) {
         });
         var radiusInput = document.getElementById("radius");
         var smoothInput = document.getElementById("smooth");
+        var globalRadiusInput = document.getElementById("globalRadius"); // Nuevo input
+
         if (popupallAux === false) {
             radiusInput.addEventListener("mousemove", function (event) {
                 event.stopPropagation();
@@ -110,11 +112,21 @@ function openPopup(mouseX, mouseY) {
                 allcircles(0, smoothDifference); // Enviar la diferencia a la función allcircles
                 previousSmoothValue = currentSmoothValue; // Actualizar el valor anterior
             });
+            globalRadiusInput.addEventListener("input", function () {
+                const newGlobalRadius = globalRadiusInput.value;
+                const radiusDifference = newGlobalRadius - previousGlobalRadius;
+                allcircles(radiusDifference, 0);
+                previousGlobalRadius = newGlobalRadius;
+            });
+
+
             popupallAux = true;
         }
 
         let previousRadiusValue = radiusInput.value; // Variable para almacenar el valor anterior del slider
         let previousSmoothValue = smoothInput.value; // Variable para almacenar el valor anterior del slider
+        let previousGlobalRadius = globalRadiusInput.value;
+
     }
 }
 function closePopup() {

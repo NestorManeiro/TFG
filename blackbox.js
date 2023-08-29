@@ -4715,9 +4715,9 @@ var __Z16randomgenerationv = Module["__Z16randomgenerationv"] = createExportWrap
 /** @type {function(...*):?} */
 var __Z12connectnodesii = Module["__Z12connectnodesii"] = createExportWrapper("_Z12connectnodesii");
 /** @type {function(...*):?} */
-var __Z15disconnectnodesii = Module["__Z15disconnectnodesii"] = createExportWrapper("_Z15disconnectnodesii");
+var __Z15disconnectnodesdd = Module["__Z15disconnectnodesdd"] = createExportWrapper("_Z15disconnectnodesdd");
 /** @type {function(...*):?} */
-var __Z17insertpointmiddleii = Module["__Z17insertpointmiddleii"] = createExportWrapper("_Z17insertpointmiddleii");
+var __Z17insertpointmiddledd = Module["__Z17insertpointmiddledd"] = createExportWrapper("_Z17insertpointmiddledd");
 /** @type {function(...*):?} */
 var __Z11insertpointii = Module["__Z11insertpointii"] = createExportWrapper("_Z11insertpointii");
 /** @type {function(...*):?} */
@@ -4773,7 +4773,7 @@ var dynCall_iiiiij = Module["dynCall_iiiiij"] = createExportWrapper("dynCall_iii
 var dynCall_iiiiijj = Module["dynCall_iiiiijj"] = createExportWrapper("dynCall_iiiiijj");
 /** @type {function(...*):?} */
 var dynCall_iiiiiijj = Module["dynCall_iiiiiijj"] = createExportWrapper("dynCall_iiiiiijj");
-var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 68532;
+var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 68756;
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===

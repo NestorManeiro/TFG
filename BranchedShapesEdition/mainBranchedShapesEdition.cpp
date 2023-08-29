@@ -104,19 +104,23 @@ char* connectnodes(int argc, int argv) {
 }
 
 EMSCRIPTEN_KEEPALIVE
-char* disconnectnodes(int argc, int argv) {
-    if(nT.node_connected_checking(argc,argv)==false) return allocateAndExtract();
-    nT.disconnect_nodes(argc,argv);
+char* disconnectnodes(double x, double y) {
+    int i = 0;
+    int j = nT.i_[i][0];
+    nT.segment_distance(x, y, i, j);
+    nT.disconnect_nodes(i, j);  // Assuming disconnect_nodes() takes indices
     nT.svg_generation("shape_new.svg", true);
     return allocateAndExtract();
 }
 
 EMSCRIPTEN_KEEPALIVE
-char* insertpointmiddle(int argc, int argv) {
-  if(nT.node_connected_checking(argc,argv)==false) return allocateAndExtract();
-  nT.insert_point((nT.n_[argc]+nT.n_[argv])*0.5,
-                  (nT.r_[argc]+nT.r_[argv])*0.5,
-                  (nT.s_[argc]+nT.s_[argv])*0.5,0,1);
+char* insertpointmiddle(double x, double y) {
+    int i = 0;
+    int j = nT.i_[i][0];
+    nT.segment_distance(x, y, i, j);
+    nT.insert_point((nT.n_[i] + nT.n_[j]) * 0.5,
+                    (nT.r_[i] + nT.r_[j]) * 0.5,
+                    (nT.s_[i] + nT.s_[j]) * 0.5, 0, 1);
     nT.svg_generation("shape_new.svg", true);
     return allocateAndExtract();
 }

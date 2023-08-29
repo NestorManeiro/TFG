@@ -54,8 +54,8 @@
             <button id="eraseButton">Erase a circle</button>
         </div>
         <div class="inline-buttons">
-            <button id="createconection">New circle connection</button>
-            <button id="eraseconection">Remove circle connection</button>
+            <button id="createconection">Add segment by clicking in extreme circles</button>
+            <button id="eraseconection">Remove a segment</button>
         </div>
         <div class="inline-buttons">
             <button onclick="randomGenerate()">Generate random shape</button>
@@ -82,8 +82,8 @@
         <li><strong>New circle in the middle of a segment:</strong> Clicking on two circles adds a circle in the segment that connects them.</li>
         <li><strong>Create a circle:</strong> Clicking adds a circle.</li>
         <li><strong>Erase a circle:</strong> Clicking removes a circle.</li>
-        <li><strong>New circle connection:</strong> Clicking on two circles connects them.</li>
-        <li><strong>Remove circle connection:</strong> Clicking on two circles removes the connection.</li>
+        <li><strong>Add segment by clicking in extreme circle:</strong> Click on two circles for make a segment between them</li>
+        <li><strong>Remove a segment</strong> Clicking on a segment erase the segment.</li>
         <li><strong>Generate random SVG:</strong> Generates a random SVG shape.</li>
         <li><strong>Generate similar SVG:</strong> Generates a similar SVG shape.</li>
     </ul>
@@ -91,6 +91,7 @@
 <div id="popup" class="popup" style="display: none;"></div>
 <div id="popupall" class="popup" style="display: none;">
     <h2>All Circles</h2>
+    <input type="number" id="globalRadius" placeholder="Global Radius" />
     <label for="radius">Radius:</label>
     <input type="range" id="radius" min="0" max="500" step="1">
     <label for="smooth">Smooth:</label>

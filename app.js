@@ -173,7 +173,7 @@ function createconection(circleIndex1, circleIndex2) {
 
 function eraseConnection(circleIndex1, circleIndex2) {
     shapeInput.value = Module.ccall(
-        "_Z15disconnectnodesii",
+        "_Z15disconnectnodesdd",
         "string",
         ["number", "number"],
         [circleIndex1, circleIndex2],
@@ -181,12 +181,12 @@ function eraseConnection(circleIndex1, circleIndex2) {
     computeShape();
 }
 
-function middleCircle(circleIndex1, circleIndex2) {
+function middleCircle(x, y) {
     shapeInput.value = Module.ccall(
-        "_Z17insertpointmiddleii",
+        "_Z17insertpointmiddledd",
         "string",
         ["number", "number"],
-        [circleIndex1, circleIndex2],
+        [x, y],
     );
     computeShape();
 }
@@ -209,3 +209,14 @@ function transform(zoom_factor, zx, zy, dx, dy) {
         [zoom_factor, zx, zy, dx, dy],
     );
 }
+
+window.onload = function() {
+    // Retrasa la simulación del clic por 100 milisegundos (ajusta según sea necesario)
+    setTimeout(function() {
+        // Obtén el elemento del botón por su ID
+        var computeButton = document.getElementById("computeButton");
+
+        // Simula un clic en el botón
+        computeButton.click();
+    }, 10);
+};

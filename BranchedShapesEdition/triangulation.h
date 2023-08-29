@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <cstring>
 #include <string.h>
+#include <time.h>
 
 #define ami_PI 3.14159265358979323846
 #define myrand(gamma) ( gamma==1?( (double) rand()/RAND_MAX ):pow((double) rand()/(RAND_MAX+1.),gamma) )
@@ -264,7 +265,37 @@ class NodeTree{ ///AAA
     return false;
   }
 
-
+  /// **************************************************************
+  /// DISTANCE FROM A POINT TO TreeNode SEGMENTS
+  /// IT RETURNS THE DISTANCE TO THE CLOSEST SEGMENT JOINING 2 CIRCLES
+  /// AS PARAMETERS IT ALSO RETURN THE INDEXES OF THE EXTREMA CIRCLES
+  /// **************************************************************
+  double segment_distance(
+  double x,double y,  /// coordinates of point
+  int &i,int &j) /// indexes of circles extrema of the segment with lowest distance
+  {
+    double error=1e50;
+    i=j=-1;
+    for(int k=0;k<(int) n_.size();k++){
+      for(int n=0;n<(int) i_[k].size();n++){
+        if(k<i_[k][n]) continue;
+        double x1=n_[k].x;
+        double y1=n_[k].y;
+        double x2=n_[i_[k][n]].x;
+        double y2=n_[i_[k][n]].y;
+        if( (x2-x1)*(x-x1)+(y2-y1)*(y-y1) < 0  ) continue;
+        if( (x1-x2)*(x-x2)+(y1-y2)*(y-y2) < 0  ) continue;
+        double norm=sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
+        double d=fabs( -(y2-y1)*(x-x1)+(x2-x1)*(y-y1) )/norm;
+        if(d<error){
+          error=d;
+          i=k;
+          j=i_[k][n];
+        }
+      }
+    }
+    return error;
+  }
 
 
   ///***********************************************************************
@@ -776,7 +807,7 @@ class NodeTree{ ///AAA
 
         ///COMPUTATION OF POINTS TO JOIN TO BUILD TRIANGLES
         point2d pk1,pk2,pm1,pm2;
-        double ak1,ak2,am1,am2,zmin=0.7,zmin0=0.3;
+        double ak1,ak2,am1,am2,zmin=0.,zmin0=0.;
         if(a_[k].size()==1){
           ak1 = a_[k][0]+M_PI*0.5;
           pk1 = n_[k]+point2d(cos(ak1),sin(ak1))*r_[k];
@@ -935,7 +966,8 @@ class NodeTree{ ///AAA
   ///********************************************************
   /// nodeTree TRANSFORMATION
   ///********************************************************
-  void transformation(double zoom=1.,double zx=0.,double zy=0.,double dx=0.,double dy=0.){
+  double transformation(double zoom=1.,double zx=0.,double zy=0.,double dx=0.,double dy=0.){
+    static time_t timer=0;
     if(zoom!=1 || dx!=0 || dy!=0){
       for(int k=0;k<n_.size();k++){
         n_[k].x+=dx;
@@ -949,15 +981,43 @@ class NodeTree{ ///AAA
           r_[k]*=zoom;
         }
       }
+      time_t timer2;
+      time(&timer2);
+      double seconds=difftime(timer2,timer);
+      timer=timer2;
     }
+
+    return 0;
   }
 
   ///********************************************************
-  /// SVG FILE GENERATION AAA
+  /// nodeTree check_equality
+  ///********************************************************
+  bool check_equality(NodeTree &nT){
+    if(n_.size()!=nT.n_.size()) return false;
+
+    for(int k=0;k<(int) n_.size();k++){
+      if(n_[k].x!=nT.n_[k].x) return false;
+      if(n_[k].y!=nT.n_[k].y) return false;
+      if(s_[k]!=nT.s_[k]) return false;
+      if(r_[k]!=nT.r_[k]) return false;
+      if(i_[k].size()!=nT.i_[k].size()) return false;
+      for(int n=0;n<(int) i_[k].size();n++){
+        if(i_[k][n]!=nT.i_[k][n]) return(false);
+      }
+    }
+
+    return(true);
+  }
+
+  ///********************************************************
+  /// SVG FILE GENERATION
   ///********************************************************
   void svg_generation(char name[200],bool draw_nodes=false){
 
     node_angles_computation();
+
+    vector < vector<point2d> > eP(n_.size());
 
     //bool draw_circle = (bool) branched_finished_in_peak;
 
@@ -1052,13 +1112,15 @@ class NodeTree{ ///AAA
         printf("COMPUTATION OF POINTS TO JOIN TO BUILD TRIANGLES\n");
         #endif
         point2d pk1,pk2,pm1,pm2;
-        double ak1,ak2,am1,am2,zmin=0.7,zmin0=0.3;
+        //double ak1,ak2,am1,am2,zmin=0.7,zmin0=0.3;
+        double ak1,ak2,am1,am2,zmin=0.,zmin0=0.;
         if(a_[k].size()==1){
           ak1 = a_[k][0]+M_PI*0.5;
           pk1 = n_[k]+point2d(cos(ak1),sin(ak1))*r_[k];
+          eP[k].push_back(pk1);
           ak2 = a_[k][0]-M_PI*0.5;
           pk2 = n_[k]+point2d(cos(ak2),sin(ak2))*r_[k];
-
+          eP[k].push_back(pk2);
         }
         else{
           int m1=(m+1)%a_[k].size();
@@ -1070,6 +1132,7 @@ class NodeTree{ ///AAA
             z=sqrt(z);
             pk1 = n_[k]+point2d(cos(ak1),sin(ak1))*r_[k]/(z<zmin?zmin:z);
           }
+          eP[k].push_back(pk1);
           m1=m==0?a_[k].size()-1:m-1;
           ak2=angle_average(a_[k][m1],a_[k][m]);
           //z=sqrt(fabs(sin(0.5*angle_dif(a_[k][m1],a_[k][m]))));
@@ -1079,12 +1142,15 @@ class NodeTree{ ///AAA
             z=sqrt(z);
             pk2 = n_[k]+point2d(cos(ak2),sin(ak2))*r_[k]/(z<zmin?zmin:z);
           }
+          eP[k].push_back(pk2);
         }
         if(a_[ikm].size()==1){
           am1 = a_[ikm][0]+M_PI*0.5;
           pm1 = n_[ikm]+point2d(cos(am1),sin(am1))*r_[ikm];
+          eP[ikm].push_back(pm1);
           am2 = a_[ikm][0]-M_PI*0.5;
           pm2 = n_[ikm]+point2d(cos(am2),sin(am2))*r_[ikm];
+          eP[ikm].push_back(pm2);
         }
         else{
           int m1=(imk+1)%a_[ikm].size();
@@ -1097,6 +1163,7 @@ class NodeTree{ ///AAA
             z=sqrt(z);
             pm1 = n_[ikm]+point2d(cos(am1),sin(am1))*r_[ikm]/(z<zmin?zmin:z);
           }
+          eP[ikm].push_back(pm1);
           m1=imk==0?a_[ikm].size()-1:imk-1;
           am2=angle_average(a_[ikm][m1],a_[ikm][imk]);
           //printf("%lf=angle_average(%lf,%lf)\n",angle*180./M_PI,a_[ikm][imk]*180./M_PI,a_[ikm][m1]*180./M_PI);
@@ -1107,6 +1174,7 @@ class NodeTree{ ///AAA
             z=sqrt(z);
             pm2 = n_[ikm]+point2d(cos(am2),sin(am2))*r_[ikm]/(z<zmin?zmin:z);
           }
+          eP[ikm].push_back(pm2);
         }
         if( different_half_planes(pk1,pm1,n_[k],n_[ikm])==true ){
           if( different_half_planes(pk1,pm2,n_[k],n_[ikm])==true ){
@@ -1274,6 +1342,12 @@ class NodeTree{ ///AAA
       float r=r_[k]>=10?5:r_[k]/2.;
       fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"none\" fill=\"black\" /> \n",n_[k].x,n_[k].y,r);
       fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"black\" stroke-width=\"1\" fill=\"none\" class=\"draggable-circle\"/> \n",n_[k].x,n_[k].y,r_[k]);
+    }
+    for(int k=0;k<(int) eP.size();k++){
+      for(int m=0;m<(int) eP[k].size();m++){
+        fprintf(svgFile,"<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"none\" fill=\"green\" /> \n",eP[k][m].x,eP[k][m].y,3.);
+        fprintf(svgFile,"<line pathLength=\"100\" stroke-dasharray=\"5,10,5,11,5,11,5,10,5,11,5,11,5\" x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" style=\"stroke:rgb(0,255,0);stroke-width:1\" />  \n",n_[k].x,n_[k].y,eP[k][m].x,eP[k][m].y);
+      }
     }
   }
 //    T.update_n();

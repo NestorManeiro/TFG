@@ -35,46 +35,32 @@ function handleBPreviewMouseUp() {
 
 function handleMiddleCircleClick() {
     buttonColor(middlecircle, "#ff9800");
-    if (circulitos) {
-        waitingMessage.style.display = "block";
-        removeAllCanvasEvents();
-        circulitos.on("click", handleMiddleCircleConnectionClick);
-    }
+    waitingMessage.style.display = "block";
+    removeAllCanvasEvents();
+    canvas.addEventListener("click", handleMiddleCircleConnectionClick);
 }
 
 function handleMiddleCircleConnectionClick() {
-    const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
-
-    if (typeof erasecon.firstCircleIndex === "undefined") {
-        erasecon.firstCircleIndex = circleIndex;
-    } else {
-        middleCircle(erasecon.firstCircleIndex, circleIndex);
-        delete erasecon.firstCircleIndex;
-        waitingMessage.style.display = "none";
-        buttonColor(middlecircle, "#4CAF50");
-    }
+    initialClickX = event.clientX - canvas.getBoundingClientRect().left;
+    initialClickY = event.clientY - canvas.getBoundingClientRect().top;
+    middleCircle(initialClickX, initialClickY);
+    waitingMessage.style.display = "none";
+    buttonColor(middlecircle, "#4CAF50");
     addShape();
 }
 function handleEraseconClick() {
     buttonColor(erasecon, "#ff9800");
-    if (circulitos) {
-        waitingMessage.style.display = "block";
-        removeAllCanvasEvents();
-        circulitos.on("click", handleEraseConnectionClick);
-    }
+    waitingMessage.style.display = "block";
+    removeAllCanvasEvents();
+    canvas.addEventListener("click", handleEraseConnectionClick);
 }
 
-function handleEraseConnectionClick() {
-    const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
-
-    if (typeof eraseConnection.firstCircleIndex === "undefined") {
-        eraseConnection.firstCircleIndex = circleIndex;
-    } else {
-        eraseConnection(eraseConnection.firstCircleIndex, circleIndex);
-        delete eraseConnection.firstCircleIndex;
-        waitingMessage.style.display = "none";
-        buttonColor(erasecon, "#4CAF50");
-    }
+function handleEraseConnectionClick(event) {
+    initialClickX = event.clientX - canvas.getBoundingClientRect().left;
+    initialClickY = event.clientY - canvas.getBoundingClientRect().top;
+    eraseConnection(initialClickX, initialClickY);
+    waitingMessage.style.display = "none";
+    buttonColor(erasecon, "#4CAF50");
     addShape();
 }
 function handleCreateconClick() {
@@ -126,6 +112,7 @@ function handleComputeButtonClick() {
     computeShape();
     fixit();
 }
+
 function handleHelpButtonClick() {
     popuphelp.style.display = "block";
 }
