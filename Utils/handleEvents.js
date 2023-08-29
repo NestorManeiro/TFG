@@ -46,7 +46,9 @@ function handleMiddleCircleConnectionClick() {
     middleCircle(initialClickX, initialClickY);
     waitingMessage.style.display = "none";
     buttonColor(middlecircle, "#4CAF50");
+    canvas.removeEventListener("click", handleMiddleCircleConnectionClick);
     addShape();
+
 }
 function handleEraseconClick() {
     buttonColor(erasecon, "#ff9800");
@@ -61,6 +63,7 @@ function handleEraseConnectionClick(event) {
     eraseConnection(initialClickX, initialClickY);
     waitingMessage.style.display = "none";
     buttonColor(erasecon, "#4CAF50");
+    canvas.removeEventListener("click", handleEraseConnectionClick);
     addShape();
 }
 function handleCreateconClick() {
