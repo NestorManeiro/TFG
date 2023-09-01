@@ -89,6 +89,6 @@
   These last two (the triangulation files) are usually the ones that need to be replaced for code modifications, sometimes even the BranchedShapesEdition files. However, never replace the main file, as it contains necessary functions for the website, including     
   declarations and method calls to the other files.
 
-  Afterwards, it is necessary to compile the C++ code into WebAssembly. To do this, you can use the script.bat, although you would need to modify the directory paths.
+  Afterward, it is necessary to compile the C++ code into WebAssembly. To do this, you can use the script.bat, although you would need to modify the directory paths.
 
   In the first directory, emsdk.bat should be located, and in the second one, where our C++ code is, will also be the location where the new files will be created. Then, you simply need to move these new files to the project's root folder and overwrite the existing ones.
