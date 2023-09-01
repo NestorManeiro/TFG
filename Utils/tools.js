@@ -2,6 +2,7 @@
 function fixit() {
     transform(1, null, null, 0, 0);
 }
+
 function addShape() {
     const newShape = shapeInput.value.split("\n");
     if (currentShapeIndex < shapesArray.length - 1) {
@@ -466,14 +467,10 @@ function setButtonStyle() {
 }
 
 function addcircle(event) {
-    const rect = canvas.getBoundingClientRect();
-    const divOffsetX = rect.left;
-    const divOffsetY = rect.top;
-    const offsetX = event.clientX - divOffsetX;
-    const offsetY = event.clientY - divOffsetY;
+    var coords = relMouseCoords(event);
 
-    addpoint(offsetX, offsetY);
-
+    addpoint(coords.x , coords.y );
+    console.log(coords)
     // Restablecer el color del botón "addButton" después de completar la lógica
     addButton.style.backgroundColor = "#4CAF50"; // Color inicial
 
@@ -483,4 +480,8 @@ function addcircle(event) {
 
 function buttonColor(elementoBoton, color) {
     elementoBoton.style.backgroundColor = color;
+}
+
+function relMouseCoords(event) {
+    return { x: event.offsetX || event.layerX, y: event.offsetY || event.layerY };
 }

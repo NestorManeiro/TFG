@@ -34,6 +34,7 @@ function handleBPreviewMouseUp() {
 }
 
 function handleMiddleCircleClick() {
+    handleNoActionClick();
     buttonColor(middlecircle, "#ff9800");
     waitingMessage.style.display = "block";
     removeAllCanvasEvents();
@@ -41,9 +42,9 @@ function handleMiddleCircleClick() {
 }
 
 function handleMiddleCircleConnectionClick() {
-    initialClickX = event.clientX - canvas.getBoundingClientRect().left;
-    initialClickY = event.clientY - canvas.getBoundingClientRect().top;
-    middleCircle(initialClickX, initialClickY);
+    var coords = relMouseCoords(event);
+
+    middleCircle(coords.x , coords.y);
     waitingMessage.style.display = "none";
     buttonColor(middlecircle, "#4CAF50");
     canvas.removeEventListener("click", handleMiddleCircleConnectionClick);
@@ -51,6 +52,7 @@ function handleMiddleCircleConnectionClick() {
 
 }
 function handleEraseconClick() {
+    handleNoActionClick();
     buttonColor(erasecon, "#ff9800");
     waitingMessage.style.display = "block";
     removeAllCanvasEvents();
@@ -58,15 +60,15 @@ function handleEraseconClick() {
 }
 
 function handleEraseConnectionClick(event) {
-    initialClickX = event.clientX - canvas.getBoundingClientRect().left;
-    initialClickY = event.clientY - canvas.getBoundingClientRect().top;
-    eraseConnection(initialClickX, initialClickY);
+    var coords = relMouseCoords(event);
+    eraseConnection(coords.x, coords.y );
     waitingMessage.style.display = "none";
     buttonColor(erasecon, "#4CAF50");
     canvas.removeEventListener("click", handleEraseConnectionClick);
     addShape();
 }
 function handleCreateconClick() {
+    handleNoActionClick();
     buttonColor(createcon, "#ff9800");
     if (circulitos) {
         waitingMessage.style.display = "block";
@@ -89,6 +91,7 @@ function handleCreateConnectionClick() {
     addShape();
 }
 function handleAddButtonClick() {
+    handleNoActionClick();
     buttonColor(addButton, "#ff9800");
     waitingMessage.style.display = "block";
     removeAllCanvasEvents();
@@ -96,6 +99,7 @@ function handleAddButtonClick() {
 }
 
 function handleEraseButtonClick() {
+    handleNoActionClick();
     buttonColor(eraseButton, "#ff9800");
     if (circulitos) {
         waitingMessage.style.display = "block";
@@ -143,8 +147,9 @@ function handleWheelEvent(event) {
 }
 function handleCanvasMouseDown(event) {
     if (!isRightClick(event) || popup.style.display === "block") return;
-    initialClickX = event.clientX - canvas.getBoundingClientRect().left;
-    initialClickY = event.clientY - canvas.getBoundingClientRect().top;
+    var coords = relMouseCoords(event);
+    initialClickX = coords.x;
+    initialClickY = coords.y;
     isCanvasClicked = true;
 }
 
@@ -166,13 +171,9 @@ function saveFigure() {
 function handleWheelCanvas(event) {
     if (selectedcircle == null) {
         var isScrollUp = event.deltaY < 0;
-        var offsetX = event.clientX;
-        var offsetY = event.clientY;
-        var rect = canvas.getBoundingClientRect();
-        offsetX -= rect.left;
-        offsetY -= rect.top;
+        var coords = relMouseCoords(event);
         var zoom = isScrollUp ? 1.03 : 0.97;
-        transform(zoom, offsetX, offsetY, 0, 0);
+        transform(zoom, coords.x, coords.y, 0, 0);
         computeShape();
 
         // Reiniciar el temporizador cada vez que se usa la rueda del ratón
@@ -184,10 +185,9 @@ function HandleMovecanvas(event) {
     if (!isRightClick(event) || popup.style.display === "block") return;
     if (isCanvasClicked) {
         if (activeCircle === false) {
-            var rect = canvas.getBoundingClientRect();
-            var currentMouseX = event.clientX - rect.left;
-            var currentMouseY = event.clientY - rect.top;
-
+            var coords = relMouseCoords(event);
+            var currentMouseX = coords.x;
+            var currentMouseY = coords.y;
             var movementX = currentMouseX - initialMouseX;
             var movementY = currentMouseY - initialMouseY;
 
@@ -205,9 +205,9 @@ function handleCanvasContextMenu(event) {
 }
 
 function handleCanvasMouseDown2(event) {
-    var rect = canvas.getBoundingClientRect();
-    initialMouseX = event.clientX - rect.left;
-    initialMouseY = event.clientY - rect.top;
+    var coords = relMouseCoords(event);
+    initialMouseX = coords.x;
+    initialMouseY = coords.y;
 }
 
 function handleDocumentKeyDown(event) {

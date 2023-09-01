@@ -141,8 +141,8 @@ button:hover {
 
 #canvas_svg {
     border: 0.0625em solid #ccc;
-    width: 64em;
-    height: 64em;
+    width: 1024px; /* 640 píxeles de ancho */
+    height: 1024px; /* 640 píxeles de alto */
     overflow: auto;
     display: flex;
     align-items: stretch;

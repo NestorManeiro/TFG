@@ -120,7 +120,7 @@ char* insertpointmiddle(double x, double y) {
     nT.segment_distance(x, y, i, j);
     nT.insert_point((nT.n_[i] + nT.n_[j]) * 0.5,
                     (nT.r_[i] + nT.r_[j]) * 0.5,
-                    (nT.s_[i] + nT.s_[j]) * 0.5, 0, 1);
+                    (nT.s_[i] + nT.s_[j]) * 0.5, i, j);
     nT.svg_generation("shape_new.svg", true);
     return allocateAndExtract();
 }

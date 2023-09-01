@@ -122,6 +122,7 @@ function downloadsvg() {
 }
 
 function randomGenerate() {
+    handleNoActionClick();
     // Antes de generar un nuevo SVG, verifica si ya hay uno previo y libera la memoria
     if (typeof svgPtr !== "undefined") {
         Module["_free"](svgPtr); // Liberar la memoria del SVG anterior
@@ -142,6 +143,7 @@ function randomGenerate() {
 }
 
 function similarGenerate() {
+    handleNoActionClick();
     // Antes de generar un nuevo SVG, verifica si ya hay uno previo y libera la memoria
     if (typeof svgPtr !== "undefined") {
         Module["_free"](svgPtr); // Liberar la memoria del SVG anterior
