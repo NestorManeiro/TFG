@@ -89,20 +89,11 @@ function openPopup(mouseX, mouseY) {
             isDragging = false;
             popup2.style.cursor = "grab";
         });
-        var radiusInput = document.getElementById("radius");
+
         var smoothInput = document.getElementById("smooth");
         var globalRadiusInput = document.getElementById("globalRadius"); // Nuevo input
 
         if (popupallAux === false) {
-            radiusInput.addEventListener("mousemove", function (event) {
-                event.stopPropagation();
-                // Calcular la diferencia entre la posición anterior y la posición actual del slider
-                const currentRadiusValue = radiusInput.value;
-                const radiusDifference = currentRadiusValue - previousRadiusValue;
-
-                allcircles(radiusDifference, 0); // Enviar la diferencia a la función allcircles
-                previousRadiusValue = currentRadiusValue; // Actualizar el valor anterior
-            });
 
             smoothInput.addEventListener("mousemove", function () {
                 event.stopPropagation();
@@ -124,7 +115,6 @@ function openPopup(mouseX, mouseY) {
             popupallAux = true;
         }
 
-        let previousRadiusValue = radiusInput.value; // Variable para almacenar el valor anterior del slider
         let previousSmoothValue = smoothInput.value; // Variable para almacenar el valor anterior del slider
         let previousGlobalRadius = globalRadiusInput.value;
 
@@ -478,10 +468,14 @@ function addcircle(event) {
     waitingMessage.style.display = "none";
 }
 
+function relMouseCoords(event) {
+    var rect = canvas.getBoundingClientRect();
+    var x = (event.clientX - rect.left) * (1024 / canvas.clientWidth);
+    var y = (event.clientY - rect.top) * (1024 / canvas.clientHeight);
+    return { x: x, y: y };
+}
+
 function buttonColor(elementoBoton, color) {
     elementoBoton.style.backgroundColor = color;
 }
 
-function relMouseCoords(event) {
-    return { x: event.offsetX || event.layerX, y: event.offsetY || event.layerY };
-}

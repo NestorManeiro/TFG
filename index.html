@@ -91,14 +91,13 @@
 <div id="popup" class="popup" style="display: none;"></div>
 <div id="popupall" class="popup" style="display: none;">
     <h2>All Circles</h2>
-    <input type="number" id="globalRadius" placeholder="Global Radius" />
-    <label for="radius">Radius:</label>
-    <input type="range" id="radius" min="0" max="500" step="1">
+    <input type="number" id="globalRadius" placeholder="0" />
     <label for="smooth">Smooth:</label>
     <input type="range" id="smooth" min="0" max="2" step="0.1">
     <button class="close-button" onclick="closePopup()">Close</button>
 </div>
-<script async type="text/javascript" src="blackbox.js"></script>
+
+<script defer  type="text/javascript" src="blackbox.js"></script>
 <script type="text/javascript" src="Utils/handleEvents.js"></script>
 <script type="text/javascript" src="Utils/init.js"></script>
 <script type="text/javascript" src="Utils/tools.js"></script>
