@@ -68,7 +68,7 @@ window.onerror = (message, source, lineno, colno, error) => {
         console.error(message);
     }
 
-    Module.setStatus("Exception thrown, see JavaScript console");
+    Module.setStatus("Exception thrown, see JavaScript console: " + message);
     spinnerElement.style.display = "none";
     Module.setStatus = (text) => {
         if (text) console.error("[post-exception status] " + text);
