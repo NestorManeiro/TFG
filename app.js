@@ -56,7 +56,7 @@ var Module = {
 Module.setStatus("Downloading...");
 window.onerror = (message, source, lineno, colno, error) => {
     if (
-        message.includes('Uncaught TypeError: Module.ccall is not a function')|| message.includes('Exception thrown, see JavaScript console: Uncaught RuntimeError: Aborted(Assertion failed: native function `stackSave` called before runtime initialization)')
+        message.includes('Uncaught TypeError: Module.ccall is not a function') || message.includes('Uncaught RuntimeError: Aborted(Assertion failed: native function `stackSave` called before runtime initialization)')
     ) {
         // Espera 5 segundos antes de recargar la página
         setTimeout(() => {
