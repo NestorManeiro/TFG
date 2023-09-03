@@ -54,7 +54,20 @@ var Module = {
     },
 };
 Module.setStatus("Downloading...");
-window.onerror = () => {
+window.onerror = (message, source, lineno, colno, error) => {
+    if (
+        message.includes('Uncaught TypeError: Module.ccall is not a function')
+    ) {
+        // Espera 5 segundos antes de recargar la página
+        setTimeout(() => {
+            console.log("hola");
+            window.location.reload();
+        }, 1000); // 5000 milisegundos = 5 segundos
+    } else {
+        // Si no es el error específico, solo muestra el mensaje de error en la consola
+        console.error(message);
+    }
+
     Module.setStatus("Exception thrown, see JavaScript console");
     spinnerElement.style.display = "none";
     Module.setStatus = (text) => {
