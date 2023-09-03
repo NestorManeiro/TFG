@@ -211,3 +211,14 @@ function transform(zoom_factor, zx, zy, dx, dy) {
         [zoom_factor, zx, zy, dx, dy],
     );
 }
+
+window.onload = function() {
+    // Retrasa la simulación del clic por 100 milisegundos (ajusta según sea necesario)
+    setTimeout(function() {
+        // Obtén el elemento del botón por su ID
+        var computeButton = document.getElementById("computeButton");
+
+        // Simula un clic en el botón
+        computeButton.click();
+    }, 100);
+};
