@@ -1203,10 +1203,16 @@ class NodeTree{ ///AAA
         point2d dm1=point2d(-sin(am1),cos(am1))*s_[ikm];
         point2d dk2=point2d(-sin(ak2),cos(ak2))*s_[k];
         point2d dm2=point2d(-sin(am2),cos(am2))*s_[ikm];
-        if( ( dk1.x*(pm1.x-pk1.x)+dk1.y*(pm1.y-pk1.y) ) < 0 ) { dk1.x=-dk1.x; dk1.y=-dk1.y;}
-        if( ( dk2.x*(pm2.x-pk2.x)+dk2.y*(pm2.y-pk2.y) ) < 0 ) { dk2.x=-dk2.x; dk2.y=-dk2.y;}
-        if( ( dm1.x*(pm1.x-pk1.x)+dm1.y*(pm1.y-pk1.y) ) < 0 ) { dm1.x=-dm1.x; dm1.y=-dm1.y;}
-        if( ( dm2.x*(pm2.x-pk2.x)+dm2.y*(pm2.y-pk2.y) ) < 0 ) { dm2.x=-dm2.x; dm2.y=-dm2.y;}
+        //if( ( dk1.x*(pm1.x-pk1.x)+dk1.y*(pm1.y-pk1.y) ) < 0 ) { dk1.x=-dk1.x; dk1.y=-dk1.y;}
+        //if( ( dk2.x*(pm2.x-pk2.x)+dk2.y*(pm2.y-pk2.y) ) < 0 ) { dk2.x=-dk2.x; dk2.y=-dk2.y;}
+        //if( ( dm1.x*(pm1.x-pk1.x)+dm1.y*(pm1.y-pk1.y) ) < 0 ) { dm1.x=-dm1.x; dm1.y=-dm1.y;}
+        //if( ( dm2.x*(pm2.x-pk2.x)+dm2.y*(pm2.y-pk2.y) ) < 0 ) { dm2.x=-dm2.x; dm2.y=-dm2.y;}
+
+        /// CAMBIO NUEVO
+        if( ( dk1.x*(T.p[im].x-pk1.x)+dk1.y*(T.p[im].y-pk1.y) ) < 0 ) { dk1.x=-dk1.x; dk1.y=-dk1.y;}
+        if( ( dk2.x*(T.p[im].x-pk2.x)+dk2.y*(T.p[im].y-pk2.y) ) < 0 ) { dk2.x=-dk2.x; dk2.y=-dk2.y;}
+        if( ( dm1.x*(T.p[im].x-pk1.x)+dm1.y*(T.p[im].y-pk1.y) ) < 0 ) { dm1.x=-dm1.x; dm1.y=-dm1.y;}
+        if( ( dm2.x*(T.p[im].x-pk2.x)+dm2.y*(T.p[im].y-pk2.y) ) < 0 ) { dm2.x=-dm2.x; dm2.y=-dm2.y;}
 
         ///
         fprintf(svgFile,"<path fill=\"red\" stroke=\"none\" d=\" \n");

@@ -71,6 +71,8 @@ function openPopup(mouseX, mouseY) {
         popup2.style.left = mouseX + "px";
         popup2.style.top = mouseY + "px";
 
+        previousGlobalRadius = 0;
+
         popup2.addEventListener("mousedown", function (event) {
             isDragging = true;
             offsetX = event.clientX - popup2.getBoundingClientRect().left;
@@ -111,16 +113,17 @@ function openPopup(mouseX, mouseY) {
                 previousGlobalRadius = newGlobalRadius;
             });
 
-
             popupallAux = true;
         }
 
-        let previousSmoothValue = smoothInput.value; // Variable para almacenar el valor anterior del slider
-        let previousGlobalRadius = globalRadiusInput.value;
-
+        let previousSmoothValue = smoothInput.value;
     }
 }
+
+
 function closePopup() {
+    var globalRadiusInput = document.getElementById("globalRadius"); // Nuevo input
+    globalRadiusInput.value=0;
     addShape();
     addAllCanvasEvents();
     popup2.style.display = "none";
