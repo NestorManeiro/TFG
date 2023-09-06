@@ -463,7 +463,7 @@ function addcircle(event) {
     var coords = relMouseCoords(event);
 
     addpoint(coords.x , coords.y );
-    console.log(coords)
+
     // Restablecer el color del botón "addButton" después de completar la lógica
     addButton.style.backgroundColor = "#4CAF50"; // Color inicial
 
@@ -473,8 +473,8 @@ function addcircle(event) {
 
 function relMouseCoords(event) {
     var rect = canvas.getBoundingClientRect();
-    var x = (event.clientX - rect.left) * (1024 / canvas.clientWidth);
-    var y = (event.clientY - rect.top) * (1024 / canvas.clientHeight);
+    var x = (event.clientX - rect.left) * (1);
+    var y = (event.clientY - rect.top) * (1);
     return { x: x, y: y };
 }
 

@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 1.25em;
+    padding: 0.5em;
     user-select: none;
 }
 
@@ -142,7 +142,7 @@ button:hover {
 #canvas_svg {
     border: 0.0625em solid #ccc;
     width: 1024px; /*canvas size*/
-    height: 1024px;
+    height: 98vh;
     display: flex;
     align-items: stretch;
 }
