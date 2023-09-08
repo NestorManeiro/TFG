@@ -18,11 +18,7 @@
 </div>
 <label for="svgOutput"></label><textarea id="svgOutput" rows="10" cols="50" hidden></textarea>
 <div id="container">
-    <div id="canvas_svg">
-        <div id="waiting-message">
-            Waiting for click⏱
-        </div>
-    </div>
+
     <div id="instructions">
         <p>Shape parameters: An advanced user can modify the shape parameters by hand. To render the shape press the “Compute Shape” button.</p>
         <label for="shapeInput"></label><textarea id="shapeInput" rows="5" cols="50"></textarea>
@@ -46,28 +42,36 @@
             <li>Dragging the mouse with the left mouse button pressed outside of all the circles allows to move the entire shape. </li>
             <li>The mouse wheel allows zooming the entire shape.  </li>
         </ol>
-        <div class="inline-buttons">
-            <button id="middlecircle">New circle in the middle of a segment</button>
+        <div class="ordenadouwu">
+            <div class="inline-buttons-container">
+                <button id="middlecircle">New circle in the middle of a segment</button>
+            </div>
+            <div class="inline-buttons-container">
+                <button id="addcircle">Create a circle</button>
+                <button id="eraseButton">Erase a circle</button>
+            </div>
+            <div class="inline-buttons-container">
+                <button id="createconection">Add segment by clicking in extreme circles</button>
+                <button id="eraseconection">Remove a segment</button>
+            </div>
+            <div class="inline-buttons-container">
+                <button onclick="randomGenerate()">Generate random shape</button>
+                <button onclick="similarGenerate()">Generate similar shape</button>
+            </div>
+            <div class="inline-buttons-container">
+                <button id="noAction">Reset action</button>
+                <button onclick="downloadsvg()">Download SVG</button>
+            </div>
+            <div class="inline-buttons-container" id="UndoRedo">
+                <button onclick="updateShapeInput();"><img src="./Media/undo_icon.png" width="20" height="20" alt="Undo"></button>
+                <button onclick="redoShapeInput();"><img src="./Media/redo_icon.png" width="20" height="20" alt="Redo"></button>
+            </div>
         </div>
-        <div class="inline-buttons">
-            <button id="addcircle">Create a circle</button>
-            <button id="eraseButton">Erase a circle</button>
-        </div>
-        <div class="inline-buttons">
-            <button id="createconection">Add segment by clicking in extreme circles</button>
-            <button id="eraseconection">Remove a segment</button>
-        </div>
-        <div class="inline-buttons">
-            <button onclick="randomGenerate()">Generate random shape</button>
-            <button onclick="similarGenerate()">Generate similar shape</button>
-        </div>
-        <div class="inline-buttons">
-            <button id="noAction">Reset action</button>
-            <button onclick="downloadsvg()">Download SVG</button>
-        </div>
-        <div class="inline-buttons">
-            <button onclick="updateShapeInput();"><img src="./Media/undo_icon.png" width="20" height="20" alt="Undo"></button>
-            <button onclick="redoShapeInput();"><img src="./Media/redo_icon.png" width="20" height="20" alt="Redo"></button>
+
+    </div>
+    <div id="canvas_svg">
+        <div id="waiting-message">
+            Waiting for click⏱
         </div>
     </div>
 </div>
