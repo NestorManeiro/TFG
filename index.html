@@ -36,11 +36,11 @@
             <hr>
             <ol class="zoom-instructions">
                 <li>Shape can be edited using the action buttons below.</li>
-                <li>Right-clicking inside a circle opens a pop-up window that allows the user to modify the parameters of the selected circles.</li>
+                <li>Right-clicking inside a circle opens a pop-up window that allows the user to modify the parameters of the selected circle.</li>
                 <li>Right-clicking outside of all the circles opens a pop-up window that allows the user to modify the parameters of all the circles. </li>
                 <li>Dragging the mouse with the left button pressed inside a circle allows to change the circle location</li>
-                <li>Dragging the mouse with the left mouse button pressed outside of all the circles allows to move the entire shape. </li>
-                <li>The mouse wheel allows zooming the entire shape.  </li>
+                <li>Dragging the mouse with the left mouse button pressed outside all the circles allows to move the entire shape. </li>
+                <li>The mouse wheel allows zooming the entire shape.</li>
             </ol>
             <div class="inline-buttons">
                 <button id="middlecircle">New circle in the middle of a segment</button>
@@ -62,8 +62,10 @@
                 <button onclick="downloadsvg()">Download SVG</button>
             </div>
             <div class="inline-buttons">
-                <button onclick="updateShapeInput();"><img src="./Media/undo_icon.png" width="20" height="20" alt="Undo"></button>
-                <button onclick="redoShapeInput();"><img src="./Media/redo_icon.png" width="20" height="20" alt="Redo"></button>
+                <button onclick="updateShapeInput();"><!--suppress CheckImageSize -->
+                    <img src="./Media/undo_icon.png" width="20" height="20" alt="Undo"></button>
+                <button onclick="redoShapeInput();"><!--suppress CheckImageSize -->
+                    <img src="./Media/redo_icon.png" width="20" height="20" alt="Redo"></button>
             </div>
         </div>
         <div id="canvas_svg">
@@ -80,7 +82,7 @@
             <li><strong>Export Shape:</strong> Exports the shape to a text file.</li>
             <li><strong>Upload Shape:</strong> Import a shape from a text file.</li>
             <li><strong>Preview:</strong> Shows a preview of the shape (without the black lines and circles).</li>
-            <li><strong>New circle in the middle of a segment:</strong> Clicking on two circles adds a circle in the segment that connects them.</li>
+            <li><strong>New circle in the middle of a segment:</strong> Clicking on a segment adds a circle in the middle of the segment</li>
             <li><strong>Create a circle:</strong> Clicking adds a circle.</li>
             <li><strong>Erase a circle:</strong> Clicking removes a circle.</li>
             <li><strong>Add segment by clicking in extreme circle:</strong> Click on two circles for make a segment between them</li>
