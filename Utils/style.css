@@ -4,8 +4,6 @@ body {
     padding: 0.5em;
     user-select: none;
 }
-body, html { overflow: hidden; }
-
 
 h1 {
     font-size: 1.5em;
