@@ -328,33 +328,49 @@ function dragStarted(event) {
     initialY = parseFloat(activeCircle.getAttribute("cy"));
     activeCircle.setAttribute("stroke", "blue");
     activeCircle.setAttribute("stroke-width", "3");
-    deltaX = event.clientX;
-    deltaY = event.clientY;
-    isDragging = true; // Marcar como arrastrando
+    deltaX = event.clientX || event.touches[0].clientX;
+    deltaY = event.clientY || event.touches[0].clientY;
+    isDragging = true;
+
+    // Agregar eventos tanto para el mouse como para el toque
     document.addEventListener("mousemove", dragged);
+    document.addEventListener("touchmove", dragged, { passive: false });
+
     document.addEventListener("mouseup", dragEnded);
+    document.addEventListener("touchend", dragEnded);
     document.addEventListener("wheel", wheel);
 }
 
 function dragged(event) {
     if (isDragging && activeCircle) {
-        const offsetX = event.clientX - deltaX;
-        const offsetY = event.clientY - deltaY;
+        const clientX = event.clientX || event.touches[0].clientX;
+        const clientY = event.clientY || event.touches[0].clientY;
+        const offsetX = clientX - deltaX;
+        const offsetY = clientY - deltaY;
         const newX = initialX + offsetX;
         const newY = initialY + offsetY;
 
         activeCircle.setAttribute("cx", newX);
         activeCircle.setAttribute("cy", newY);
-        hasDataChanged = true; // Marcar como datos modificados
+        hasDataChanged = true;
         updateCircleData(activeCircle, newX, newY);
+
+        // Actualizar las coordenadas iniciales para el próximo movimiento
+        deltaX = clientX;
+        deltaY = clientY;
     }
 }
 
 function dragEnded() {
     isDragging = false;
     activeCircle = false;
+
+    // Eliminar los eventos tanto para el mouse como para el toque
     document.removeEventListener("mouseup", dragEnded);
+    document.removeEventListener("touchend", dragEnded);
     document.removeEventListener("mousemove", dragged);
+    document.removeEventListener("touchmove", dragged);
+
     drawFigure();
     unselect();
 }

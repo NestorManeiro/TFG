@@ -66,6 +66,7 @@ canvas.addEventListener("wheel", handleWheelCanvas);
 canvas.addEventListener("mousemove", HandleMovecanvas);
 canvas.addEventListener("contextmenu", handleCanvasContextMenu);
 canvas.addEventListener("mousedown", handleCanvasMouseDown2);
+document.addEventListener("touchstart", dragStarted);
 
 // Document Event Listener
 document.addEventListener("keydown", handleDocumentKeyDown);
