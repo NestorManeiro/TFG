@@ -6,25 +6,22 @@ function fixit() {
 function addShape() {
     const newShape = shapeInput.value.split("\n");
     if (currentShapeIndex < shapesArray.length - 1) {
-        shapesArray.splice(currentShapeIndex + 1); // Eliminar figuras por encima de currentShapeIndex
+        shapesArray.splice(currentShapeIndex + 1);
     }
     if (shapesArray.length >= 10) {
-        shapesArray.shift(); // Eliminar el primer elemento si ya hay 10
+        shapesArray.shift();
     }
     const lastShape = shapesArray[shapesArray.length - 1];
 
-    // Compara si el nuevo shape es igual al último shape almacenado
     const shapesAreEqual = lastShape && arraysAreEqual(newShape, lastShape);
 
-    // Si los shapes son iguales, no lo agregues al historial
     if (!shapesAreEqual) {
         shapesArray.push(newShape);
-        currentShapeIndex = shapesArray.length - 1; // Actualizar el puntero al nuevo índice
+        currentShapeIndex = shapesArray.length - 1;
     }
 }
 
 function arraysAreEqual(arr1, arr2) {
-    // Verifica si ambos arreglos tienen una longitud antes de comparar  los
     if (!arr1 || !arr2 || arr1.length !== arr2.length) return false;
     for (let i = 0; i < arr1.length; i++) {
         if (arr1[i] !== arr2[i]) return false;
@@ -93,18 +90,17 @@ function openPopup(mouseX, mouseY) {
         });
 
         var smoothInput = document.getElementById("smooth");
-        var globalRadiusInput = document.getElementById("globalRadius"); // Nuevo input
+        var globalRadiusInput = document.getElementById("globalRadius");
 
         if (popupallAux === false) {
 
             smoothInput.addEventListener("mousemove", function () {
                 event.stopPropagation();
-                // Calcular la diferencia entre la posición anterior y la posición actual del slider
                 const currentSmoothValue = smoothInput.value;
                 const smoothDifference = currentSmoothValue - previousSmoothValue;
 
-                allcircles(0, smoothDifference); // Enviar la diferencia a la función allcircles
-                previousSmoothValue = currentSmoothValue; // Actualizar el valor anterior
+                allcircles(0, smoothDifference);
+                previousSmoothValue = currentSmoothValue;
             });
             globalRadiusInput.addEventListener("input", function () {
                 const newGlobalRadius = globalRadiusInput.value;
@@ -144,7 +140,6 @@ function allcircles(radius, smooth) {
         lines[currentRadiusIndex] = newRadius.toString();
         lines[currentSmoothIndex] = newSmooth.toString();
     }
-    // Actualizar el valor de shapeInput con los radios y smooth actualizados
     shapeInput.value = lines.join("\n");
     computeShape();
 }
@@ -201,13 +196,8 @@ function addEvents() {
     if (activeCircle || selectedcircle != null) return;
     circulitos = d3.selectAll("#canvas_svg circle.draggable-circle");
 
-    // Actualiza el radio mínimo de los círculos
     circulitos.attr("r", function () {
-        // Obtiene el radio actual del círculo
         const currentRadius = parseFloat(d3.select(this).attr("r"));
-
-        // Calcula el nuevo radio usando Math.max() para asegurarte de que sea al menos MIN_RADIUS
-        // Devuelve el nuevo radio para actualizar el atributo "r" del círculo
         return Math.max(currentRadius, 10);
     });
 
@@ -263,14 +253,12 @@ function showPopup(mouseX, mouseY) {
     ${circleIndex}
     <button id="closeButton">Close</button>`;
 
-    // Agregamos el evento click al botón "Cerrar" para ocultar el popup
     const closeButton = document.getElementById("closeButton");
     closeButton.addEventListener("click", function () {
         addShape();
         unselect();
     });
 
-    // Agrega eventos a los campos del popup para actualizar los datos del círculo seleccionado
     const radiusInput = document.getElementById("radiusInput");
     const smoothInput = document.getElementById("smoothInput");
     const xInput = document.getElementById("xInput");
@@ -318,7 +306,6 @@ function rightClick(event) {
 }
 
 function isRightClick(event) {
-    // Verificar si es el botón derecho o izquierdo del ratón
     if ("which" in event) {
         if (event.which === 3) {
             return false;
@@ -420,7 +407,6 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-// Función para verificar si el ratón está sobre el elemento SVG
 function isMouseOverSVG(event) {
     const svgRect = svgElement.getBoundingClientRect();
     const mouseX = event.clientX;
@@ -450,10 +436,8 @@ function addAllCanvasEvents() {
 }
 
 function setButtonStyle() {
-    // Obtener todos los elementos de botón en el documento
     const buttons = document.getElementsByTagName("button");
 
-    // Aplicar el estilo de fondo verde (#4CAF50) a todos los botones
     for (let i = 0; i < buttons.length; i++) {
         buttons[i].style.backgroundColor = "#4CAF50";
     }
@@ -464,10 +448,8 @@ function addcircle(event) {
 
     addpoint(coords.x , coords.y );
 
-    // Restablecer el color del botón "addButton" después de completar la lógica
-    addButton.style.backgroundColor = "#4CAF50"; // Color inicial
+    addButton.style.backgroundColor = "#4CAF50";
 
-    // Oculta el elemento de espera después de agregar el punto
     waitingMessage.style.display = "none";
 }
 

@@ -1,4 +1,4 @@
-// Variables let
+// Let
 let statusElement = document.getElementById('status');
 let progressElement = document.getElementById('progress');
 let spinnerElement = document.getElementById('spinner');
@@ -8,7 +8,7 @@ let isDragging = false;
 let currentShapeIndex = -1;
 let svgPtr;
 
-// Variables
+// var
 var circulitos;
 var selectedcircle = null;
 var draggableCircles;
@@ -23,7 +23,7 @@ var initialMouseX = 0;
 var initialMouseY = 0;
 var shapesArray = [];
 
-// Constantes
+// const
 const popup = document.getElementById("popup");
 const popup2 = document.getElementById("popupall");
 const waitingMessage = document.getElementById("waiting-message");
