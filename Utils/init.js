@@ -29,6 +29,7 @@ const popup2 = document.getElementById("popupall");
 const waitingMessage = document.getElementById("waiting-message");
 const canvas = document.getElementById("canvas_svg");
 const helpButton = document.getElementById("helpButton");
+const blankButton = document.getElementById("blankButton");
 const closeBtn = document.getElementsByClassName("close")[0];
 const exportButton = document.getElementById("exportButton");
 const customUploadButton = document.querySelector(".custom-upload-button");
@@ -53,6 +54,7 @@ bpreview.addEventListener("mouseup", handleBPreviewMouseUp);
 noaction.addEventListener("click", handleNoActionClick);
 eraseButton.addEventListener("click", handleEraseButtonClick);
 helpButton.addEventListener("click", handleHelpButtonClick);
+blankButton.addEventListener("click", handleBlankButtonClick);
 closeBtn.addEventListener("click", handleCloseButtonClick);
 computeButton.addEventListener("click", handleComputeButtonClick);
 customUploadButton.addEventListener("click", () => { uploadInput.click(); });
@@ -66,8 +68,18 @@ canvas.addEventListener("wheel", handleWheelCanvas);
 canvas.addEventListener("mousemove", HandleMovecanvas);
 canvas.addEventListener("contextmenu", handleCanvasContextMenu);
 canvas.addEventListener("mousedown", handleCanvasMouseDown2);
-document.addEventListener("touchstart", dragStarted);
 
 // Document Event Listener
 document.addEventListener("keydown", handleDocumentKeyDown);
 svgElement.addEventListener("wheel", handleWheelEvent, { passive: false });
+
+const colorButton = document.getElementById('color-button');
+const colorMenu = document.getElementById('color-menu');
+
+colorButton.addEventListener('click', () => {
+    if (colorMenu.style.display === 'block') {
+        colorMenu.style.display = 'none';
+    } else {
+        colorMenu.style.display = 'block';
+    }
+});

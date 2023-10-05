@@ -123,6 +123,31 @@ function handleComputeButtonClick() {
 function handleHelpButtonClick() {
     popuphelp.style.display = "block";
 }
+function handleBlankButtonClick() {
+    shapeInput.value = "1\n" +
+        "490.03424099999995 648\n" +
+        "100.000000\n" +
+        "1.000000\n" +
+        "0\n" +
+        "5\n" +
+        "1128602801\n" +
+        "480.000000\n" +
+        "30.000000\n" +
+        "1.000000\n" +
+        "0\n" +
+        "1\n" +
+        "1\n" +
+        "0.000000\n" +
+        "11\n" +
+        "0\n" +
+        "0.950000\n" +
+        "33\n" +
+        "73\n" +
+        "1\n"
+    computeShape();
+
+}
+
 function handleCloseButtonClick() {
     popuphelp.style.display = "none";
 }

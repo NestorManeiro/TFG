@@ -75,7 +75,17 @@ window.onerror = (message, source, lineno, colno, error) => {
     };
 };
 
-
+function changeColor(colorValue){
+    svgOutput.value = Module.ccall(
+        "_Z8setColorRKNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE", // name of C function
+        "null", // return type
+        //['number','string'], // argument types
+        ["string"], // argument types
+        [colorValue], // arguments
+    );
+    computeShape();
+    drawFigure();
+}
 function computeShape() {
     svgOutput.value = Module.ccall(
         "_Z19ComputeSVGFromShapePc", // name of C function
