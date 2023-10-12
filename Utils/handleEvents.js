@@ -98,9 +98,27 @@ function handleAddButtonClick() {
     canvas.addEventListener("click", addcircle, { once: true });
 }
 
+function handleAddButtonClicks() {
+    handleNoActionClick();
+    buttonColor(addsButton, "#ff9800");
+    waitingMessage.style.display = "block";
+    removeAllCanvasEvents();
+    canvas.addEventListener("click", addcircle);
+}
+
 function handleEraseButtonClick() {
     handleNoActionClick();
     buttonColor(eraseButton, "#ff9800");
+    if (circulitos) {
+        waitingMessage.style.display = "block";
+        removeAllCanvasEvents();
+        circulitos.on("click", handleCircleClickForErase);
+    }
+}
+function handleEraseButtonClicks() {
+    handleNoActionClick();
+    buttonColor(erasesButton, "#ff9800");
+    circulitos.on("click", handleCircleClickForErase);
     if (circulitos) {
         waitingMessage.style.display = "block";
         removeAllCanvasEvents();
@@ -113,6 +131,8 @@ function handleCircleClickForErase() {
     waitingMessage.style.display = "none";
     buttonColor(eraseButton, "#4CAF50");
     addShape();
+    removeAllCanvasEvents();
+    circulitos.on("click", handleCircleClickForErase);
 }
 function handleComputeButtonClick() {
     addShape(shapeInput.value.split("\n"));
