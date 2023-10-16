@@ -352,6 +352,7 @@ function dragged(event) {
 }
 
 function dragEnded() {
+    if (!isRightClick(event) || popup.style.display === "block") return;
     isDragging = false;
     activeCircle = false;
     document.removeEventListener("mouseup", dragEnded);
@@ -359,16 +360,17 @@ function dragEnded() {
     drawFigure();
     unselect();
 }
-
-function touchStarted(){
-    event.preventDefault()
+var touch ;
+function touchStarted(event){
+    event.preventDefault();
     activeCircle = this;
+    touch = event.touches[0];
     selectedcircle = activeCircle;
     initialX = parseFloat(activeCircle.getAttribute("cx"));
     initialY = parseFloat(activeCircle.getAttribute("cy"));
     activeCircle.setAttribute("stroke", "blue");
     activeCircle.setAttribute("stroke-width", "3");
-    var touch = event.touches[0];
+
     deltaX = touch.clientX;
     deltaY = touch.clientY;
     isDragging = true; // Marcar como arrastrando
@@ -379,7 +381,8 @@ function touchStarted(){
 
 function touchMoved(event) {
     if (isDragging && activeCircle) {
-        var touch = event.touches[0];
+        touch = event.touches[0];
+        console.log(activeCircle)
         var offsetX = touch.clientX - deltaX;
         var offsetY = touch.clientY - deltaY;
         const newX = initialX + offsetX;
@@ -388,16 +391,17 @@ function touchMoved(event) {
         activeCircle.setAttribute("cx", newX);
         activeCircle.setAttribute("cy", newY);
         hasDataChanged = true; // Marcar como datos modificados
-        console.log(newX,newY)
-        updateCircleData(activeCircle, newX, newY);
+
+        //updateCircleData(activeCircle, newX, newY);
     }
 }
 
 function touchEnded() {
+    updateCircleData(activeCircle, activeCircle.getAttribute("cx"), activeCircle.getAttribute("cy"));
     isDragging = false;
     activeCircle = false;
-    document.removeEventListener("touchend", touchEnded);
     document.removeEventListener("touchmove", touchMoved);
+    document.removeEventListener("touchend", touchEnded);
     drawFigure();
     unselect();
 }
@@ -473,7 +477,10 @@ function removeAllCanvasEvents() {
 function addAllCanvasEvents() {
     canvas.addEventListener("mousemove", HandleMovecanvas);
     canvas.addEventListener("wheel", handleWheelCanvas);
-    draggableCircles.on("mousedown", dragStarted).on("contextmenu", rightClick);
+    draggableCircles = circulitos
+        .on("mousedown", dragStarted)
+        .on("touchstart", touchStarted)
+        .on("contextmenu", rightClick);
     circulitos.on("click", function () {});
     waitingMessage.style.display = "none";
 }
