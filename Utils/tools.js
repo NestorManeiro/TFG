@@ -203,7 +203,7 @@ function addEvents() {
 
     draggableCircles = circulitos
         .on("mousedown", dragStarted)
-        .on("touchmove", touchStarted)
+        .on("touchstart", touchStarted)
         .on("contextmenu", rightClick);
 }
 
@@ -362,20 +362,19 @@ function dragEnded() {
 
 function touchStarted(){
     event.preventDefault()
-    if (event.touches.length >= 0.1) {
-        activeCircle = this;
-        selectedcircle = activeCircle;
-        initialX = parseFloat(activeCircle.getAttribute("cx"));
-        initialY = parseFloat(activeCircle.getAttribute("cy"));
-        activeCircle.setAttribute("stroke", "blue");
-        activeCircle.setAttribute("stroke-width", "3");
-        var touch = event.touches[0];
-        deltaX = touch.clientX;
-        deltaY = touch.clientY;
-        isDragging = true; // Marcar como arrastrando
-        document.addEventListener("touchmove", touchMoved);
-        document.addEventListener("touchend", touchEnded);
-    }
+    activeCircle = this;
+    selectedcircle = activeCircle;
+    initialX = parseFloat(activeCircle.getAttribute("cx"));
+    initialY = parseFloat(activeCircle.getAttribute("cy"));
+    activeCircle.setAttribute("stroke", "blue");
+    activeCircle.setAttribute("stroke-width", "3");
+    var touch = event.touches[0];
+    deltaX = touch.clientX;
+    deltaY = touch.clientY;
+    isDragging = true; // Marcar como arrastrando
+    document.addEventListener("touchmove", touchMoved);
+    document.addEventListener("touchend", touchEnded);
+
 }
 
 function touchMoved(event) {
