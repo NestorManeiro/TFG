@@ -155,7 +155,7 @@ button:hover {
 }
 
 #canvas_svg {
-    border: 0.0625em solid #ccc;
+    border: 0.2em solid black;
     width: 1024px; /*canvas size*/
     height: 1024px;
     display: flex;
@@ -403,5 +403,11 @@ div.emscripten_border {
     .custom-upload-button {
         font-size: 1.8em; /* Ajusta el tamaño del texto según tus preferencias */ !important;
         padding: 1em 1em; /* Ajusta el espacio alrededor del texto según tus preferencias */ !important;
+    }
+    #canvas_svg {
+        margin: auto;
+    }
+    body{
+        padding:0em;
     }
 }

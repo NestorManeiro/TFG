@@ -464,3 +464,48 @@ function buttonColor(elementoBoton, color) {
     elementoBoton.style.backgroundColor = color;
 }
 
+function touchStarted(event) {
+    if (event.touches.length === 1) {
+        activeCircle = this;
+        selectedcircle = activeCircle;
+        initialX = parseFloat(activeCircle.getAttribute("cx"));
+        initialY = parseFloat(activeCircle.getAttribute("cy"));
+        activeCircle.setAttribute("stroke", "blue");
+        activeCircle.setAttribute("stroke-width", "3");
+        var touch = event.touches[0];
+        deltaX = touch.clientX;
+        deltaY = touch.clientY;
+        isDragging = true; // Marcar como arrastrando
+        document.addEventListener("touchmove", touchMoved);
+        document.addEventListener("touchend", touchEnded);
+    }
+}
+
+function touchMoved(event) {
+    if (isDragging && activeCircle) {
+        var touch = event.touches[0];
+        var offsetX = touch.clientX - deltaX;
+        var offsetY = touch.clientY - deltaY;
+        var newX = initialX + offsetX;
+        var newY = initialY + offsetY;
+
+        activeCircle.setAttribute("cx", newX);
+        activeCircle.setAttribute("cy", newY);
+        hasDataChanged = true; // Marcar como datos modificados
+        updateCircleData(activeCircle, newX, newY);
+    }
+}
+
+function touchEnded() {
+    isDragging = false;
+    activeCircle = false;
+    document.removeEventListener("touchend", touchEnded);
+    document.removeEventListener("touchmove", touchMoved);
+    drawFigure();
+    unselect();
+}
+
+// Agregar manejadores de eventos táctiles a los elementos necesarios
+document.querySelectorAll('.circle').forEach(circle => {
+    canvas.addEventListener('touchstart', touchStarted);
+});
