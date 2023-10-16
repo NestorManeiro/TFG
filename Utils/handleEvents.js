@@ -95,7 +95,8 @@ function handleAddButtonClick() {
     buttonColor(addButton, "#ff9800");
     waitingMessage.style.display = "block";
     removeAllCanvasEvents();
-    canvas.addEventListener("click", addcircle, { once: true });
+    canvas.addEventListener("mousedown", addcircle, { once: true });
+
 }
 
 function handleAddButtonClicks() {
@@ -262,3 +263,21 @@ function handleDocumentKeyDown(event) {
         redoShapeInput();
     }
 }
+document.addEventListener("DOMContentLoaded", function () {
+    const toggleButton = document.getElementById("toggle-content-button");
+    const instructions = document.getElementById("instructions");
+    const canvasSvg = document.getElementById("canvas_svg");
+
+    let isInstructionsVisible = false;
+
+    toggleButton.addEventListener("click", function () {
+        if (isInstructionsVisible) {
+            instructions.style.display = "none";
+            canvasSvg.style.display = "block";
+        } else {
+            instructions.style.display = "block";
+            canvasSvg.style.display = "none";
+        }
+        isInstructionsVisible = !isInstructionsVisible;
+    });
+});
