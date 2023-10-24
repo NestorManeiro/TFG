@@ -362,6 +362,7 @@ function dragEnded() {
 }
 var touch ;
 function touchStarted(event){
+    console.log("start")
     event.preventDefault();
     activeCircle = this;
     touch = event.touches[0];
@@ -374,12 +375,13 @@ function touchStarted(event){
     deltaX = touch.clientX;
     deltaY = touch.clientY;
     isDragging = true; // Marcar como arrastrando
-    document.addEventListener("touchmove", touchMoved);
+    activeCircle.addEventListener("touchmove", touchMoved);
     document.addEventListener("touchend", touchEnded);
 
 }
 
 function touchMoved(event) {
+    console.log("Grabbing?")
     if (isDragging && activeCircle) {
         touch = event.touches[0];
         console.log(activeCircle)
@@ -392,12 +394,12 @@ function touchMoved(event) {
         activeCircle.setAttribute("cy", newY);
         hasDataChanged = true; // Marcar como datos modificados
 
-        //updateCircleData(activeCircle, newX, newY);
+        updateCircleData(activeCircle, newX, newY);
     }
 }
 
 function touchEnded() {
-    updateCircleData(activeCircle, activeCircle.getAttribute("cx"), activeCircle.getAttribute("cy"));
+    console.log("end")
     isDragging = false;
     activeCircle = false;
     document.removeEventListener("touchmove", touchMoved);
