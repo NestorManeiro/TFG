@@ -362,6 +362,17 @@ function dragEnded() {
 }
 var touch ;
 function touchStarted(event){
+    if (event.touches.length === 1) {
+        if (popup2.style.display === "block") return;
+        event.preventDefault();
+        if (selectedcircle == null) {
+            selectedcircle = this;
+            selectedcircle.setAttribute("stroke", "blue");
+            selectedcircle.setAttribute("stroke-width", "3");
+            showPopup(event.touches[0].pageX, event.touches[0].pageY);
+        }
+        drawFigure();
+    }
     console.log("start")
     event.preventDefault();
     activeCircle = this;
@@ -381,6 +392,7 @@ function touchStarted(event){
 }
 
 function touchMoved(event) {
+    popup.style.display = "none";
     console.log("Grabbing?")
     if (isDragging && activeCircle) {
         touch = event.touches[0];
