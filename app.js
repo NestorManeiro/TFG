@@ -234,6 +234,14 @@ function transform(zoom_factor, zx, zy, dx, dy) {
         [zoom_factor, zx, zy, dx, dy],
     );
 }
+function rotate(angle, dx, dy) {
+    shapeInput.value = Module.ccall(
+        "_Z6rotatefff",
+        "string",
+        ["float", "float", "float"],
+        [angle, dx, dy],
+    );
+}
 
 window.onload = function() {
     // Retrasa la simulación del clic por 100 milisegundos (ajusta según sea necesario)

@@ -92,6 +92,11 @@ function openPopup(mouseX, mouseY) {
         var smoothInput = document.getElementById("smooth");
         var globalRadiusInput = document.getElementById("globalRadius");
 
+        // Agregar elementos de entrada para ángulo, X e Y
+        var angleInput = document.getElementById("angleInput");
+        var xInput = document.getElementById("xInput");
+        var yInput = document.getElementById("yInput");
+
         if (popupallAux === false) {
 
             smoothInput.addEventListener("mousemove", function () {
@@ -102,6 +107,7 @@ function openPopup(mouseX, mouseY) {
                 allcircles(0, smoothDifference);
                 previousSmoothValue = currentSmoothValue;
             });
+
             globalRadiusInput.addEventListener("input", function () {
                 const newGlobalRadius = globalRadiusInput.value;
                 const radiusDifference = newGlobalRadius - previousGlobalRadius;
@@ -109,12 +115,29 @@ function openPopup(mouseX, mouseY) {
                 previousGlobalRadius = newGlobalRadius;
             });
 
+            // Event listener para el cuadro de texto de ángulo
+            angleInput.addEventListener("input", function () {
+                const angle = parseFloat(angleInput.value);
+                const x = parseFloat(xInput.value);
+                const y = parseFloat(yInput.value);
+
+                // Llamar a la función rotate con los valores ingresados
+                rotate(angle, x, y);
+                computeShape();
+            });
+
+            // Establecer valores predeterminados
+            angleInput.value = "0";
+            xInput.value = "512";
+            yInput.value = "512";
+
             popupallAux = true;
         }
 
         let previousSmoothValue = smoothInput.value;
     }
 }
+
 
 
 function closePopup() {

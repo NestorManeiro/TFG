@@ -991,6 +991,29 @@ class NodeTree{ ///AAA
   }
 
   ///********************************************************
+  /// nodeTree rotation (angle in degree)
+  ///********************************************************
+  double rotation(double angle,double cx,double cy){
+    static time_t timer=0;
+    angle =M_PI*angle/180.;
+    double co=cos(angle);
+    double si=sin(angle);
+
+    for(int k=0;k<n_.size();k++){
+        double x=n_[k].x-cx;
+        double y=n_[k].y-cy;
+        n_[k].x=cx+co*x+si*y;
+        n_[k].y=cy-si*x+co*x;
+    }
+    node_angles_computation();
+    time_t timer2;
+    time(&timer2);
+
+    return difftime(timer2,timer);
+  }
+
+
+  ///********************************************************
   /// nodeTree check_equality
   ///********************************************************
   bool check_equality(NodeTree &nT){
@@ -1236,6 +1259,7 @@ class NodeTree{ ///AAA
         if(i_[k].size()>2){
           T.t.push_back( triangle(ik,ik1,ik2) );
           fprintf(svgFile, "<path fill=\"%s\" stroke=\"%s\" d=\" \n", color.c_str(), color.c_str());
+
           fprintf(svgFile,"M %lf,%lf\n",T.p[ik].x,T.p[ik].y);
           fprintf(svgFile,"L %lf,%lf\n",pk1.x,pk1.y);
           fprintf(svgFile,"L %lf,%lf\n",pk2.x,pk2.y);
@@ -1363,7 +1387,7 @@ class NodeTree{ ///AAA
 
   return;
 
-};
+ };
 
   /// *************************************************************
   ///    INSERT A NEW NODE IN THE MIDDLE OF THE SEGMENT

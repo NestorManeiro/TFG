@@ -146,3 +146,10 @@ char* transform(float zoom_factor, float zx, float zy, float dx, float dy) {
    nT.svg_generation("shape_new.svg", true, globalColor);
    return allocateAndExtract();
 }
+
+EMSCRIPTEN_KEEPALIVE
+char* rotate(float angle,float dx, float dy) {
+     nT.rotation(angle,dx,dy);
+   nT.svg_generation("shape_new.svg", true, globalColor);
+   return allocateAndExtract();
+}
