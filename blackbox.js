@@ -4729,7 +4729,7 @@ var __Z6rotatefff = Module["__Z6rotatefff"] = createExportWrapper("_Z6rotatefff"
 /** @type {function(...*):?} */
 var _main = Module["_main"] = createExportWrapper("main");
 /** @type {function(...*):?} */
-var _free = createExportWrapper("free");
+var _free = Module["_free"] = createExportWrapper("free");
 /** @type {function(...*):?} */
 var ___errno_location = createExportWrapper("__errno_location");
 /** @type {function(...*):?} */
