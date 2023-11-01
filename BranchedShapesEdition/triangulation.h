@@ -1003,7 +1003,7 @@ class NodeTree{ ///AAA
         double x=n_[k].x-cx;
         double y=n_[k].y-cy;
         n_[k].x=cx+co*x+si*y;
-        n_[k].y=cy-si*x+co*x;
+        n_[k].y=cy-si*x+co*y;
     }
     node_angles_computation();
     time_t timer2;

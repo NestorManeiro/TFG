@@ -22,7 +22,7 @@ var popupallAux = false;
 var initialMouseX = 0;
 var initialMouseY = 0;
 var shapesArray = [];
-
+var previousAngle= 0;
 // const
 const popup = document.getElementById("popup");
 const popup2 = document.getElementById("popupall");

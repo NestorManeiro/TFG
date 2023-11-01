@@ -92,18 +92,15 @@ function openPopup(mouseX, mouseY) {
         var smoothInput = document.getElementById("smooth");
         var globalRadiusInput = document.getElementById("globalRadius");
 
-        // Agregar elementos de entrada para ángulo, X e Y
         var angleInput = document.getElementById("angleInput");
         var xInput = document.getElementById("xInput");
         var yInput = document.getElementById("yInput");
 
         if (popupallAux === false) {
-
             smoothInput.addEventListener("mousemove", function () {
                 event.stopPropagation();
                 const currentSmoothValue = smoothInput.value;
                 const smoothDifference = currentSmoothValue - previousSmoothValue;
-
                 allcircles(0, smoothDifference);
                 previousSmoothValue = currentSmoothValue;
             });
@@ -115,18 +112,15 @@ function openPopup(mouseX, mouseY) {
                 previousGlobalRadius = newGlobalRadius;
             });
 
-            // Event listener para el cuadro de texto de ángulo
-            angleInput.addEventListener("input", function () {
-                const angle = parseFloat(angleInput.value);
+            angleInput.addEventListener("change", function () {
+                const newAngle = parseFloat(angleInput.value);
                 const x = parseFloat(xInput.value);
                 const y = parseFloat(yInput.value);
-
-                // Llamar a la función rotate con los valores ingresados
-                rotate(angle, x, y);
+                const angleDifference = newAngle - previousAngle;
+                rotate(angleDifference, x, y);
                 computeShape();
+                previousAngle = newAngle;
             });
-
-            // Establecer valores predeterminados
             angleInput.value = "0";
             xInput.value = "512";
             yInput.value = "512";
@@ -138,14 +132,14 @@ function openPopup(mouseX, mouseY) {
     }
 }
 
-
-
 function closePopup() {
     var globalRadiusInput = document.getElementById("globalRadius"); // Nuevo input
     globalRadiusInput.value=0;
     addShape();
     addAllCanvasEvents();
     popup2.style.display = "none";
+    angleInput.value = "0";
+    previousAngle = "0";
 }
 function allcircles(radius, smooth) {
     var lines = shapeInput.value.split("\n");
@@ -396,7 +390,6 @@ function touchStarted(event){
         }
         drawFigure();
     }
-    console.log("start")
     event.preventDefault();
     activeCircle = this;
     touch = event.touches[0];
@@ -416,10 +409,8 @@ function touchStarted(event){
 
 function touchMoved(event) {
     popup.style.display = "none";
-    console.log("Grabbing?")
     if (isDragging && activeCircle) {
         touch = event.touches[0];
-        console.log(activeCircle)
         var offsetX = touch.clientX - deltaX;
         var offsetY = touch.clientY - deltaY;
         const newX = initialX + offsetX;
@@ -434,7 +425,6 @@ function touchMoved(event) {
 }
 
 function touchEnded() {
-    console.log("end")
     isDragging = false;
     activeCircle = false;
     document.removeEventListener("touchmove", touchMoved);
