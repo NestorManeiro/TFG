@@ -379,6 +379,7 @@ function dragEnded() {
 }
 var touch ;
 function touchStarted(event){
+    if(waitingMessage.style.display === "block") return
     if (event.touches.length === 1) {
         if (popup2.style.display === "block") return;
         event.preventDefault();
