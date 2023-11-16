@@ -97,22 +97,30 @@ function openPopup(mouseX, mouseY) {
         var yInput = document.getElementById("yInput");
 
         if (popupallAux === false) {
-            smoothInput.addEventListener("mousemove", function () {
+            smoothInput.addEventListener("mousemove", handleSmoothInput);
+            smoothInput.addEventListener("touchmove", handleSmoothInput);
+
+            globalRadiusInput.addEventListener("input", handleGlobalRadiusInput);
+
+            angleInput.addEventListener("mousemove", handleAngleInput);
+            angleInput.addEventListener("touchmove", handleAngleInput);
+
+            function handleSmoothInput(event) {
                 event.stopPropagation();
                 const currentSmoothValue = smoothInput.value;
                 const smoothDifference = currentSmoothValue - previousSmoothValue;
                 allcircles(0, smoothDifference);
                 previousSmoothValue = currentSmoothValue;
-            });
+            }
 
-            globalRadiusInput.addEventListener("input", function () {
+            function handleGlobalRadiusInput() {
                 const newGlobalRadius = globalRadiusInput.value;
                 const radiusDifference = newGlobalRadius - previousGlobalRadius;
                 allcircles(radiusDifference, 0);
                 previousGlobalRadius = newGlobalRadius;
-            });
+            }
 
-            angleInput.addEventListener("mousemove", function () {
+            function handleAngleInput(event) {
                 event.stopPropagation();
                 const newAngle = parseFloat(angleInput.value);
                 const x = parseFloat(xInput.value);
@@ -121,7 +129,8 @@ function openPopup(mouseX, mouseY) {
                 rotate(angleDifference, x, y);
                 computeShape();
                 previousAngle = newAngle;
-            });
+            }
+
 
             angleInput.value = "0";
             xInput.value = "512";
@@ -382,20 +391,19 @@ function dragEnded() {
     unselect();
 }
 var touch ;
+
 function touchStarted(event){
     if(waitingMessage.style.display === "block") return
     if (event.touches.length === 1) {
         if (popup2.style.display === "block") return;
-        event.preventDefault();
         if (selectedcircle == null) {
             selectedcircle = this;
             selectedcircle.setAttribute("stroke", "blue");
-            selectedcircle.setAttribute("stroke-width", "3");
-            showPopup(event.touches[0].pageX, event.touches[0].pageY);
+            selectedcircle.setAttribute("stroke-width", "3")
         }
+
         drawFigure();
     }
-    event.preventDefault();
     activeCircle = this;
     touch = event.touches[0];
     selectedcircle = activeCircle;
@@ -408,11 +416,12 @@ function touchStarted(event){
     deltaY = touch.clientY;
     isDragging = true; // Marcar como arrastrando
     activeCircle.addEventListener("touchmove", touchMoved);
-    document.addEventListener("touchend", touchEnded);
+    activeCircle.addEventListener("touchend", touchEnded);
 
 }
 
 function touchMoved(event) {
+
     popup.style.display = "none";
     if (isDragging && activeCircle) {
         touch = event.touches[0];
@@ -429,13 +438,13 @@ function touchMoved(event) {
     }
 }
 
-function touchEnded() {
-    isDragging = false;
+function touchEnded(event) {
     activeCircle = false;
     document.removeEventListener("touchmove", touchMoved);
     document.removeEventListener("touchend", touchEnded);
     drawFigure();
     unselect();
+    isDragging = false;
 }
 function wheel(event) {
     const isScrollUp = event.deltaY < 0;
