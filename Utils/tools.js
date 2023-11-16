@@ -487,6 +487,20 @@ function updateCircleData(circle, newX, newY, newRadius, smoothFactor) {
     animationFrameId = requestAnimationFrame(animate);
 }
 
+function updateCircleRadius(circleIndex,newRadius) {
+    const shapeInput = document.getElementById("shapeInput");
+    if (newRadius<0) return;
+    const lines = shapeInput.value.split("\n");
+    const firstLine = lines[0].trim();
+
+    if (newRadius !== undefined && newRadius !== null) {
+        lines[circleIndex] = `${newRadius}`;
+    }
+
+    shapeInput.value = lines.join("\n");
+
+    animationFrameId = requestAnimationFrame(animate);
+}
 function animate() {
     if (hasDataChanged) {
         computeShape();
@@ -534,14 +548,66 @@ function setButtonStyle() {
     }
 }
 
-function addcircle(event) {
+function addcirclebefore(event) {
     var coords = relMouseCoords(event);
 
     addpoint(coords.x , coords.y );
-
     addButton.style.backgroundColor = "#4CAF50";
 
     waitingMessage.style.display = "none";
+}
+var coords;
+var initialDistance;
+var throttledMouseMove;
+
+function addcircle(event) {
+    coords = relMouseCoords(event);
+    initialDistance = 0;
+    addpoint(coords.x, coords.y);
+    var addcircleindex = shapeInput.value.split('\n')[0] * 2;
+    radius = shapeInput.value.split('\n')[addcircleindex];
+    updateCircleRadius(addcircleindex, radius / 4);
+
+    computeShape();
+    addButton.style.backgroundColor = "#4CAF50";
+    waitingMessage.style.display = "none";
+    throttledMouseMove = throttle(handleCircleMouseMove, 16);
+    document.addEventListener("mousemove", throttledMouseMove);
+    document.addEventListener("mouseup", handleCircleMouseUp);
+}
+
+function handleCircleMouseMove(event) {
+    var coords2 = relMouseCoords(event);
+
+    var distanceSquared = Math.pow(coords2.x - coords.x, 2) + Math.pow(coords2.y - coords.y, 2);
+    var radiusIncrement = Math.sqrt(distanceSquared) - Math.sqrt(initialDistance);
+
+    initialDistance = distanceSquared;
+
+    var addcircleindex = shapeInput.value.split('\n')[0] * 2;
+    var radius = parseInt(shapeInput.value.split('\n')[addcircleindex], 10);
+    updateCircleRadius(addcircleindex, radius + radiusIncrement);
+
+    computeShape();
+    removeAllCanvasEvents();
+}
+
+function handleCircleMouseUp() {
+    document.removeEventListener("mousemove", throttledMouseMove);
+    document.removeEventListener("mouseup", handleCircleMouseUp);
+    addAllCanvasEvents();
+}
+
+// Función throttle para limitar la frecuencia de ejecución
+function throttle(func, limit) {
+    let inThrottle;
+    return function (...args) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => (inThrottle = false), limit);
+        }
+    };
 }
 
 function relMouseCoords(event) {
