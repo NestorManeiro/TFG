@@ -104,7 +104,7 @@ function handleAddButtonClicks() {
     buttonColor(addsButton, "#ff9800");
     waitingMessage.style.display = "block";
     removeAllCanvasEvents();
-    canvas.addEventListener("click", addcircle);
+    canvas.addEventListener("click", addcirclebefore);
 }
 
 function handleEraseButtonClick() {
