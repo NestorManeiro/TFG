@@ -389,6 +389,7 @@ div.emscripten_border {
 
 
 @media (max-width: 1000px) {
+
     #container #instructions {
         display: none;
 
@@ -409,7 +410,8 @@ div.emscripten_border {
     }
     body{
         padding:0;
-        overscroll-behavior-y: contain; /* O 'none' */
+        overscroll-behavior: contain;
+
     }
 }
 #xInput, #yInput {
