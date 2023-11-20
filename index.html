@@ -137,5 +137,30 @@
     <script type="text/javascript" src="Utils/init.js"></script>
     <script type="text/javascript" src="Utils/tools.js"></script>
     <script src="app.js"></script>
+    <script type="text/javascript">
+        // Obtén el elemento div que contiene el SVG
+        var svgContainer = document.getElementById('canvas_svg');
+
+        // Bandera para rastrear si se está haciendo clic
+        var isClicking = false;
+
+        // Evento de inicio del toque, establece la bandera en verdadero
+        svgContainer.addEventListener('touchstart', function () {
+            isClicking = true;
+        });
+
+        // Evento de movimiento del toque, previene la recarga de la página si se está haciendo clic
+        svgContainer.addEventListener('touchmove', function (e) {
+            if (isClicking) {
+                e.preventDefault();
+            }
+        });
+
+        // Evento de finalización del toque, restablece la bandera a falso
+        svgContainer.addEventListener('touchend', function () {
+            isClicking = false;
+        });
+    </script>
+
     </body>
 </html>
