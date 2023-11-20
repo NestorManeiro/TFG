@@ -409,6 +409,7 @@ div.emscripten_border {
     }
     body{
         padding:0;
+        overscroll-behavior-y: contain; /* O 'none' */
     }
 }
 #xInput, #yInput {
