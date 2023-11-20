@@ -235,35 +235,6 @@ function addEvents() {
         .on("mousedown", dragStarted)
         .on("touchstart", touchStarted)
         .on("contextmenu", rightClick);
-
-// Evento de inicio del toque, establece la bandera en verdadero
-    svgContainer.addEventListener('touchstart', function () {
-        isClicking = true;
-    });
-
-// Evento de movimiento del toque en el contenedor SVG, prevenir la recarga de la página
-    svgContainer.addEventListener('touchmove', preventDefaultAction);
-
-// Evento de finalización del toque en el contenedor SVG, restablece la bandera a falso
-    svgContainer.addEventListener('touchend', function () {
-        isClicking = false;
-    });
-
-// Aplica eventos touch a cada círculo arrastrable
-    draggableCircles.forEach(function(circle) {
-        // Evento de inicio del toque en el círculo arrastrable, establece la bandera en verdadero
-        circle.addEventListener('touchstart', function () {
-            isClicking = true;
-        });
-
-        // Evento de movimiento del toque en el círculo arrastrable, prevenir la recarga de la página
-        circle.addEventListener('touchmove', preventDefaultAction);
-
-        // Evento de finalización del toque en el círculo arrastrable, restablece la bandera a falso
-        circle.addEventListener('touchend', function () {
-            isClicking = false;
-        });
-    });
     }
 
 function showPopup(mouseX, mouseY) {
@@ -422,6 +393,8 @@ function dragEnded() {
 var touch ;
 
 function touchStarted(event){
+    isClicking = true;
+    preventDefaultAction(event);  // También prevenir la acción predeterminada aquí si es necesario
     if(waitingMessage.style.display === "block") return
     if (event.touches.length === 1) {
         if (popup2.style.display === "block") return;
@@ -449,8 +422,8 @@ function touchStarted(event){
 
 }
 
-function touchMoved(event) {
-
+function touchMoved(event,) {
+    preventDefaultAction(event);
     popup.style.display = "none";
     if (isDragging && activeCircle) {
         touch = event.touches[0];
@@ -468,6 +441,7 @@ function touchMoved(event) {
 }
 
 function touchEnded(event) {
+    isClicking = false;
     activeCircle = false;
     document.removeEventListener("touchmove", touchMoved);
     document.removeEventListener("touchend", touchEnded);
