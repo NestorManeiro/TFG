@@ -389,6 +389,34 @@ div.emscripten_border {
 
 
 @media (max-width: 1000px) {
+    .popup {
+        position: absolute;
+        background-color: #E6E6E6;
+        border: 0.125em solid black; /* Doble del tamaño original */
+        padding: 1.25em; /* Doble del tamaño original */
+        border-radius: 0.625em; /* Doble del tamaño original */
+        box-shadow: 0 0.25em 0.625em rgba(0, 0, 0, 0.2); /* Doble del tamaño original */
+        font-family: Arial, sans-serif;
+        z-index: 99999;
+        cursor: grab;
+        font-size: 2em; /* Tamaño de fuente duplicado */
+    }
+
+    .popup input[type="number"],
+    .popup input[type="range"],
+    .popup input[type="text"] {
+        width: 16em; /* Doble del tamaño original */
+        height: 2em; /* Doble del tamaño original */
+        padding: 0.5em; /* Doble del tamaño original */
+        margin-bottom: 0.625em;
+    }
+
+    .popup label {
+        display: block;
+        margin-bottom: 1.25em; /* Doble del tamaño original */
+        font-weight: bold;
+    }
+
 
     #container #instructions {
         display: none;
