@@ -328,13 +328,31 @@ function showPopup(mouseX, mouseY) {
 function rightClick(event) {
     if (popup2.style.display === "block") return;
     event.preventDefault();
-    if (selectedcircle == null) {
-        selectedcircle = this;
+
+    // Encuentra el círculo actual en el que se hizo clic
+    const clickedCircle = d3.select(this).node();
+
+    // Verifica si el círculo actual está seleccionado
+    const isSelected = selectedcircle && selectedcircle === clickedCircle;
+
+    // Si no está seleccionado, deselecciona cualquier círculo previamente seleccionado y selecciona el actual
+    if (!isSelected) {
+        // Deselecciona cualquier círculo previamente seleccionado
+        if (selectedcircle) {
+            selectedcircle.setAttribute("stroke", "black");
+            selectedcircle.setAttribute("stroke-width", "1");
+        }
+
+        // Selecciona el círculo actual
+        selectedcircle = clickedCircle;
         selectedcircle.setAttribute("stroke", "blue");
         selectedcircle.setAttribute("stroke-width", "3");
+
+        // Muestra el popup para el círculo actual
         showPopup(event.clientX, event.clientY);
     }
 }
+
 
 function isRightClick(event) {
     if ("which" in event) {
