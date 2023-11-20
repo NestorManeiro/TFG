@@ -331,10 +331,10 @@ function rightClick(event) {
     event.preventDefault();
     if (selectedcircle == null) {
         selectedcircle = this;
-        selectedcircle.setAttribute("stroke", "blue");
-        selectedcircle.setAttribute("stroke-width", "3");
-        showPopup(event.clientX, event.clientY);
     }
+    selectedcircle.setAttribute("stroke", "blue");
+    selectedcircle.setAttribute("stroke-width", "3");
+    showPopup(512, 512);
 }
 
 
@@ -427,7 +427,6 @@ function touchStarted(event){
 function touchMoved(event,) {
     preventDefaultAction(event);
     isDragging = true; // Marcar como arrastrando
-    popup.style.display = "none";
     if (isDragging && activeCircle) {
         touch = event.touches[0];
         var offsetX = touch.clientX - deltaX;
@@ -451,7 +450,7 @@ function touchEnded(event) {
     document.removeEventListener("touchmove", touchMoved);
     document.removeEventListener("touchend", touchEnded);
     drawFigure();
-    unselect();
+    if(isDragging===true){unselect();}
     isDragging = false;
 }
 function wheel(event) {
