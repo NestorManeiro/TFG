@@ -403,12 +403,18 @@ div.emscripten_border {
     }
 
     .popup input[type="number"],
-    .popup input[type="range"],
     .popup input[type="text"] {
+        padding: 0.5em; /* Doble del tamaño original */
+        margin-bottom: 0.625em;
+        font-size: 1em;
+    }
+
+    .popup input[type="range"] {
         width: 16em; /* Doble del tamaño original */
         height: 2em; /* Doble del tamaño original */
         padding: 0.5em; /* Doble del tamaño original */
         margin-bottom: 0.625em;
+        transform: scaleY(3); /* Escala verticalmente el slider al doble del tamaño original */
     }
 
     .popup label {
