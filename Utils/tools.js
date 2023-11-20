@@ -328,28 +328,13 @@ function showPopup(mouseX, mouseY) {
 function rightClick(event) {
     if (popup2.style.display === "block") return;
     event.preventDefault();
-
-    var x, y;
-
-    // Verificar si el evento es táctil (dispositivo móvil)
-    if (event.touches && event.touches.length > 0) {
-        // Obtener las coordenadas táctiles
-        x = event.touches[0].clientX;
-        y = event.touches[0].clientY;
-    } else {
-        // Obtener las coordenadas del clic derecho
-        x = event.clientX || event.pageX;
-        y = event.clientY || event.pageY;
-    }
-
     if (selectedcircle == null) {
         selectedcircle = this;
         selectedcircle.setAttribute("stroke", "blue");
         selectedcircle.setAttribute("stroke-width", "3");
-        showPopup(x, y);
+        showPopup(event.clientX, event.clientY);
     }
 }
-
 
 function isRightClick(event) {
     if ("which" in event) {
@@ -637,3 +622,4 @@ function relMouseCoords(event) {
 function buttonColor(elementoBoton, color) {
     elementoBoton.style.backgroundColor = color;
 }
+
