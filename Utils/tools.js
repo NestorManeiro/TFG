@@ -328,13 +328,28 @@ function showPopup(mouseX, mouseY) {
 function rightClick(event) {
     if (popup2.style.display === "block") return;
     event.preventDefault();
+
+    var x, y;
+
+    // Verificar si el evento es táctil (dispositivo móvil)
+    if (event.touches && event.touches.length > 0) {
+        // Obtener las coordenadas táctiles
+        x = event.touches[0].clientX;
+        y = event.touches[0].clientY;
+    } else {
+        // Obtener las coordenadas del clic derecho
+        x = event.clientX || event.pageX;
+        y = event.clientY || event.pageY;
+    }
+
     if (selectedcircle == null) {
         selectedcircle = this;
         selectedcircle.setAttribute("stroke", "blue");
         selectedcircle.setAttribute("stroke-width", "3");
-        showPopup(event.clientX, event.clientY);
+        showPopup(x, y);
     }
 }
+
 
 function isRightClick(event) {
     if ("which" in event) {
@@ -526,6 +541,7 @@ function removeAllCanvasEvents() {
     canvas.removeEventListener("mousemove", HandleMovecanvas);
     canvas.removeEventListener("wheel", handleWheelCanvas);
     canvas.removeEventListener("click", addcircle);
+    canvas.removeEventListener("contextmenu", handleCanvasContextMenu);
     draggableCircles.on("mousedown", null).on("mouseup", null);
 }
 
@@ -536,6 +552,7 @@ function addAllCanvasEvents() {
         .on("mousedown", dragStarted)
         .on("touchstart", touchStarted)
         .on("contextmenu", rightClick);
+    canvas.addEventListener("contextmenu", handleCanvasContextMenu);
     circulitos.on("click", function () {});
     waitingMessage.style.display = "none";
 }
