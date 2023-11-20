@@ -326,6 +326,8 @@ function showPopup(mouseX, mouseY) {
 }
 
 function rightClick(event) {
+    console.log("Right click event triggered!");
+
     if (popup2.style.display === "block") return;
     event.preventDefault();
 
@@ -344,7 +346,9 @@ function rightClick(event) {
         }
 
         // Selecciona el círculo actual
-        selectedcircle = clickedCircle;
+        if(selectedcircle===null) {
+            selectedcircle = clickedCircle;
+        }
         selectedcircle.setAttribute("stroke", "blue");
         selectedcircle.setAttribute("stroke-width", "3");
 
@@ -434,7 +438,7 @@ function touchStarted(event){
 
     deltaX = touch.clientX;
     deltaY = touch.clientY;
-    isDragging = true; // Marcar como arrastrando
+
     activeCircle.addEventListener("touchmove", touchMoved);
     activeCircle.addEventListener("touchend", touchEnded);
 
@@ -442,6 +446,7 @@ function touchStarted(event){
 
 function touchMoved(event,) {
     preventDefaultAction(event);
+    isDragging = true; // Marcar como arrastrando
     popup.style.display = "none";
     if (isDragging && activeCircle) {
         touch = event.touches[0];
@@ -460,7 +465,9 @@ function touchMoved(event,) {
 
 function touchEnded(event) {
     isClicking = false;
+    selectedcircle= activeCircle;
     activeCircle = false;
+    if(isDragging===false){rightClick(event)}
     document.removeEventListener("touchmove", touchMoved);
     document.removeEventListener("touchend", touchEnded);
     drawFigure();
