@@ -397,7 +397,6 @@ var touch ;
 
 function touchStarted(event){
     isClicking = true;
-    preventDefaultAction(event);  // También prevenir la acción predeterminada aquí si es necesario
     if(waitingMessage.style.display === "block") return
     if (event.touches.length === 1) {
         if (popup2.style.display === "block") return;
