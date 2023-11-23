@@ -303,7 +303,8 @@ function showPopup(mouseX, mouseY) {
         updateCircleData(selectedcircle, null, null, newRadius);
     });
 
-    smoothInput.addEventListener("mousemove", function () {
+    smoothInput.addEventListener("input", function (event) {
+        isDragging=false;
         event.stopPropagation();
         const smoothFactor = parseFloat(smoothInput.value);
         hasDataChanged = true;
@@ -533,7 +534,9 @@ function removeAllCanvasEvents() {
     canvas.removeEventListener("mousemove", HandleMovecanvas);
     canvas.removeEventListener("wheel", handleWheelCanvas);
     canvas.removeEventListener("click", addcircle);
+    canvas.removeEventListener("click", addcirclebefore);
     canvas.removeEventListener("contextmenu", handleCanvasContextMenu);
+
     draggableCircles.on("mousedown", null).on("mouseup", null);
 }
 

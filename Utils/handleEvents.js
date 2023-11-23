@@ -132,7 +132,7 @@ function handleCircleClickForErase() {
     waitingMessage.style.display = "none";
     buttonColor(eraseButton, "#4CAF50");
     addShape();
-    removeAllCanvasEvents();
+    handleNoActionClick();
     circulitos.on("click", handleCircleClickForErase);
 }
 function handleComputeButtonClick() {
