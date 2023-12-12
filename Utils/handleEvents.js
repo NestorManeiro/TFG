@@ -34,12 +34,18 @@ function handleBPreviewMouseUp() {
 }
 
 function handleMiddleCircleClick() {
+    hideAllButtons();
     handleNoActionClick();
     buttonColor(middlecircle, "#ff9800");
     waitingMessage.style.display = "block";
     removeAllCanvasEvents();
-    canvas.addEventListener("click", handleMiddleCircleConnectionClick);
+
+    // Agregar un retraso de 10ms antes de activar el evento click
+    setTimeout(function () {
+        canvas.addEventListener("click", handleMiddleCircleConnectionClick);
+    }, 10);
 }
+
 
 function handleMiddleCircleConnectionClick() {
     var coords = relMouseCoords(event);
@@ -52,12 +58,18 @@ function handleMiddleCircleConnectionClick() {
 
 }
 function handleEraseconClick() {
+    hideAllButtons();
     handleNoActionClick();
     buttonColor(erasecon, "#ff9800");
     waitingMessage.style.display = "block";
     removeAllCanvasEvents();
-    canvas.addEventListener("click", handleEraseConnectionClick);
+
+    // Agregar un retraso de 10ms antes de activar el evento click
+    setTimeout(function () {
+        canvas.addEventListener("click", handleEraseConnectionClick);
+    }, 10);
 }
+
 
 function handleEraseConnectionClick(event) {
     var coords = relMouseCoords(event);
@@ -91,6 +103,7 @@ function handleCreateConnectionClick() {
     addShape();
 }
 function handleAddButtonClick() {
+    hideAllButtons();
     handleNoActionClick();
     buttonColor(addButton, "#ff9800");
     waitingMessage.style.display = "block";
@@ -100,12 +113,16 @@ function handleAddButtonClick() {
 }
 
 function handleAddButtonClicks() {
-    handleNoActionClick();
-    buttonColor(addsButton, "#ff9800");
-    waitingMessage.style.display = "block";
-    removeAllCanvasEvents();
-    canvas.addEventListener("click", addcirclebefore);
+    hideAllButtons();
+    setTimeout(function () {
+        handleNoActionClick();
+        buttonColor(addsButton, "#ff9800");
+        waitingMessage.style.display = "block";
+        removeAllCanvasEvents();
+        canvas.addEventListener("click", addcirclebefore);
+    }, 20);
 }
+
 
 function handleEraseButtonClick() {
     handleNoActionClick();
@@ -117,6 +134,8 @@ function handleEraseButtonClick() {
     }
 }
 function handleEraseButtonClicks() {
+    handleNoActionClick();
+    hideAllButtons();
     handleNoActionClick();
     buttonColor(erasesButton, "#ff9800");
     circulitos.on("click", handleCircleClickForErase);
@@ -142,8 +161,12 @@ function handleComputeButtonClick() {
 }
 
 function handleHelpButtonClick() {
-    popuphelp.style.display = "block";
+    var popuphelp = document.getElementById('popuphelp'); // Asegúrate de que popuphelp sea el ID correcto de tu elemento
+
+    // Si el estilo display es "block", cambia a "none"; de lo contrario, cambia a "block"
+    popuphelp.style.display = (popuphelp.style.display === "block") ? "none" : "block";
 }
+
 function handleBlankButtonClick() {
     shapeInput.value = "1\n" +
         "490.03424099999995 648\n" +

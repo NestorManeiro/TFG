@@ -1,10 +1,68 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0.5em;
+    padding: 0.1em;
     user-select: none;
 }
+#canvas_svg {
+    border: 0.2em solid black;
+    display: flex;
+    align-items: stretch;
+}
 
+
+#canvas_svg svg {
+    width: 1024px; /*canvas size*/
+    height: 1024px;
+    flex: 1;
+    overflow: hidden;
+}
+
+#canvas-container {
+    position: relative;
+    width: 100%;
+}
+
+#category-bar {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 5%;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: space-around;
+    z-index: 1001;
+}
+
+.category-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.category-button:hover {
+    background-color: #45a049;
+}
+
+.hidden {
+    display:none !important /* Inicialmente oculto, pero ocupa espacio */
+}
+/* Estilos para los botones de Undo y Redo */
+.otros-buttons button {
+    display: inline-block;
+    margin-right: 5px; /* Ajusta el margen según sea necesario */
+}
+
+.otros-buttons img {
+    width: 15px; /* Ajusta el tamaño según sea necesario */
+    height: 15px; /* Ajusta el tamaño según sea necesario */
+}
 
 
 
@@ -154,19 +212,7 @@ button:hover {
     align-items: flex-start;
 }
 
-#canvas_svg {
-    border: 0.2em solid black;
-    width: 1024px; /*canvas size*/
-    height: 1024px;
-    display: flex;
-    align-items: stretch;
-    margin-left: 2em;
-}
 
-#canvas_svg svg {
-    flex: 1;
-    overflow: hidden;
-}
 
 #instructions {
     display: inline-block;
@@ -191,19 +237,7 @@ button:hover {
 }
 
 #popuphelp {
-    position: fixed;
     display: none;
-    top: 50%;
-    left: 75%;
-    max-width: 90%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    background-color: #E6E6E6;
-    border: 0.0625em solid black;
-    padding: 0.625em;
-    border-radius: 0.3125em;
-    box-shadow: 0 0.125em 0.3125em rgba(0, 0, 0, 0.2);
-    font-family: Arial, sans-serif;
 }
 
 #popuphelp h2 {
@@ -389,6 +423,13 @@ div.emscripten_border {
 
 
 @media (max-width: 1000px) {
+    #instructions p {
+        font-size: 2em;
+    }
+    #shapeInput {
+        font-size: 1.3em;  /* Restaura el tamaño de fuente predeterminado para dispositivos móviles */
+        width: 100vw;  /* Ajusta según tus necesidades */
+    }
     #color-button {
         width: 80px;
         height: 80px;
@@ -452,9 +493,13 @@ div.emscripten_border {
         margin: auto;
     }
     body{
+
         padding:0;
         overscroll-behavior: contain;
 
+    }
+    .instructions2{
+        font-size: 3em;
     }
 }
 #xInput, #yInput {

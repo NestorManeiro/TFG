@@ -194,7 +194,6 @@ function drawFigure() {
         selectedcircle,
         canvas.querySelectorAll("circle.draggable-circle"),
     );
-
     addAllCanvasEvents();
 }
 
@@ -585,6 +584,7 @@ function addcircle(event) {
     throttledMouseMove = throttle(handleCircleMouseMove, 16);
     document.addEventListener("mousemove", throttledMouseMove);
     document.addEventListener("mouseup", handleCircleMouseUp);
+
 }
 
 function handleCircleMouseMove(event) {
@@ -631,4 +631,37 @@ function relMouseCoords(event) {
 function buttonColor(elementoBoton, color) {
     elementoBoton.style.backgroundColor = color;
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Botón "Advanced Info"
+    var advancedInfoButton = document.getElementById('advancedInfoButton');
+    advancedInfoButton.addEventListener('click', function () {
+        // Muestra u oculta los elementos
+        var hiddenElements = document.querySelectorAll('#inline-buttons, #shapeInput, #instructions2');
+        for (var i = 0; i < hiddenElements.length; i++) {
+            if (hiddenElements[i].style.display === 'none') {
+                hiddenElements[i].style.display = 'block';
+            } else {
+                hiddenElements[i].style.display = 'none';
+            }
+        }
+    });
+});
+function toggleButtons(categoria) {
+    var buttons = document.querySelectorAll('.' + categoria);
+    buttons.forEach(function (button) {
+        button.classList.toggle('hidden');
+    });
+}
+function hideAllButtons() {
+    var categories = ['edicion', 'creacion', 'generacion', 'otros'];
+
+    categories.forEach(function (categoria) {
+        var buttons = document.querySelectorAll('.' + categoria);
+        buttons.forEach(function (button) {
+            button.classList.add('hidden');
+        });
+    });
+}
+
 
