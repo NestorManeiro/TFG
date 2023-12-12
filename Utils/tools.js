@@ -52,6 +52,7 @@ function redoShapeInput() {
 }
 
 function unselect() {
+    if(selectedcircle==null) return;
     selectedcircle.setAttribute("stroke", "black");
     selectedcircle.setAttribute("stroke-width", "1");
     selectedcircle = null;
@@ -88,7 +89,11 @@ function openPopup(mouseX, mouseY) {
             isDragging = false;
             popup2.style.cursor = "grab";
         });
-
+        document.addEventListener("mouseup", function () {
+            isDragging = false;
+            popup.style.cursor = "grab";
+            closePopup();
+        });
         var smoothInput = document.getElementById("smooth");
         var globalRadiusInput = document.getElementById("globalRadius");
 
@@ -237,6 +242,7 @@ function addEvents() {
     }
 
 function showPopup(mouseX, mouseY) {
+
     var shapeInput = document.getElementById("shapeInput");
     var circleIndex =
         Array.from(draggableCircles.nodes()).indexOf(selectedcircle) + 1;
@@ -265,12 +271,10 @@ function showPopup(mouseX, mouseY) {
             popup.style.left = event.clientX - offsetX + "px";
             popup.style.top = event.clientY - offsetY + "px";
         }
+
     });
 
-    document.addEventListener("mouseup", function () {
-        isDragging = false;
-        popup.style.cursor = "grab";
-    });
+
     popup.innerHTML = `<label>Radius:</label>
     <input type="number" id="radiusInput" value="${currentRadius}" step="1" min="0"><br>
     <label>Smooth:</label>
@@ -288,7 +292,11 @@ function showPopup(mouseX, mouseY) {
         addShape();
         unselect();
     });
-
+    document.addEventListener("mouseup", function () {
+        isDragging = false;
+        popup.style.cursor = "grab";
+        closeButton.click();
+    });
     const radiusInput = document.getElementById("radiusInput");
     const smoothInput = document.getElementById("smoothInput");
     const xInput = document.getElementById("xInput");
@@ -326,7 +334,6 @@ function showPopup(mouseX, mouseY) {
 }
 
 function rightClick(event) {
-    console.log("hola")
     if (popup2.style.display === "block") return;
     event.preventDefault();
     if (selectedcircle == null) {
@@ -370,6 +377,7 @@ function dragStarted(event) {
 }
 
 function dragged(event) {
+
     if (isDragging && activeCircle) {
         const offsetX = event.clientX - deltaX;
         const offsetY = event.clientY - deltaY;

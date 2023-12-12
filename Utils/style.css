@@ -101,7 +101,7 @@ textarea {
 }
 
 button {
-    padding: 0.625em 1.25em;
+    padding: 1em 1.5em;
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -424,7 +424,7 @@ div.emscripten_border {
 
 @media (max-width: 1000px) {
     #instructions p {
-        font-size: 2em;
+        font-size: 1.7em;
     }
     #shapeInput {
         font-size: 1.3em;  /* Restaura el tamaño de fuente predeterminado para dispositivos móviles */

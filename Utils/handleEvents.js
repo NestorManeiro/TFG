@@ -80,14 +80,19 @@ function handleEraseConnectionClick(event) {
     addShape();
 }
 function handleCreateconClick() {
+    hideAllButtons();
     handleNoActionClick();
     buttonColor(createcon, "#ff9800");
-    if (circulitos) {
-        waitingMessage.style.display = "block";
-        removeAllCanvasEvents();
-        circulitos.on("click", handleCreateConnectionClick);
-    }
+
+    setTimeout(function () {
+        if (circulitos) {
+            waitingMessage.style.display = "block";
+            removeAllCanvasEvents();
+            circulitos.on("click", handleCreateConnectionClick);
+        }
+    }, 10);
 }
+
 
 function handleCreateConnectionClick() {
     const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
@@ -136,14 +141,21 @@ function handleEraseButtonClick() {
 function handleEraseButtonClicks() {
     handleNoActionClick();
     hideAllButtons();
-    handleNoActionClick();
     buttonColor(erasesButton, "#ff9800");
     circulitos.on("click", handleCircleClickForErase);
     if (circulitos) {
         waitingMessage.style.display = "block";
         removeAllCanvasEvents();
-        circulitos.on("click", handleCircleClickForErase);
+        circulitos.on("click", handleCircleClickForErases);
     }
+}
+function handleCircleClickForErases() {
+    const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
+    erasePoint(circleIndex);
+    waitingMessage.style.display = "none";
+    buttonColor(eraseButton, "#4CAF50");
+    addShape();
+    handleEraseButtonClicks();
 }
 function handleCircleClickForErase() {
     const circleIndex = Array.from(circulitos.nodes()).indexOf(this);
@@ -152,8 +164,8 @@ function handleCircleClickForErase() {
     buttonColor(eraseButton, "#4CAF50");
     addShape();
     handleNoActionClick();
-    circulitos.on("click", handleCircleClickForErase);
 }
+
 function handleComputeButtonClick() {
     addShape(shapeInput.value.split("\n"));
     computeShape();
