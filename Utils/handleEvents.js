@@ -114,7 +114,6 @@ function handleAddButtonClick() {
     waitingMessage.style.display = "block";
     removeAllCanvasEvents();
     canvas.addEventListener("mousedown", addcircle, { once: true });
-
 }
 
 function handleAddButtonClicks() {

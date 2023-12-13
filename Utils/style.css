@@ -421,87 +421,6 @@ div.emscripten_border {
     cursor: pointer;
 }
 
-
-@media (max-width: 1000px) {
-    #instructions p {
-        font-size: 1.7em;
-    }
-    #shapeInput {
-        font-size: 1.3em;  /* Restaura el tamaño de fuente predeterminado para dispositivos móviles */
-        width: 100vw;  /* Ajusta según tus necesidades */
-    }
-    #color-button {
-        width: 80px;
-        height: 80px;
-    }
-
-    .color-option {
-        width: 50px;
-        height: 50px;
-    }
-    .popup {
-        position: absolute;
-        background-color: #E6E6E6;
-        border: 0.125em solid black; /* Doble del tamaño original */
-        padding: 1.25em; /* Doble del tamaño original */
-        border-radius: 0.625em; /* Doble del tamaño original */
-        box-shadow: 0 0.25em 0.625em rgba(0, 0, 0, 0.2); /* Doble del tamaño original */
-        font-family: Arial, sans-serif;
-        z-index: 99999;
-        cursor: grab;
-        font-size: 2em; /* Tamaño de fuente duplicado */
-    }
-
-    .popup input[type="number"],
-    .popup input[type="text"] {
-        padding: 0.5em; /* Doble del tamaño original */
-        margin-bottom: 0.625em;
-        font-size: 1em;
-    }
-
-    .popup input[type="range"] {
-        width: 16em; /* Doble del tamaño original */
-        height: 2em; /* Doble del tamaño original */
-        padding: 0.5em; /* Doble del tamaño original */
-        margin-bottom: 0.625em;
-        transform: scaleY(3); /* Escala verticalmente el slider al doble del tamaño original */
-    }
-
-    .popup label {
-        display: block;
-        margin-bottom: 1.25em; /* Doble del tamaño original */
-        font-weight: bold;
-    }
-
-
-    #container #instructions {
-        display: none;
-
-    }
-    #mobile-toggle-button{
-        display:block;
-    }
-    button {
-       font-size: 1.8em; /* Ajusta el tamaño del texto según tus preferencias */ !important;
-        padding: 1em 1em; /* Ajusta el espacio alrededor del texto según tus preferencias */ !important;
-    }
-    .custom-upload-button {
-        font-size: 1.8em; /* Ajusta el tamaño del texto según tus preferencias */ !important;
-        padding: 1em 1em; /* Ajusta el espacio alrededor del texto según tus preferencias */ !important;
-    }
-    #canvas_svg {
-        margin: auto;
-    }
-    body{
-
-        padding:0;
-        overscroll-behavior: contain;
-
-    }
-    .instructions2{
-        font-size: 3em;
-    }
-}
 #xInput, #yInput {
     width: 3em; /* Ajusta el ancho según tus preferencias */
     margin: 5px auto; /* Espacio entre los campos y centrado verticalmente */
@@ -513,4 +432,90 @@ div.emscripten_border {
 
 #canvas_svg circle.draggable-circle {
     pointer-events: visible; /* Habilita los eventos de puntero solo en los círculos con la clase "draggable-circle" */
+}
+
+
+@media (max-width: 1000px) {
+    #instructions p {
+        font-size: 1.7em;
+    }
+    #category-bar {
+        height: 12%;
+    }
+    #shapeInput {
+        font-size: 1.3em;
+        width: 100vw;
+    }
+
+    #color-button {
+        width: 80px;
+        height: 80px;
+    }
+
+    .color-option {
+        width: 50px;
+        height: 50px;
+    }
+
+    .popup {
+        position: absolute;
+        background-color: #E6E6E6;
+        border: 0.25em solid black;
+        padding: 2.5em;
+        border-radius: 1.25em;
+        box-shadow: 0 0.5em 1.25em rgba(0, 0, 0, 0.2);
+        font-family: Arial, sans-serif;
+        z-index: 99999;
+        cursor: grab;
+        font-size: 2em;
+    }
+
+    .popup input[type="number"],
+    .popup input[type="text"] {
+        padding: 1em;
+        margin-bottom: 1.25em;
+        font-size: 1em;
+    }
+
+    .popup input[type="range"] {
+        width: 8em;
+        height: 1em;
+        padding: 1em;
+        margin-bottom: 1.25em;
+        transform: scaleY(2);
+    }
+
+    .popup label {
+        display: block;
+        margin-bottom: 2.5em;
+        font-weight: bold;
+    }
+
+    #container #instructions {
+        display: none;
+    }
+
+    #mobile-toggle-button {
+        display: block;
+    }
+
+    button,
+    .custom-upload-button {
+        font-size: 1.8em !important;
+        padding: 1em;
+    }
+
+    #canvas_svg {
+        margin: auto;
+    }
+
+    body {
+        padding: 0;
+        overscroll-behavior: contain;
+    }
+
+    .instructions2 {
+        font-size: 3em;
+    }
+
 }

@@ -584,7 +584,7 @@ function addcircle(event) {
     addpoint(coords.x, coords.y);
     var addcircleindex = shapeInput.value.split('\n')[0] * 2;
     radius = shapeInput.value.split('\n')[addcircleindex];
-    updateCircleRadius(addcircleindex, radius / 4);
+    updateCircleRadius(addcircleindex, radius/4);
 
     computeShape();
     addButton.style.backgroundColor = "#4CAF50";
