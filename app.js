@@ -75,6 +75,7 @@ window.onerror = (message, source, lineno, colno, error) => {
 };
 
 function changeColor(colorValue){
+    hideAllButtons();
     svgOutput.value = Module.ccall(
         "_Z8setColorRKNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE", // name of C function
         "null", // return type
@@ -83,8 +84,10 @@ function changeColor(colorValue){
         [colorValue], // arguments
     );
     colorMenu.style.display = 'none';
+
     computeShape();
     drawFigure();
+
 }
 function computeShape() {
     svgOutput.value = Module.ccall(
@@ -129,6 +132,7 @@ function preview() {
 }
 
 function downloadsvg() {
+    hideAllButtons();
     var aux = Module.ccall("_Z11downloadsvgv", "string", ["number"], []);
 
     var enlaceDescarga = document.createElement("a");

@@ -176,6 +176,7 @@ function handleHelpButtonClick() {
 }
 
 function handleBlankButtonClick() {
+    hideAllButtons()
     shapeInput.value = "1\n" +
         "490.03424099999995 648\n" +
         "100.000000\n" +

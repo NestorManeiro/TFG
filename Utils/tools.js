@@ -27,7 +27,6 @@ function addShape() {
         shapesArray.push(newShape);
         currentShapeIndex = shapesArray.length - 1;
     }
-    console.log(currentShapeIndex)
 }
 
 function updateShapeInput() {
@@ -643,6 +642,7 @@ function relMouseCoords(event) {
 
 function buttonColor(elementoBoton, color) {
     elementoBoton.style.backgroundColor = color;
+
 }
 
 document.addEventListener('DOMContentLoaded', function () {
