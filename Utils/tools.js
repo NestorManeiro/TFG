@@ -551,7 +551,24 @@ function removeAllCanvasEvents() {
 
     draggableCircles.on("mousedown", null).on("mouseup", null);
 }
+const hammer = new Hammer(canvas);
 
+// Agregar un manejador para el evento de pellizco (pinch)
+hammer.get('pinch').set({ enable: true });
+hammer.on('pinch', function (event) {
+    if (selectedcircle == null) {
+        const zoom = event.scale < 1 ? 0.97 : 1.03;
+        const centerX = event.center.x;
+        const centerY = event.center.y;
+
+        transform(zoom, centerX, centerY, 0, 0);
+        computeShape();
+
+        // Reiniciar el temporizador cada vez que se realiza un pellizco
+        clearTimeout(wheelTimer);
+        wheelTimer = setTimeout(saveFigure, 300); // 300 milisegundos después de terminar el pellizco
+    }
+});
 function addAllCanvasEvents() {
     canvas.addEventListener("mousemove", HandleMovecanvas);
     canvas.addEventListener("wheel", handleWheelCanvas);
