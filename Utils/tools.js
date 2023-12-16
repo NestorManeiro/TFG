@@ -551,34 +551,6 @@ function removeAllCanvasEvents() {
 
     draggableCircles.on("mousedown", null).on("mouseup", null);
 }
-let initialPinchScale = 1;
-
-// Crear un objeto Hammer para el elemento canvas
-const hammer = new Hammer(canvas);
-
-// Agregar un manejador para el evento de pellizco (pinch)
-hammer.get('pinch').set({ enable: true });
-hammer.on('pinchstart pinchmove', function (event) {
-    if (event.type === 'pinchstart') {
-        initialPinchScale = 1;
-    }
-
-    if (selectedcircle == null) {
-        const zoom = event.scale / initialPinchScale;
-
-        const centerX = event.center.x;
-        const centerY = event.center.y;
-
-        transform(zoom, centerX, centerY, 0, 0);
-        computeShape();
-
-        // Reiniciar el temporizador cada vez que se realiza un pellizco
-        clearTimeout(wheelTimer);
-        wheelTimer = setTimeout(saveFigure, 300); // 300 milisegundos después de terminar el pellizco
-
-        initialPinchScale = event.scale;
-    }
-});
 function addAllCanvasEvents() {
     canvas.addEventListener("mousemove", HandleMovecanvas);
     canvas.addEventListener("wheel", handleWheelCanvas);
