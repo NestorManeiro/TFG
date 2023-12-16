@@ -37,10 +37,6 @@ body {
     justify-content: space-around;
     z-index: 1001;
 }
-#otros-buttons button {
-
-    z-index: 9999;
-}
 
 .category-button {
     background-color: #4CAF50;
@@ -61,11 +57,12 @@ body {
 .otros-buttons button {
     display: inline-block;
     margin-right: 5px; /* Ajusta el margen según sea necesario */
+    z-index: 9999;
 }
 
 .otros-buttons img {
-    width: 15px; /* Ajusta el tamaño según sea necesario */
-    height: 15px; /* Ajusta el tamaño según sea necesario */
+    width: 1.3em; /* Ajusta el tamaño según sea necesario */
+    height: 1.3em; /* Ajusta el tamaño según sea necesario */
 }
 
 
