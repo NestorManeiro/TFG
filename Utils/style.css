@@ -461,37 +461,31 @@ div.emscripten_border {
     }
 
     .popup {
-        position: absolute;
-        background-color: #E6E6E6;
-        border: 0.25em solid black;
-        padding: 2.5em;
-        border-radius: 1.25em;
-        box-shadow: 0 0.5em 1.25em rgba(0, 0, 0, 0.2);
-        font-family: Arial, sans-serif;
-        z-index: 99999;
-        cursor: grab;
-        font-size: 2em;
+        padding: 1.8em; /* Ajustado el padding */
+        font-size: 1.5em; /* Ajustado el font-size */
     }
 
     .popup input[type="number"],
     .popup input[type="text"] {
-        padding: 1em;
-        margin-bottom: 1.25em;
-        font-size: 1em;
+        padding: 0.8em; /* Ajustado el padding */
+        margin-bottom: 0.8em;
+        font-size: 0.8em; /* Ajustado el font-size */
     }
 
     .popup input[type="range"] {
-        width: 8em;
-        height: 1em;
-        padding: 1em;
-        margin-bottom: 1.25em;
-        transform: scaleY(2);
+        width: 6em;
+        height: 0.8em;
+        padding: 0.8em; /* Ajustado el padding */
+        margin-bottom: 0.8em;
+        transform: scaleY(1.5);
     }
 
     .popup label {
-        display: block;
-        margin-bottom: 2.5em;
-        font-weight: bold;
+        margin-bottom: 1.8em; /* Ajustado el margin-bottom */
+    }
+
+    .popup button{
+        padding: 0.5em 0.8em;
     }
 
     #container #instructions {
