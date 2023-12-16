@@ -551,23 +551,23 @@ function removeAllCanvasEvents() {
 
     draggableCircles.on("mousedown", null).on("mouseup", null);
 }
-let initialPinchDistance = 0;
+let initialPinchScale = 1;
 
 // Crear un objeto Hammer para el elemento canvas
 const hammer = new Hammer(canvas);
 
-// Agregar manejadores para eventos de pellizco (pinch)
-hammer.on('pinchstart', function (event) {
-    initialPinchDistance = event.distance;
-});
+// Agregar un manejador para el evento de pellizco (pinch)
+hammer.get('pinch').set({ enable: true });
+hammer.on('pinchstart pinchmove', function (event) {
+    if (event.type === 'pinchstart') {
+        initialPinchScale = 1;
+    }
 
-hammer.on('pinchmove', function (event) {
     if (selectedcircle == null) {
-        const currentPinchDistance = event.distance;
-        const zoom = currentPinchDistance < initialPinchDistance ? 0.97 : 1.03;
+        const zoom = event.scale / initialPinchScale;
 
-        const centerX = (event.pointers[0].clientX + event.pointers[1].clientX) / 2;
-        const centerY = (event.pointers[0].clientY + event.pointers[1].clientY) / 2;
+        const centerX = event.center.x;
+        const centerY = event.center.y;
 
         transform(zoom, centerX, centerY, 0, 0);
         computeShape();
@@ -576,12 +576,8 @@ hammer.on('pinchmove', function (event) {
         clearTimeout(wheelTimer);
         wheelTimer = setTimeout(saveFigure, 300); // 300 milisegundos después de terminar el pellizco
 
-        initialPinchDistance = currentPinchDistance;
+        initialPinchScale = event.scale;
     }
-});
-
-hammer.on('pinchend', function () {
-    initialPinchDistance = 0;
 });
 function addAllCanvasEvents() {
     canvas.addEventListener("mousemove", HandleMovecanvas);
