@@ -3,23 +3,6 @@ function fixit() {
     transform(1, null, null, 0, 0);
 }
 
-function addShape() {
-    const newShape = shapeInput.value.split("\n");
-    if (currentShapeIndex < shapesArray.length - 1) {
-        shapesArray.splice(currentShapeIndex + 1);
-    }
-    if (shapesArray.length >= 10) {
-        shapesArray.shift();
-    }
-    const lastShape = shapesArray[shapesArray.length - 1];
-
-    const shapesAreEqual = lastShape && arraysAreEqual(newShape, lastShape);
-
-    if (!shapesAreEqual) {
-        shapesArray.push(newShape);
-        currentShapeIndex = shapesArray.length - 1;
-    }
-}
 
 function arraysAreEqual(arr1, arr2) {
     if (!arr1 || !arr2 || arr1.length !== arr2.length) return false;
@@ -27,6 +10,24 @@ function arraysAreEqual(arr1, arr2) {
         if (arr1[i] !== arr2[i]) return false;
     }
     return true;
+}
+function addShape() {
+    const newShape = shapeInput.value.split("\n");
+    if (currentShapeIndex < shapesArray.length - 1) {
+        //shapesArray.splice(currentShapeIndex + 1);
+    }
+    if (shapesArray.length >= 10) {
+        shapesArray.shift();
+    }
+    const lastShape = shapesArray[currentShapeIndex];
+
+    const shapesAreEqual = lastShape && arraysAreEqual(newShape, lastShape);
+
+    if (!shapesAreEqual) {
+        shapesArray.push(newShape);
+        currentShapeIndex = shapesArray.length - 1;
+    }
+    console.log(currentShapeIndex)
 }
 
 function updateShapeInput() {
@@ -92,6 +93,9 @@ function openPopup(mouseX, mouseY) {
         document.addEventListener("mouseup", function () {
             isDragging = false;
             popup.style.cursor = "grab";
+
+        });
+        canvas.addEventListener("mouseup", function () {
             closePopup();
         });
         var smoothInput = document.getElementById("smooth");
@@ -295,6 +299,8 @@ function showPopup(mouseX, mouseY) {
     document.addEventListener("mouseup", function () {
         isDragging = false;
         popup.style.cursor = "grab";
+    });
+    canvas.addEventListener("mouseup", function () {
         closeButton.click();
     });
     const radiusInput = document.getElementById("radiusInput");
@@ -645,7 +651,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var advancedInfoButton = document.getElementById('advancedInfoButton');
     advancedInfoButton.addEventListener('click', function () {
         // Muestra u oculta los elementos
-        var hiddenElements = document.querySelectorAll('#inline-buttons, #shapeInput, #instructions2');
+        var hiddenElements = document.querySelectorAll('#inline-buttons, #shapeInput, #instructions2, #advinfo');
         for (var i = 0; i < hiddenElements.length; i++) {
             if (hiddenElements[i].style.display === 'none') {
                 hiddenElements[i].style.display = 'block';
@@ -657,6 +663,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 function toggleButtons(categoria) {
     var buttons = document.querySelectorAll('.' + categoria);
+    var anyButtonVisible = Array.from(buttons).some(function(button) {
+        return !button.classList.contains('hidden');
+    });
+
+    // Si al menos un botón de la categoría no está visible, ocultar todos los botones
+    if (!anyButtonVisible) {
+        hideAllButtons();
+    }
     buttons.forEach(function (button) {
         button.classList.toggle('hidden');
     });
@@ -671,5 +685,3 @@ function hideAllButtons() {
         });
     });
 }
-
-

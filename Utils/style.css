@@ -37,6 +37,10 @@ body {
     justify-content: space-around;
     z-index: 1001;
 }
+#otros-buttons button {
+
+    z-index: 9999;
+}
 
 .category-button {
     background-color: #4CAF50;
@@ -115,7 +119,6 @@ button:hover {
 }
 
 .custom-upload-button {
-    padding: 0.625em 1.25em;
     background-color: #4CAF50;
     color: white;
     border: none;

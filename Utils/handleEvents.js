@@ -25,12 +25,9 @@ function handleNoActionClick() {
     setButtonStyle();
 }
 function handleBPreviewMouseDown() {
+    hideAllButtons()
     svgOutput.value = preview();
     drawFigure();
-}
-
-function handleBPreviewMouseUp() {
-    computeShape();
 }
 
 function handleMiddleCircleClick() {
