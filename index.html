@@ -185,6 +185,11 @@
         </aside>
     </div>
 
+    <!-- MOBILE NOTICE -->
+    <div id="mobile-notice">
+        ⚠️ Mobile preview only — clicks won't align with the actual coordinates. For full interaction use a desktop browser.
+    </div>
+
     <!-- STATUS BAR -->
     <div id="statusbar">
         <div class="status-item">
@@ -214,6 +219,15 @@
         <input type="number" id="yInput" placeholder="Coord Y">
         <button class="close-button" onclick="closePopup()">Close</button>
     </div>
+
+    <!-- TOGGLE MÓVIL -->
+    <script>
+        document.getElementById("toggle-content-button").addEventListener("click", function() {
+            var sidebar = document.getElementById("sidebar");
+            sidebar.classList.toggle("open");
+            this.textContent = sidebar.classList.contains("open") ? "Hide panel" : "Show panel";
+        });
+    </script>
 
     <!-- SCRIPTS (orden original preservado) -->
     <script defer type="text/javascript" src="blackbox.js"></script>
