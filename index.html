@@ -4,13 +4,15 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Emscripten-Generated Code</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branched Shapes Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Utils/style.css">
 </head>
 <body>
-    <div id="mobile-toggle-button">
-        <button id="toggle-content-button">Show content</button>
-    </div>
+
+    <!-- SPINNERS (estructura original preservada, necesaria para app.js) -->
     <figure id="spinner2" style="display: none;">
         <div class="spinner"></div>
         <div class="spinner-text">emscripten</div>
@@ -19,118 +21,184 @@
         <div class="spinner"></div>
     </figure>
     <div id="status" class="loading-message">Downloading...</div>
-    <label for="svgOutput"></label><textarea id="svgOutput" rows="10" cols="50" hidden></textarea>
-    <div id="container">
-        <div id="canvas_svg">
-            <div id="waiting-message">
-                Waiting for click⏱
-            </div>
-            <div id="category-bar">
-                <div class="category-list">
-                    <button class="category-button categoria" data-category="edicion" onclick="toggleButtons('edicion')">Edition</button>
-                    <button id="middlecircle" class="category-button hidden edicion">New circle in the middle of a segment</button>
-                    <button id="eraseButton" class="category-button hidden edicion">Erase a circle</button>
-                    <button id="erasesButton" class="category-button hidden edicion">Erase multiple circles</button>
-                    <button id="eraseconection" class="category-button hidden edicion">Remove a segment</button>
-                </div>
 
-                <div class="category-list">
-                    <button class="category-button categoria" data-category="creacion" onclick="toggleButtons('creacion')">Creation</button>
-                    <button id="addcircle" class="category-button hidden creacion">Create a circle</button>
-                    <button id="addcircles" class="category-button hidden creacion">Create multiple circles</button>
-                    <button id="createconection" class="category-button hidden creacion">Add segment by clicking in extreme circles</button>
-                </div>
+    <!-- HIDDEN OUTPUT -->
+    <label for="svgOutput"></label>
+    <textarea id="svgOutput" rows="10" cols="50" hidden></textarea>
 
-                <div class="category-list">
-                    <button class="category-button categoria" data-category="generacion" onclick="toggleButtons('generacion')">Generation</button>
-                    <button onclick="randomGenerate()" class="category-button hidden generacion">Generate random shape</button>
-                    <button onclick="similarGenerate()" class="category-button hidden generacion">Generate similar shape</button>
-                </div>
-                <div class="category-list">
-                    <button class="category-button categoria" data-category="otros" onclick="toggleButtons('otros')">Others</button>
-                    <div class="otros-buttons">
-                        <button class="category-button hidden otros" onclick="updateShapeInput();"><!--suppress CheckImageSize -->
-                            <img src="./Media/undo_icon.png" width="20" height="20" alt="Undo">
-                        </button>
-                        <button class="category-button hidden otros" onclick="redoShapeInput();"><!--suppress CheckImageSize -->
-                            <img src="./Media/redo_icon.png" width="20" height="20" alt="Redo">
-                        </button>
-                    </div>
-                    <button onclick="downloadsvg()" class="category-button hidden otros">Download SVG</button>
-                    <button class="category-button hidden otros" id="blankButton">Blank template</button>
-                    <button class="category-button hidden otros" id="preview">Preview</button>
-                    <div class="color-picker">
-                        <button id="color-button" class="category-button hidden otros"></button>
-                        <div id="color-menu" class="color-menu">
-                            <div class="color-option" onclick="changeColor('red')" style="background-color: red;"></div>
-                            <div class="color-option" onclick="changeColor('blue')" style="background-color: blue;"></div>
-                            <div class="color-option" onclick="changeColor('green')" style="background-color: green;"></div>
-                            <div class="color-option" onclick="changeColor('yellow')" style="background-color: yellow;"></div>
-                            <div class="color-option" onclick="changeColor('orange')" style="background-color: orange;"></div>
-                            <div class="color-option" onclick="changeColor('purple')" style="background-color: purple;"></div>
-                            <div class="color-option" onclick="changeColor('pink')" style="background-color: pink;"></div>
-                            <div class="color-option" onclick="changeColor('brown')" style="background-color: brown;"></div>
-                            <div class="color-option" onclick="changeColor('gray')" style="background-color: gray;"></div>
-                            <div class="color-option" onclick="changeColor('black')" style="background-color: black;"></div>
-                        </div>
-                    </div>
-                </div>
+    <!-- MOBILE TOGGLE -->
+    <div id="mobile-toggle-button">
+        <button id="toggle-content-button">Show panel</button>
+    </div>
 
-                <div class="category-list">
-                    <button id="noAction">Reset action</button>
-                </div>
-
-            </div>
+    <!-- HEADER -->
+    <header id="header">
+        <div id="header-logo">
+            <div class="logo-icon">✦</div>
+            <h1>Branched <span>Shapes</span> Editor</h1>
         </div>
-        <div id="instructions">
-            <div id="instructions2" style="display: none;">
-                <p>Shape parameters: An advanced user can modify the shape parameters by hand. To render the shape press the “Compute Shape” button.</p>
-            </div>
-            <label for="shapeInput" style="display: none;"></label><textarea id="shapeInput" rows="5" cols="50" style="display: none;"></textarea>
-            <div id="advinfo" class="inline-buttons" style="display: none;">
-                <button id="computeButton">Compute Shape</button>
-                <button id="exportButton">Export Shape</button>
-                <!-- Botón personalizado para cargar archivos -->
-                <button class="custom-upload-button">
-                    Upload Shape
-                    <input type="file" id="upload" accept=".txt" style="display: none;">
-                </button>
-            </div>
-            <div class="inline-buttons">
+        <div id="header-actions">
             <button id="helpButton">Help</button>
-            <button id="advancedInfoButton">Advanced Info</button>
+            <button id="advancedInfoButton">Advanced</button>
+            <button id="computeButton" class="btn-primary">Compute Shape</button>
+        </div>
+    </header>
+
+    <!-- TOOLBAR -->
+    <div id="toolbar">
+
+        <div class="toolbar-group">
+            <span class="toolbar-label">Edit</span>
+            <div class="category-list" style="display:flex;gap:0.2rem;align-items:center;">
+                <button class="category-button categoria" data-category="edicion" onclick="toggleButtons('edicion')">Edition ▾</button>
+                <button id="middlecircle"   class="category-button hidden edicion">Mid-segment circle</button>
+                <button id="eraseButton"    class="category-button hidden edicion">Erase circle</button>
+                <button id="erasesButton"   class="category-button hidden edicion">Erase multiple</button>
+                <button id="eraseconection" class="category-button hidden edicion">Remove segment</button>
             </div>
-            <hr>
-            <div id="popuphelp">
-            <ol class="zoom-instructions">
-                <li>Shape can be edited using the action buttons below.</li>
-                <li>Right-clicking inside a circle opens a pop-up window that allows the user to modify the parameters of the selected circle.</li>
-                <li>Right-clicking outside of all the circles opens a pop-up window that allows the user to modify the parameters of all the circles. </li>
-                <li>Dragging the mouse with the left button pressed inside a circle allows to change the circle location</li>
-                <li>Dragging the mouse with the left mouse button pressed outside all the circles allows to move the entire shape. </li>
-                <li>The mouse wheel allows zooming the entire shape.</li>
-            </ol>
-                <br>
-            <h2>Button Descriptions</h2>
-            <ul>
-                <li><strong>Compute Shape:</strong> Calculates the shape based on the input.</li>
-                <li><strong>Export Shape:</strong> Exports the shape to a text file.</li>
-                <li><strong>Upload Shape:</strong> Import a shape from a text file.</li>
-                <li><strong>Preview:</strong> Shows a preview of the shape (without the black lines and circles).</li>
-                <li><strong>New circle in the middle of a segment:</strong> Clicking on a segment adds a circle in the middle of the segment</li>
-                <li><strong>Create a circle:</strong> Clicking adds a circle.</li>
-                <li><strong>Erase a circle:</strong> Clicking removes a circle.</li>
-                <li><strong>Add segment by clicking in extreme circle:</strong> Click on two circles for make a segment between them</li>
-                <li><strong>Remove a segment</strong> Clicking on a segment erase the segment.</li>
-                <li><strong>Generate random SVG:</strong> Generates a random SVG shape.</li>
-                <li><strong>Generate similar SVG:</strong> Generates a similar SVG shape.</li>
-            </ul>
-                </div>
         </div>
 
+        <div class="toolbar-group">
+            <span class="toolbar-label">Create</span>
+            <div class="category-list" style="display:flex;gap:0.2rem;align-items:center;">
+                <button class="category-button categoria" data-category="creacion" onclick="toggleButtons('creacion')">Creation ▾</button>
+                <button id="addcircle"       class="category-button hidden creacion">Add circle</button>
+                <button id="addcircles"      class="category-button hidden creacion">Add multiple</button>
+                <button id="createconection" class="category-button hidden creacion">Add segment</button>
+            </div>
+        </div>
 
+        <div class="toolbar-group">
+            <span class="toolbar-label">Generate</span>
+            <div class="category-list" style="display:flex;gap:0.2rem;align-items:center;">
+                <button class="category-button categoria" data-category="generacion" onclick="toggleButtons('generacion')">Generation ▾</button>
+                <button onclick="randomGenerate()"  class="category-button hidden generacion">Random shape</button>
+                <button onclick="similarGenerate()" class="category-button hidden generacion">Similar shape</button>
+            </div>
+        </div>
+
+        <div class="toolbar-group">
+            <span class="toolbar-label">Tools</span>
+            <div class="category-list" style="display:flex;gap:0.2rem;align-items:center;">
+                <button class="category-button categoria" data-category="otros" onclick="toggleButtons('otros')">Others ▾</button>
+                <div class="otros-buttons">
+                    <button class="category-button hidden otros" onclick="updateShapeInput();">
+                        <img src="./Media/undo_icon.png" width="20" height="20" alt="Undo">
+                    </button>
+                    <button class="category-button hidden otros" onclick="redoShapeInput();">
+                        <img src="./Media/redo_icon.png" width="20" height="20" alt="Redo">
+                    </button>
+                </div>
+                <button onclick="downloadsvg()" class="category-button hidden otros">↓ SVG</button>
+                <button class="category-button hidden otros" id="blankButton">Blank</button>
+                <button class="category-button hidden otros" id="preview">Preview</button>
+                <div class="color-picker">
+                    <button id="color-button" class="category-button hidden otros"></button>
+                    <div id="color-menu" class="color-menu">
+                        <div class="color-option" onclick="changeColor('red')"    style="background-color: red;"></div>
+                        <div class="color-option" onclick="changeColor('blue')"   style="background-color: blue;"></div>
+                        <div class="color-option" onclick="changeColor('green')"  style="background-color: green;"></div>
+                        <div class="color-option" onclick="changeColor('yellow')" style="background-color: yellow;"></div>
+                        <div class="color-option" onclick="changeColor('orange')" style="background-color: orange;"></div>
+                        <div class="color-option" onclick="changeColor('purple')" style="background-color: purple;"></div>
+                        <div class="color-option" onclick="changeColor('pink')"   style="background-color: pink;"></div>
+                        <div class="color-option" onclick="changeColor('brown')"  style="background-color: brown;"></div>
+                        <div class="color-option" onclick="changeColor('gray')"   style="background-color: gray;"></div>
+                        <div class="color-option" onclick="changeColor('black')"  style="background-color: black;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toolbar-group" style="border:none;">
+            <button id="noAction">✕ Reset action</button>
+        </div>
 
     </div>
+
+    <!-- MAIN -->
+    <div id="main">
+
+        <!-- CANVAS -->
+        <div id="canvas_svg">
+            <div id="waiting-message">⏱ Waiting for click</div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside id="sidebar">
+
+            <!-- Advanced info -->
+            <div class="sidebar-section" id="instructions">
+                <div id="instructions2" style="display: none;">
+                    <span class="sidebar-section-title">Shape Parameters</span>
+                    <p>Modify the shape parameters manually. Press <strong>Compute Shape</strong> to render.</p>
+                </div>
+                <label for="shapeInput" style="display:none;"></label>
+                <textarea id="shapeInput" rows="5" cols="50" style="display: none;"></textarea>
+                <div id="advinfo" class="inline-buttons" style="display: none;">
+                    <button id="exportButton">↑ Export Shape</button>
+                    <button class="custom-upload-button">
+                        ↓ Upload Shape
+                        <input type="file" id="upload" accept=".txt" style="display: none;">
+                    </button>
+                </div>
+            </div>
+
+            <!-- Help -->
+            <div class="sidebar-section">
+                <span class="sidebar-section-title">How to use</span>
+                <div id="popuphelp">
+                    <ol class="zoom-instructions">
+                        <li>Shape can be edited using the toolbar action buttons.</li>
+                        <li>Right-click inside a circle to edit its parameters.</li>
+                        <li>Right-click outside all circles to edit all at once.</li>
+                        <li>Drag inside a circle to reposition it.</li>
+                        <li>Drag outside circles to move the entire shape.</li>
+                        <li>Mouse wheel to zoom.</li>
+                    </ol>
+                    <h2>Button Reference</h2>
+                    <ul>
+                        <li><strong>Compute Shape</strong> — Recalculates and renders the shape.</li>
+                        <li><strong>Export Shape</strong> — Save shape to a .txt file.</li>
+                        <li><strong>Upload Shape</strong> — Load a shape from a .txt file.</li>
+                        <li><strong>Preview</strong> — Clean view without guides.</li>
+                        <li><strong>Mid-segment circle</strong> — Click a segment to insert a circle.</li>
+                        <li><strong>Add circle</strong> — Click anywhere to place a circle.</li>
+                        <li><strong>Erase circle</strong> — Click a circle to remove it.</li>
+                        <li><strong>Add segment</strong> — Click two circles to connect them.</li>
+                        <li><strong>Remove segment</strong> — Click a segment to delete it.</li>
+                        <li><strong>Random shape</strong> — Generate a random SVG figure.</li>
+                        <li><strong>Similar shape</strong> — Generate a variation of the current shape.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- About -->
+            <div class="sidebar-section">
+                <span class="sidebar-section-title">About</span>
+                <p id="about-text">
+                    C++ shape generation compiled to <strong>WebAssembly</strong> via Emscripten.
+                    Interactive editing powered by <strong>D3.js</strong>.
+                </p>
+            </div>
+
+        </aside>
+    </div>
+
+    <!-- STATUS BAR -->
+    <div id="statusbar">
+        <div class="status-item">
+            <div class="status-dot"></div>
+            <span>WebAssembly</span>
+        </div>
+        <div class="status-item">D3.js v7</div>
+        <div class="status-item">Emscripten</div>
+        <div class="status-item" style="margin-left:auto; color: var(--accent2); font-family: 'Space Mono', monospace; font-size: 0.6rem;">
+            branched-shapes-editor
+        </div>
+    </div>
+
+    <!-- POPUPS -->
     <div id="pop3uphelp"><span class="close"></span></div>
     <div id="popup" class="popup" style="display: none;"></div>
     <div id="popupall" class="popup" style="display: none;">
@@ -139,8 +207,7 @@
         <input type="number" id="globalRadius" placeholder="0" />
         <label for="smooth">Smooth:</label>
         <input type="range" id="smooth" min="0" max="2" step="0.1">
-        <label for="angleInput">Rotate</label>
-        <p>Angle(degree):</p>
+        <label for="angleInput">Rotate (degrees):</label>
         <input type="range" id="angleInput" min="0" max="360" step="1">
         <p>Center:</p>
         <input type="number" id="xInput" placeholder="Coord X">
@@ -148,12 +215,14 @@
         <button class="close-button" onclick="closePopup()">Close</button>
     </div>
 
-    <script defer  type="text/javascript" src="blackbox.js"></script>
+    <!-- SCRIPTS (orden original preservado) -->
+    <script defer type="text/javascript" src="blackbox.js"></script>
     <script type="text/javascript" src="Utils/handleEvents.js"></script>
     <script type="text/javascript" src="Utils/init.js"></script>
     <script type="text/javascript" src="Utils/tools.js"></script>
     <script src="app.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.17"></script>
+
 </body>
 </html>
