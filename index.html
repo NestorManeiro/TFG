@@ -94,7 +94,7 @@
                 <button class="category-button hidden otros" id="preview">Preview</button>
                 <div class="color-picker">
                     <button id="color-button" class="category-button hidden otros"></button>
-                    <div id="color-menu" class="color-menu">
+                    <div id="color-menu" class="color-menu" style="display:none;">
                         <div class="color-option" onclick="changeColor('red')"    style="background-color: red;"></div>
                         <div class="color-option" onclick="changeColor('blue')"   style="background-color: blue;"></div>
                         <div class="color-option" onclick="changeColor('green')"  style="background-color: green;"></div>
@@ -238,5 +238,21 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.17"></script>
 
+    <script>
+        window.addEventListener('load', function() {
+            var btn = document.getElementById('color-button');
+            var menu = document.getElementById('color-menu');
+            btn.replaceWith(btn.cloneNode(true)); // elimina listeners anteriores
+            document.getElementById('color-button').addEventListener('click', function(e) {
+                e.stopPropagation();
+                menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+            });
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.color-picker')) {
+                    menu.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

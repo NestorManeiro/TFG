@@ -172,6 +172,7 @@ button:hover {
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
     overflow-x: auto;
+    overflow-y: visible;
 }
 
 .toolbar-group {
@@ -260,37 +261,32 @@ button:hover {
 }
 
 #color-button {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 50% !important;
     background: conic-gradient(
         red 0deg 36deg, orange 36deg 72deg, yellow 72deg 108deg,
         green 108deg 144deg, teal 144deg 180deg, blue 180deg 216deg,
         indigo 216deg 252deg, purple 252deg 288deg, pink 288deg 324deg, brown 324deg 360deg
-    );
-    border: 2px solid var(--border);
+    ) !important;
+    border: 2px solid var(--border) !important;
     cursor: pointer;
-    padding: 0;
+    padding: 0 !important;
     margin-top: 0;
     display: inline-block;
     transition: border-color 0.15s;
 }
 
-#color-button:hover { border-color: var(--accent2); }
+#color-button:hover { border-color: var(--accent2) !important; }
 
 .color-menu {
-    position: absolute;
-    top: 34px;
-    left: 0;
-    display: none;
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 8px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    z-index: 9999;
     flex-wrap: wrap;
-    width: 100px;
+    width: 20%px;
     gap: 4px;
 }
 
