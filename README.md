@@ -92,3 +92,5 @@
   Afterward, it is necessary to compile the C++ code into WebAssembly. To do this, you can use the script.bat, although you would need to modify the directory paths.
 
   In the first directory, emsdk.bat should be located, and in the second one, where our C++ code is, will also be the location where the new files will be created. Then, you simply need to move these new files to the project's root folder and overwrite the existing ones.
+
+<img width="1027" height="967" alt="image" src="https://github.com/user-attachments/assets/c507da98-afd0-4fda-8571-06316f35cc53" />
